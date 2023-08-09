@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EduTracker</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="login2">تسجيل الدخول</string>
+    <string name="email_code">البريد الإلكتروني/الكود</string>
+    <string name="enter_your_email_code">أدخل البريد الإلكتروني/الكود الخاص بك</string>
+    <string name="password">كلمة المرور</string>
+    <string name="enter_your_password">أدخل كلمة المرور الخاصة بك</string>
+    <string name="reset_password">إعادة تعيين كلمة المرور؟</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="reEnter_your_password">أعد إدخال كلمة المرور</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="enter_your_user_name">أدخل اسم المستخدم الخاص بك</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="enter_your_email">أدخل البريد الإلكتروني الخاص بك</string>
+    <string name="enter_your_subject">أدخل موضوعك</string>
+    <string name="signup">إنشاء حساب</string>
+    <string name="create_n_account"> إنشاء حساب جديد </string>
+    <string name="already_have_account_login">هل لديك حساب بالفعل؟ تسجيل الدخول</string>
+    <string name="teacher_sign_up">إنشاء حساب المدرس</string>
+    <string name="subject">المادة</string>
+    <string name="student">طالب</string>
+    <string name="teacher">معلم</string>
+    <string name="assistant">مساعد</string>
+    <string name="parent">ولي امر</string>
+</resources>
