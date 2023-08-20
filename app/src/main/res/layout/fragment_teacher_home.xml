@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eff0fc"
+    tools:context=".teacher.home.TeacherHomeFragment">
+<ScrollView
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:contentDescription="@string/app_name"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+>
+ <androidx.constraintlayout.widget.ConstraintLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:contentDescription="@string/app_name">
+     <ImageView
+         android:backgroundTint="@color/white"
+         android:id="@+id/imageView"
+         android:layout_width="wrap_content"
+         android:layout_height="100dp"
+         android:contentDescription="TODO"
+         android:scaleType="fitXY"
+         android:src="@drawable/top_background"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintVertical_bias="0.0" />
+
+     <ImageView
+         android:id="@+id/imageView2"
+         android:layout_width="wrap_content"
+         android:layout_height="100dp"
+         android:src="@drawable/women1"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="28dp"
+         android:text="Welcome"
+         android:textColor="@color/black"
+         android:textSize="30sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.098"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />
+
+
+     <Spinner
+         android:id="@+id/spinner"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:prompt="@string/semester_prompt"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+     <androidx.cardview.widget.CardView
+         android:id="@+id/AssistantCard"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="16dp"
+         app:cardCornerRadius="25dp"
+         app:cardElevation="4dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/spinner">
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/white"
+             android:padding="16dp">
+
+             <!-- Icon on the left -->
+             <ImageView
+                 android:id="@+id/AssistantIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/assistant"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <TextView
+                 android:id="@+id/text_assistant"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="20dp"
+                 android:layout_marginTop="4dp"
+                 android:text="@string/assistant"
+                 android:textColor="@color/primary"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 app:layout_constraintStart_toEndOf="@+id/AssistantIcon"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <ImageView
+                 android:id="@+id/assistantNextIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/circle"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+     </androidx.cardview.widget.CardView>
+
+     <androidx.cardview.widget.CardView
+         android:id="@+id/StudentCard"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="16dp"
+         app:cardCornerRadius="25dp"
+         app:cardElevation="4dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/AssistantCard">
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/white"
+             android:padding="16dp">
+
+             <ImageView
+                 android:id="@+id/StudentIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/student"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <TextView
+                 android:id="@+id/text_student"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="20dp"
+                 android:layout_marginTop="4dp"
+                 android:text="@string/students"
+                 android:textColor="@color/primary"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 app:layout_constraintStart_toEndOf="@+id/StudentIcon"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <ImageView
+                 android:id="@+id/studentNextIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/circle"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+     </androidx.cardview.widget.CardView>
+
+     <androidx.cardview.widget.CardView
+         android:id="@+id/GroupCard"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="16dp"
+         app:cardCornerRadius="25dp"
+         app:cardElevation="4dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/StudentCard">
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/white"
+             android:padding="16dp">
+
+             <ImageView
+                 android:id="@+id/groupIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/group"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <TextView
+                 android:id="@+id/group_student"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="20dp"
+                 android:layout_marginTop="4dp"
+                 android:text="@string/groups"
+                 android:textColor="@color/primary"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 app:layout_constraintStart_toEndOf="@+id/groupIcon"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <ImageView
+                 android:id="@+id/groupNextIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/circle"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+     </androidx.cardview.widget.CardView>
+
+
+     <androidx.cardview.widget.CardView
+         android:id="@+id/lessonsCard"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="16dp"
+         app:cardCornerRadius="25dp"
+         app:cardElevation="4dp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/GroupCard">
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/white"
+             android:padding="16dp">
+
+             <ImageView
+                 android:id="@+id/lessonsIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/semester"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <TextView
+                 android:id="@+id/lessons_student"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="20dp"
+                 android:layout_marginTop="4dp"
+                 android:text="@string/lessons"
+                 android:textColor="@color/primary"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 app:layout_constraintStart_toEndOf="@+id/lessonsIcon"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <ImageView
+                 android:id="@+id/lessonsNextIcon"
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:src="@drawable/circle"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+     </androidx.cardview.widget.CardView>
+
+ </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

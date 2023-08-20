@@ -61,24 +61,12 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
-                android:text="@string/email_code"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
             <EditText
                 android:id="@+id/loginEmailET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/background_edit_text"
                 android:ems="10"
@@ -88,20 +76,6 @@
                 android:padding="8dp"
                 android:textColor="#A2A4b5"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/passwordTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
-
-                android:layout_marginEnd="32dp"
-                android:text="@string/password"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
             <EditText
                 android:id="@+id/loginPasswordET"
                 android:layout_width="match_parent"

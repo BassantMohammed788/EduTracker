@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "934157758936",
+    "project_id": "edutracker-8b6cc",
+    "storage_bucket": "edutracker-8b6cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934157758936:android:74b779575e1ae2b09882ad",
+        "android_client_info": {
+          "package_name": "com.example.edutracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "934157758936-mcc4kvhpl4jtq8t1gitgfcf23ft9akgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFumFeFd2ROI_xhYbjPm333_nK6TQ-8qg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "934157758936-mcc4kvhpl4jtq8t1gitgfcf23ft9akgj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,7 +15,7 @@
     <string name="enter_your_user_name">أدخل اسم المستخدم الخاص بك</string>
     <string name="email">البريد الإلكتروني</string>
     <string name="enter_your_email">أدخل البريد الإلكتروني الخاص بك</string>
-    <string name="enter_your_subject">أدخل موضوعك</string>
+    <string name="enter_your_subject">أدخل مادتك</string>
     <string name="signup">إنشاء حساب</string>
     <string name="create_n_account"> إنشاء حساب جديد </string>
     <string name="already_have_account_login">هل لديك حساب بالفعل؟ تسجيل الدخول</string>
@@ -25,4 +25,57 @@
     <string name="teacher">معلم</string>
     <string name="assistant">مساعد</string>
     <string name="parent">ولي امر</string>
+    <string name="signupSuccessfully">تم التسجيل بنجاح</string>
+    <string name="signupCancel">تم إلغاء التسجيل</string>
+    <string name="signupExists">المستخدم موجود بالفعل، حاول تسجيل الدخول</string>
+    <string name="passwordNotMatch">كلمة المرور غير متطابقة</string>
+    <string name="phoneNotValid">رقم الهاتف غير صالح</string>
+    <string name="network_lost_title">تحقق من اتصالك بالشبكة ثم حاول مرة أخرى</string>
+    <string name="fillAllFields">يجب ادخال جميع البيانات</string>
+    <string name="signinSuccessfully">تم تسجيل الدخول بنجاح</string>
+    <string name="signinNotExists">المستخدم غير موجود</string>
+    <string name="signinWrongPassword">كلمة المرور خطأ</string>
+    <string name="signinUserType">يجب أن تختار هويتك</string>
+
+    <string name="notTeacher">أنت لست مدرس</string>
+
+    <string name="emailNotValid">البريد الالكتروني غير صالح</string>
+    <string name="passwordLength">يجب أن تكون كلمة المرور على الأقل 6 أحرف وأقل من 20 حرفًا</string>
+    <string name="signInCancel">تم إلغاء تسجيل الدخول</string>
+    <string name="assistants">المساعدين</string>
+    <string name="students">الطلاب</string>
+    <string name="groups">المجموعات</string>
+    <string name="levels">المستويات</string>
+    <string name="lessons">الدروس</string>
+    <string name="home">الرئيسية</string>
+    <string name="cancel">إلغاء</string>
+    <string name="add">إضافة</string>
+    <string name="enter_your_phone_number">أدخل رقم هاتفك</string>
+    <string name="enter_assistant_phone_number">أدخل رقم هاتف المساعد</string>
+    <string name="add_assistant">إضافة مساعد</string>
+    <string name="no_assistants_yet">لا يوجد مساعدين بعد</string>
+    <string name="phone">الهاتف</string>
+    <string name="name">الاسم</string>
+    <string name="assistant_data">بيانات المساعد</string>
+    <string name="delete">حذف</string>
+    <string name="update">تحديث</string>
+    <string name="enter_assistant_password">أدخل كلمة مرور المساعد</string>
+    <string name="enter_assistant_name">أدخل اسم المساعد</string>
+    <string name="enter_assistant_email">أدخل البريد الإلكتروني للمساعد</string>
+    <string name="semester_prompt">اختر الفصل الدراسي</string>
+    <string name="no">لا</string>
+    <string name="yes">نعم</string>
+    <string name="add_group">إضافة مجموعة</string>
+    <string name="no_groups_yet">لا توجد مجموعات بعد</string>
+    <string name="ok">موافق</string>
+    <string name="choose_grade_level">اختر المستوى الدراسي</string>
+    <string-array name="grade_levels">
+        <item>الصف الاول الاعدادي</item>
+        <item>الصف الثاني الاعدادي</item>
+        <item>الصف الثالث الاعدادي</item>
+        <item>الصف الاول الثانوي</item>
+        <item>الصف الثاني الثانوي</item>
+        <item>الصف الثالث الثانوي</item>
+    </string-array>
+
 </resources>

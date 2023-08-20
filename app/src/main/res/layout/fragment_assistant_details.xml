@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".teacher.assistantdata.view.AssistantDetailsFragment"
+    tools:ignore="SpeakableTextPresentCheck">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--      <TextView
+                  android:id="@+id/assistants"
+                  android:layout_width="wrap_content"
+                  android:textColor="@color/black"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="32dp"
+                  android:background="@drawable/background_edit_text"
+                  android:padding="12dp"
+                  android:text="@string/assistant_data"
+                  android:textSize="24sp"
+                  android:fontFamily="serif-monospace"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent" />
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="32dp"
+                  android:orientation="vertical"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintTop_toBottomOf="@id/assistants"
+                  app:layout_constraintStart_toStartOf="parent">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@string/name"/>
+
+                    <EditText
+                        android:id="@+id/assistantNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/background_edit_text"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck"
+                        android:autofillHints="" />
+                 </LinearLayout>
+                 <LinearLayout
+                     android:layout_marginTop="8dp"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@string/email"/>
+
+                    <EditText
+                        android:id="@+id/assistantEmailET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/background_edit_text"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                 </LinearLayout>
+                 <LinearLayout
+                     android:layout_marginTop="8dp"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@string/phone"/>
+
+                    <EditText
+                        android:id="@+id/assistantPhoneET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="26dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/background_edit_text"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                 </LinearLayout>
+                 <LinearLayout
+                     android:layout_marginTop="8dp"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@string/password"/>
+
+                    <EditText
+                        android:id="@+id/assistantPasswordET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/background_edit_text"
+
+        android:layout_marginStart="1dp"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+
+                 </LinearLayout>
+
+
+
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginStart="32dp"
+                     android:layout_marginEnd="32dp"
+                     android:layout_marginBottom="32dp"
+                     android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/signUpButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="32dp"
+                        android:background="@drawable/background_login_btn"
+                        android:paddingStart="25dp"
+                        android:paddingEnd="25dp"
+                        android:text="@string/update"
+                        android:textAllCaps="false"
+
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/cancelButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/background_login_btn"
+                        android:paddingStart="25dp"
+                        android:paddingEnd="25dp"
+                        android:text="@string/delete"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                 </LinearLayout>
+
+
+
+
+
+
+              </LinearLayout>-->
+
+        <TextView
+            android:id="@+id/sign_up_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_edit_text"
+            android:padding="10dp"
+            android:text="@string/assistant_data"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/sign_up_right_guideline"
+            app:layout_constraintStart_toStartOf="@+id/sign_up_left_guideline"
+            app:layout_constraintTop_toTopOf="@+id/sign_up_top_guideline" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sign_up_top_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sign_up_left_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/sign_up_right_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <!--
+              <TextView
+                  android:id="@+id/sign_up_welcome_txt"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/welcome_in_frenzy"
+                  android:textColor="@color/gray"
+                  android:textSize="25sp"
+                  android:fontFamily="@font/fontfile"
+                  app:layout_constraintEnd_toEndOf="@+id/sign_up_txt"
+                  app:layout_constraintHorizontal_bias="0.0"
+                  app:layout_constraintStart_toStartOf="@+id/sign_up_txt"
+                  app:layout_constraintTop_toBottomOf="@+id/sign_up_txt" />
+        -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/assistantEmailET"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/white"
+            android:hint="@string/email"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/primary"
+            app:layout_constraintEnd_toStartOf="@id/sign_up_right_guideline"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/sign_up_left_guideline"
+            app:layout_constraintTop_toBottomOf="@id/sign_up_txt">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/assistantEmailETt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textEmailAddress"
+                android:padding="8dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="40dp"
+            android:hint="@string/name"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/primary"
+            app:layout_constraintEnd_toStartOf="@id/assistantEmailET"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/assistantEmailET"
+            app:layout_constraintTop_toBottomOf="@id/assistantEmailET">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/assistantNameET"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/white"
+            android:hint="@string/phone"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/primary"
+            app:layout_constraintEnd_toStartOf="@id/nameTF"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/nameTF"
+            app:layout_constraintTop_toBottomOf="@id/nameTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/assistantPhoneET"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTF"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/white"
+            android:hint="@string/password"
+            android:textColorHint="@color/black"
+
+            app:boxStrokeColor="@color/primary"
+            app:layout_constraintEnd_toStartOf="@id/phoneTF"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/phoneTF"
+            app:layout_constraintTop_toBottomOf="@id/phoneTF">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/assistantPasswordET"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:inputType="text"
+                android:padding="8dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/passwordTF"
+            app:layout_constraintTop_toBottomOf="@id/passwordTF">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/signUpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="64dp"
+                android:background="@drawable/background_login_btn"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:text="@string/update"
+                android:textAllCaps="false"
+
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_login_btn"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:text="@string/delete"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

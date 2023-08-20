@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="#eff0fc"
+android:background="@color/background_color"
 tools:context=".authentication.SignUpFragment">
 
 <ScrollView
@@ -58,25 +58,13 @@ tools:context=".authentication.SignUpFragment">
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <TextView
-            android:id="@+id/textView6"
-
-            android:layout_marginEnd="32dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/user_name"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/signupUserNameET"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/background_edit_text"
             android:ems="10"
@@ -86,18 +74,6 @@ tools:context=".authentication.SignUpFragment">
             android:padding="8dp"
             android:textColor="#A2A4b5"
             android:textSize="16sp" />
-        <TextView
-
-            android:layout_marginEnd="32dp"
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/email"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/SignUpEmailET"
@@ -114,18 +90,6 @@ tools:context=".authentication.SignUpFragment">
             android:padding="8dp"
             android:textColor="#A2A4b5"
             android:textSize="16sp" />
-        <TextView
-
-            android:layout_marginEnd="32dp"
-            android:id="@+id/textView8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/subject"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/signupSubjectET"
@@ -142,18 +106,21 @@ tools:context=".authentication.SignUpFragment">
             android:padding="8dp"
             android:textColor="#A2A4b5"
             android:textSize="16sp" />
-        <TextView
-
-            android:layout_marginEnd="32dp"
-            android:id="@+id/passwordTv"
+        <EditText
+            android:id="@+id/signupPhoneNumberET"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="@string/password"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/background_edit_text"
+            android:ems="10"
+            android:hint="Enter Your Phone Number"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:textColor="#A2A4b5"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/signUpPasswordET"
@@ -170,17 +137,6 @@ tools:context=".authentication.SignUpFragment">
             android:padding="8dp"
             android:textColor="#A2A4b5"
             android:textSize="16sp" />
-        <TextView
-            android:layout_marginEnd="32dp"
-            android:id="@+id/password2Tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/confirm_password"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/signupConfirmPasswordET"

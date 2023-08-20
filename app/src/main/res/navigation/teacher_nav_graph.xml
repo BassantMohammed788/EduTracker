@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_nav_graph"
+    app:startDestination="@id/teacherHomeFragment">
+
+    <fragment
+        android:id="@+id/teacherHomeFragment"
+        android:name="com.example.edutracker.teacher.home.TeacherHomeFragment"
+        android:label="fragment_teacher_home"
+        tools:layout="@layout/fragment_teacher_home" >
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_teacherAllAssistantFragment"
+            app:destination="@id/teacherAllAssistantFragment" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_allGroupsFragment"
+            app:destination="@id/allGroupsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherAllAssistantFragment"
+        android:name="com.example.edutracker.teacher.assistantdata.view.TeacherAllAssistantFragment"
+        android:label="@string/assistants"
+        tools:layout="@layout/fragment_teacher_all_assistant" >
+        <action
+            android:id="@+id/action_teacherAllAssistantFragment_to_teacherAddNewAssistantFragment"
+            app:destination="@id/teacherAddNewAssistantFragment" />
+        <action
+            android:id="@+id/action_teacherAllAssistantFragment_to_assistantDetailsFragment"
+            app:destination="@id/assistantDetailsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/teacherAddNewAssistantFragment"
+        android:name="com.example.edutracker.teacher.assistantdata.view.TeacherAddNewAssistantFragment"
+        android:label="fragment_teacher_add_new_assistant"
+        tools:layout="@layout/fragment_teacher_add_new_assistant" >
+        <action
+            android:id="@+id/action_teacherAddNewAssistantFragment_to_teacherAllAssistantFragment"
+            app:destination="@id/teacherAllAssistantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/assistantDetailsFragment"
+        android:name="com.example.edutracker.teacher.assistantdata.view.AssistantDetailsFragment"
+        android:label="fragment_assistant_details"
+        tools:layout="@layout/fragment_assistant_details" >
+        <action
+            android:id="@+id/action_assistantDetailsFragment_to_teacherAllAssistantFragment"
+            app:destination="@id/teacherAllAssistantFragment" />
+      <!--  <argument
+            android:name="assistant_id"
+            app:argType="string" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/allGroupsFragment"
+        android:name="com.example.edutracker.teacher.groups.view.AllGroupsFragment"
+        android:label="fragment_all_groups"
+        tools:layout="@layout/fragment_all_groups" >
+        <action
+            android:id="@+id/action_allGroupsFragment_to_addNewGroupFragment"
+            app:destination="@id/addNewGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewGroupFragment"
+        android:name="com.example.edutracker.teacher.groups.view.AddNewGroupFragment"
+        android:label="fragment_add_new_group"
+        tools:layout="@layout/fragment_add_new_group" >
+        <action
+            android:id="@+id/action_addNewGroupFragment_to_allGroupsFragment"
+            app:destination="@id/allGroupsFragment" />
+    </fragment>
+</navigation>
