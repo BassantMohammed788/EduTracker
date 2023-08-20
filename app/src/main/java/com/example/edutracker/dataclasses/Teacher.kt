@@ -41,7 +41,9 @@ data class Group(
     val name: String,
     val id: String,
     val gradeLevel:String
-)
+){
+    constructor() : this("", "","","")
+}
 
 data class Lesson(
     val id: String,
@@ -49,7 +51,9 @@ data class Lesson(
     val teacherId: String,
     val date: String,
     val time: String
-)
+){
+    constructor() : this("", "","","","")
+}
 
 data class StudentStatus(
     val studentId: String,

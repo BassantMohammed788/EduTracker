@@ -98,7 +98,7 @@ class AddNewGroupFragment : Fragment() {
 
         }
     }
-    private fun displayGradeLevelDialog() {
+     fun displayGradeLevelDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
         gradeLevelDialog.GradeLevelRecycler.adapter = gradeLevelAdapter
@@ -114,7 +114,7 @@ class AddNewGroupFragment : Fragment() {
     private val gradeLambda = { string: String ->
         gradeVar = string
     }
-    private fun gradeLevel(targetGrade: String): String? {
+     public fun gradeLevel(targetGrade: String): String? {
 
         val gradeLevelsList = listOf(
             "First preparatory Grade",

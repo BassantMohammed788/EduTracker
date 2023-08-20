@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/background_color"
     tools:context=".teacher.groups.view.AllGroupsFragment">
 
@@ -11,6 +11,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,34 +47,78 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assistantsRecycler"
+        <LinearLayout
+            android:id="@+id/chooseLevel"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/groups" />
+            app:layout_constraintTop_toBottomOf="@id/groups"
+            android:background="@drawable/background_edit_text"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/gradeName"
+                android:autofillHints=""
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:text="Choose Grade Level"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/drop_down_arrow"
+                android:contentDescription="Icon"
+                app:tint="@color/primary" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/groupsRecycler"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chooseLevel"
+            tools:listitem="@layout/group_item"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addGroupFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="370dp"
             android:layout_marginEnd="32dp"
             android:backgroundTint="@color/primary"
             android:clickable="true"
             android:contentDescription="@string/app_name"
             android:focusable="true"
+
             android:src="@drawable/add_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assistantsRecycler"
+            app:layout_constraintTop_toBottomOf="@+id/chooseLevel"
             app:rippleColor="@color/white"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <TextView
-            android:id="@+id/noAssistantTv"
+            android:id="@+id/noGroupsTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_groups_yet"
@@ -81,7 +126,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/chooseLevel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -12,4 +12,6 @@ interface RepositoryInterface {
     fun deleteAssistantByEmail(teacher_id: String, email: String)
     fun updateAssistantData(teacher_id: String, email: String, updatedAssistant: Assistant):Flow<Assistant>
     fun addGroup(group: Group, teacher_id: String, semester:String):Flow<Boolean>
+    fun getAllGroups(semester:String,teacher_id: String,gradeLevel:String): Flow<List<Group>>
+    fun deleteGroup(semester:String,teacher_id: String,gradeLevel:String,group_id:String)
 }

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    android:layout_gravity="center"
     tools:context=".teacher.groups.view.AddNewGroupFragment">
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
 
     <ProgressBar
         android:id="@+id/groupProgressBar"
@@ -19,6 +23,7 @@
         android:indeterminateTintMode="src_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartO-f="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 <TextView
@@ -96,7 +101,6 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -115,7 +119,6 @@
                 android:paddingEnd="35dp"
                 android:text="@string/add"
                 android:textAllCaps="false"
-
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -124,7 +127,7 @@
                 android:id="@+id/cancelButton"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_login_btn"
                 android:paddingStart="25dp"
@@ -139,3 +142,6 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

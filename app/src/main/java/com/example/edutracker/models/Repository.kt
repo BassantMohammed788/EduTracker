@@ -41,4 +41,17 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
     override fun addGroup(group: Group, teacher_id: String, semester: String): Flow<Boolean> {
         return remoteSource.addGroup(group,teacher_id, semester)
     }
+
+    override fun getAllGroups(semester: String, teacher_id: String, gradeLevel: String): Flow<List<Group>> {
+        return remoteSource.getAllGroups(semester, teacher_id, gradeLevel)
+    }
+
+    override fun deleteGroup(
+        semester: String,
+        teacher_id: String,
+        gradeLevel: String,
+        group_id: String
+    ) {
+        remoteSource.deleteGroup(semester, teacher_id, gradeLevel, group_id)
+    }
 }
