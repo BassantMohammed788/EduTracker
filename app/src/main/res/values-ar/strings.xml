@@ -46,7 +46,7 @@
     <string name="students">الطلاب</string>
     <string name="groups">المجموعات</string>
     <string name="levels">المستويات</string>
-    <string name="lessons">الدروس</string>
+    <string name="lessons">الحصص</string>
     <string name="home">الرئيسية</string>
     <string name="cancel">إلغاء</string>
     <string name="add">إضافة</string>
@@ -69,6 +69,45 @@
     <string name="no_groups_yet">لا توجد مجموعات بعد</string>
     <string name="ok">موافق</string>
     <string name="choose_grade_level">اختر المستوى الدراسي</string>
+    <string name="choose_group">اختر المجموعة</string>
+    <string name="choose_month">اختر الشهر</string>
+    <string name="no_lessons_yet">لا توجد حصص بعد</string>
+    <string name="you_should_choose_grade_level">يجب عليك اختيار المستوى الدراسي أولاً</string>
+    <string name="you_should_choose_time">يجب عليك اختيار مستوى الصف والمجموعة والوقت</string>
+
+    <string name="you_should_choose_grade_level_and_group">يجب عليك اختيار المستوى الدراسي والمجموعة</string>
+
+    <string name="add_lesson">إضافة درس</string>
+
+    <string name="no_grades_yet">لا توجد مستويات دراسية حتى الآن</string>
+
+    <string name="no_months_yet">لا توجد أشهر حتى الآن</string>
+
+    <string name="you_should_choose_semester_level">يجب عليك اختيار الفصل الدراسي والمجموعة</string>
+    <string name="choose_semester">اختر الفصل الدراسي</string>
+    <string name="should_choose_semester">يجب عليك اختيار الفصل الدراسي</string>
+    <string name="enter_student_name">أدخل اسم الطالب</string>
+    <string name="enter_student_email">أدخل بريد الطالب الإلكتروني</string>
+    <string name="enter_student_phone">أدخل رقم هاتف الطالب</string>
+    <string name="enter_student_password">أدخل كلمة مرور الطالب</string>
+    <string name="enter_parent_email">أدخل بريد الوالد</string>
+    <string name="enter_parent_phone">أدخل رقم هاتف الوالد</string>
+    <string name="add_student">إضافة طالب</string>
+    <string name="attendance">الحضور</string>
+    <string name="choose_lesson">اختر الدرس</string>
+    <string name="you_should_choose_month">يجب عليك اختيار الشهر أولاً</string>
+    <string name="no_students_yet">لا يوجد طلاب بعد</string>
+    <string name="search_by_student_name">البحث  باسم الطالب</string>
+    <string name="exams">الامتحانات</string>
+    <string name="details">التفاصيل</string>
+    <string name="take_attendance">تسجيل الحضور</string>
+    <string name="permitted">مستأذن</string>
+    <string name="present">حاضر</string>
+    <string name="absent">غائب</string>
+    <string name="late">متأخر</string>
+    <string name="you_should_choose_semester">يجب عليك اختيار الفصل الدراسي</string>
+    <string name="choose_date">اختر التاريخ</string>
+    <string name="payment">الدفع</string>
     <string-array name="grade_levels">
         <item>الصف الاول الاعدادي</item>
         <item>الصف الثاني الاعدادي</item>

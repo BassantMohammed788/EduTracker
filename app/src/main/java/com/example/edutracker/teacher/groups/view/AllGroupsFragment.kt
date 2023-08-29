@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edutracker.R
+import com.example.edutracker.databinding.AlertDialogBinding
 import com.example.edutracker.databinding.FragmentAllGroupsBinding
 import com.example.edutracker.databinding.FragmentTeacherAllAssistantBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
@@ -26,17 +27,17 @@ import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModel
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
+import com.example.edutracker.utilities.gradeLevel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AllGroupsFragment : Fragment() {
     lateinit var binding: FragmentAllGroupsBinding
     lateinit var viewModel: GroupsViewModel
-    lateinit var viewModelFactory: GroupsViewModelFactory
+    private lateinit var viewModelFactory: GroupsViewModelFactory
     lateinit var gradeLevelAdapter: GradeLevelAdapter
     private var gradeVar:String?= null
-    lateinit var gradeLevelsArray : List<String>
-    lateinit var groupsAdapter: GroupsAdapter
+    private lateinit var groupsAdapter: GroupsAdapter
     lateinit var recyclerView: RecyclerView
     var semester : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,13 +53,12 @@ class AllGroupsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModelFactory = GroupsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         viewModel = ViewModelProvider(this, viewModelFactory)[GroupsViewModel::class.java]
-        gradeLevelsArray = resources.getStringArray(R.array.grade_levels).toList()
-        gradeLevelAdapter = GradeLevelAdapter(gradeLevelsArray,gradeLambda)
+        gradeLevelAdapter = GradeLevelAdapter(emptyList<String>() ,gradeLambda)
         binding.groupProgressBar.visibility=View.GONE
         binding.groupsRecycler.visibility=View.GONE
         binding.noGroupsTv.visibility=View.GONE
         val teacher_id = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
-         semester = "2023-2024 الترم الاول"
+         semester = MySharedPreferences.getInstance(requireContext()).getSemester()!!
         groupsAdapter=GroupsAdapter(deleteGroupLambda)
         recyclerView = binding.groupsRecycler
         recyclerView.apply {
@@ -74,7 +74,6 @@ class AllGroupsFragment : Fragment() {
         }
 
     }
-
     fun displayGradeLevelDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
@@ -82,6 +81,42 @@ class AllGroupsFragment : Fragment() {
         builder.setView(gradeLevelDialog.root)
         val dialog = builder.create()
         dialog.show()
+        if (checkConnectivity(requireContext())){
+            lifecycleScope.launch {
+                viewModel.getAllGrades(semester, MySharedPreferences.getInstance(requireContext()).getTeacherID()!!)
+                viewModel.getGrades.collect{ result->
+                    when(result){
+                        is FirebaseState.Loading ->{
+                            gradeLevelDialog.progressBar.visibility=View.VISIBLE
+                            gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                        }
+                        is FirebaseState.Success ->{
+                            if (result.data.isEmpty()){
+                                gradeLevelDialog.progressBar.visibility=View.GONE
+                                gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                                gradeLevelDialog.noDataTv.visibility=View.VISIBLE
+                                gradeLevelDialog.noDataTv.text=getString(R.string.no_grades_yet)
+                            }else{
+                                gradeLevelDialog.progressBar.visibility=View.GONE
+                                gradeLevelDialog.GradeLevelRecycler.visibility=View.VISIBLE
+                                gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                                val list = mutableListOf<String>()
+                                for (i in result.data){
+                                    list.add(gradeLevel(i)!!)
+                                }
+                                gradeLevelAdapter.setGradeLevelsList(list)
+                            }
+
+                        }
+                        is FirebaseState.Failure ->{}
+
+                    }
+
+                }
+            }
+        }else{
+            Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
+        }
         gradeLevelDialog.okBTN.setOnClickListener {
             binding.gradeName.text = gradeVar
             dialog.dismiss()
@@ -129,42 +164,23 @@ class AllGroupsFragment : Fragment() {
         gradeVar = string
     }
     private val deleteGroupLambda = { group: Group ->
-        viewModel.deleteGroup(semester, group.teacherId ,group.gradeLevel,group.id)
-    }
-    public fun gradeLevel(targetGrade: String?): String? {
-
-        val gradeLevelsList = listOf(
-            "First preparatory Grade",
-            "Second preparatory Grade",
-            "Third preparatory Grade",
-            "First Secondary Grade",
-            "Second Secondary Grade",
-            "Third Secondary Grade",
-            "الصف الاول الاعدادي",
-            "الصف الثاني الاعدادي",
-            "الصف الثالث الاعدادي",
-            "الصف الاول الثانوي",
-            "الصف الثاني الثانوي",
-            "الصف الثالث الثانوي"
-        )
-        var result: String? = null
-        if (targetGrade == gradeLevelsList[0]||targetGrade == gradeLevelsList[6]){
-            result=gradeLevelsList[0]
-
-        }else if (targetGrade == gradeLevelsList[1]||targetGrade == gradeLevelsList[7]){
-            result=gradeLevelsList[1]
-        }else if (targetGrade == gradeLevelsList[2]||targetGrade == gradeLevelsList[8]){
-            result=gradeLevelsList[2]
-        }else if (targetGrade == gradeLevelsList[3]||targetGrade == gradeLevelsList[9]){
-            result=gradeLevelsList[3]
-        }else if (targetGrade == gradeLevelsList[4]||targetGrade == gradeLevelsList[10]){
-            result=gradeLevelsList[4]
-        }else if (targetGrade == gradeLevelsList[5]||targetGrade == gradeLevelsList[11]){
-            result=gradeLevelsList[5]
+        val builder = AlertDialog.Builder(requireContext())
+        val alertDialog = AlertDialogBinding.inflate(layoutInflater)
+        builder.setView(alertDialog.root)
+        val dialog = builder.create()
+        dialog.show()
+        alertDialog.dialogYesBtn.setOnClickListener {
+            lifecycleScope.launch {
+                lifecycleScope.launch {
+                    viewModel.deleteGroup(semester, group.teacherId ,group.gradeLevel,group.id)
+                }
+            }
+            dialog.dismiss()
         }
-        return result
+        alertDialog.dialogNoBtn.setOnClickListener {
+            dialog.dismiss()
+        }
     }
-
 
 
 }

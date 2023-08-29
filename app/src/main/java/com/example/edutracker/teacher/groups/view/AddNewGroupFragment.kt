@@ -56,9 +56,14 @@ class AddNewGroupFragment : Fragment() {
         gradeLevelAdapter = GradeLevelAdapter(gradeLevelsArray,gradeLambda)
         binding.groupProgressBar.visibility=View.GONE
         val teacher_id =MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
-        val semester = "2023-2024 الترم الاول"
+        val semester = MySharedPreferences.getInstance(requireContext()).getSemester()!!
         binding.chooseLevel.setOnClickListener{
             displayGradeLevelDialog()
+        }
+        binding.cancelButton.setOnClickListener {
+            Navigation.findNavController(requireView()).apply {
+                popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+            }
         }
         binding.AddButton.setOnClickListener {
           if (gradeVar!=null&&binding.groupNameET.text.isNotEmpty()){
@@ -77,8 +82,10 @@ class AddNewGroupFragment : Fragment() {
                               binding.groupProgressBar.visibility=View.GONE
                               if (result.data) {
                                   Toast.makeText(requireContext(), "Added Successfully", Toast.LENGTH_SHORT).show()
-                                  Navigation.findNavController(requireView()).navigate(R.id.action_addNewGroupFragment_to_allGroupsFragment)
-                              } else {
+                                  Navigation.findNavController(requireView()).apply {
+                                      popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+                                  }
+                                   } else {
                                   Toast.makeText(requireContext(), "The Group already exists", Toast.LENGTH_SHORT).show()
                               }
                           }

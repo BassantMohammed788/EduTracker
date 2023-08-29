@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="32dp"
     android:background="#eff0fc"
     tools:context=".teacher.home.TeacherHomeFragment">
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,8 +20,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/app_name">
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="60dp">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -55,14 +58,45 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/chooseSemester"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:prompt="@string/semester_prompt"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/background_edit_text"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+
+                <TextView
+                    android:id="@+id/semesterName"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:padding="8dp"
+                    android:text="@string/choose_semester"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="Icon"
+                    android:src="@drawable/drop_down_arrow"
+                    app:tint="@color/primary" />
+            </LinearLayout>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/AssistantCard"
@@ -73,7 +107,7 @@
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/spinner">
+                app:layout_constraintTop_toBottomOf="@+id/chooseSemester">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -224,6 +258,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:layout_marginBottom="32dp"
                 app:cardCornerRadius="25dp"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -14,17 +14,19 @@ data class YearNode(
 )
 
 data class Student(
-    val teacherId: String,
-    val id: String,
+    val email: String,
     val name: String,
+    val teacherId: String,
     val password: String,
     val phoneNumber: String,
-    val parentId: String,
+    val parentEmail: String,
     val parentPassword: String,
     val parentPhone: String,
-    val grade: String,
-    val groupId: String
-)
+    val activeGradeLevel: String,
+    val activeGroupId: String
+){
+    constructor():this("","","","","","","","","","")
+}
 
 data class Assistant(
     val name: String,
@@ -49,10 +51,9 @@ data class Lesson(
     val id: String,
     val groupId: String,
     val teacherId: String,
-    val date: String,
     val time: String
 ){
-    constructor() : this("", "","","","")
+    constructor() : this("", "","","")
 }
 
 data class StudentStatus(
@@ -60,3 +61,9 @@ data class StudentStatus(
     val lessonId: String,
     val status: String
 )
+data class GroupStatus(
+    val groupId: String,
+    val status:String
+){
+    constructor(): this("","")
+}

@@ -3,7 +3,6 @@ package com.example.edutracker.teacher.groups.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.models.RepositoryInterface
 import com.example.edutracker.network.FirebaseState
@@ -21,14 +20,19 @@ class GroupsViewModel(private val repo: RepositoryInterface): ViewModel() {
     private var getGroupsMutable: MutableStateFlow<FirebaseState<List<Group>>> =
         MutableStateFlow(FirebaseState.Loading)
     val getGroups: StateFlow<FirebaseState<List<Group>>> = getGroupsMutable
+
+    private var getGradesMutable: MutableStateFlow<FirebaseState<List<String>>> =
+        MutableStateFlow(FirebaseState.Loading)
+    val getGrades: StateFlow<FirebaseState<List<String>>> = getGradesMutable
+
     fun addGroup(group: Group,teacher_id: String,semester:String){
         viewModelScope.launch(Dispatchers.IO){
             repo.addGroup(group,teacher_id,semester)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "addGroup: $e")
                     addGroupMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "addGroupSuccess: $data")
                     addGroupMutable.value = FirebaseState.Success(data)
                 }
@@ -36,11 +40,11 @@ class GroupsViewModel(private val repo: RepositoryInterface): ViewModel() {
     fun getAllGroups(semester: String,teacher_id:String,grade_level: String){
         viewModelScope.launch(Dispatchers.IO){
             repo.getAllGroups(semester,teacher_id,grade_level)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getAllGroups: $e")
                     getGroupsMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getAllGroups: $data")
                     getGroupsMutable.value = FirebaseState.Success(data)
                 }
@@ -50,4 +54,16 @@ class GroupsViewModel(private val repo: RepositoryInterface): ViewModel() {
             repo.deleteGroup(semester,teacher_id,grade_level,group_id)
         }
     }
+    fun getAllGrades(semester: String,teacher_id:String){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.getAllGrades(semester,teacher_id)
+                .catch { e ->
+                    Log.e("TAG", "getAllGrades: $e")
+                    getGradesMutable.value = FirebaseState.Failure(e)
+                }
+                .collect { data ->
+                    Log.i("TAG", "getAllGrades: $data")
+                    getGradesMutable.value = FirebaseState.Success(data)
+                }
+        }}
 }

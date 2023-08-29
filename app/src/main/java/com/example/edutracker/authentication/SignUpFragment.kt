@@ -117,30 +117,40 @@ class SignUpFragment : Fragment() {
 
 
     private fun createTeacherNode(teacher: Teacher) {
-        val year1 = YearNode("2023-2024 الترم الاول")
-        val year2 = YearNode("2023-2024 الترم الثاني")
-        val year3 = YearNode("2024-2025 الترم الاول")
-        val year4 = YearNode("2024-2025 الترم الثاني")
-        val year5 = YearNode("2025-2026 الترم الاول")
-        val year6 = YearNode("2025-2026 الترم الثاني")
-        val year7 = YearNode("2026-2027 الترم الاول")
-        val year8 = YearNode("2026-2027 الترم الثاني")
-        val year9 = YearNode("2027-2028 الترم الاول")
-        val year10 = YearNode("2027-2028 الترم الثاني")
-        val list = listOf<YearNode>(year1,year2,year3,year4,year5,year6,year7,year8,year9,year10)
+        val year1 = YearNode("2023-2024 First Semester")
+        val year2 = YearNode("2023-2024 Second Semester")
+        val year3 = YearNode("2024-2025 First Semester")
+        val year4 = YearNode("2024-2025 Second Semester")
+        val year5 = YearNode("2025-2026 First Semester")
+        val year6 = YearNode("2025-2026 Second Semester")
+        val year7 = YearNode("2026-2027 First Semester")
+        val year8 = YearNode("2026-2027 Second Semester")
+        val year9 = YearNode("2027-2028 First Semester")
+        val year10 = YearNode("2027-2028 Second Semester")
+        val year11 = YearNode("2028-2029 First Semester")
+        val year12 = YearNode("2028-2029 Second Semester")
+        val year13 = YearNode("2029-2030 First Semester")
+        val year14 = YearNode("2029-2030 Second Semester")
+        val year15 = YearNode("2030-2031 First Semester")
+        val year16 = YearNode("2030-2031 Second Semester")
+        val year17 = YearNode("2031-2032 First Semester")
+        val year18 = YearNode("2031-2032 Second Semester")
+        val year19 = YearNode("2032-2033 First Semester")
+        val year20 = YearNode("2032-2033 Second Semester")
+        val list = listOf<YearNode>(year1,year2,year3,year4,year5,year6,year7,year8,year9,year10,year11,year12,year13,year14,year15,year16,year17,year18,year19,year20)
         databaseReference.child("Teachers").child(teacher.id).setValue(teacher)
         for (element in list){
             databaseReference.child("Teachers").child(teacher.id).child(element.id).setValue(element)
         }
     }
 
-    fun addData(teacher_id: String) {
+   /* fun addData(teacher_id: String) {
         val database = FirebaseDatabase.getInstance()
         val studentsRef = firebaseDatabase.getReference("Teachers")
-/*        val assistantsRef = database.getReference("Assistants")
+*//*        val assistantsRef = database.getReference("Assistants")
         val groupsRef = database.getReference("Groups")
         val lessonsRef = database.getReference("Lessons")
-        val studentStatusRef = database.getReference("StudentStatus")*/
+        val studentStatusRef = database.getReference("StudentStatus")*//*
 
         // Add data to other nodes
         val student = Student(
@@ -172,7 +182,7 @@ class SignUpFragment : Fragment() {
         databaseReference.child("Teachers").child(teacher_id).child("Students").child(student2.id)
             .setValue(student2)
 
-        /*
+        *//*
             val assistant = Assistant(
                 id = "assistant1",
                 name = "Bob Johnson",
@@ -206,6 +216,6 @@ class SignUpFragment : Fragment() {
                 status = "present"
             )
             studentStatusRef.child(studentStatus.studentId).child(studentStatus.lessonId).setValue(studentStatus)
-     */
-    }
+     *//*
+    }*/
 }

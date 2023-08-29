@@ -72,7 +72,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
-                android:text="Choose Grade Level"
+                android:text="@string/choose_grade_level"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textSize="16sp" />

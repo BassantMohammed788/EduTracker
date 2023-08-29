@@ -1,11 +1,10 @@
 package com.example.edutracker.network
 
-import android.content.Context
 import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.dataclasses.Lesson
+import com.example.edutracker.dataclasses.Student
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 
 interface RemoteInterface {
     fun addAssistant(assistant: Assistant, teacher_id: String):Flow<Boolean>
@@ -18,5 +17,14 @@ interface RemoteInterface {
     fun deleteGroup(semester:String,teacher_id: String,gradeLevel:String,group_id:String)
     fun addLesson( teacher_id: String, semester: String,grade_level: String,month:String,lesson: Lesson): Flow<Boolean>
 
+    fun getAllGrades(semester: String, teacher_id: String): Flow<List<String>>
+    fun getAllMonths(semester: String, teacherId: String,grade_level: String,group_id: String) : Flow<List<String>>
+    fun getAllLessons( teacher_id: String, semester: String,grade_level: String,group_id:String,month:String): Flow<List<Lesson>>
+    fun deleteLesson(semester: String, teacher_id: String, gradeLevel: String, group_id: String,month: String,lesson_id:String)
+    fun addStudent(student: Student, teacher_id: String, semester: String, grade_level: String, group_id: String): Flow<Boolean>
+    fun getAllStudents(teacher_id: String): Flow<List<Student>>
+    fun getAllStudentsOfGroup(teacher_id: String, group_id: String): Flow<List<Student>>
+    fun getStudentAttendanceForLesson(semester: String, gradeLevel: String, groupId: String, lessonId: String, month: String, studentList: List<Student>): Flow<List<Triple<String, String, String>>>
+    fun  addStudentAttendanceForLesson(semester: String, gradeLevel: String, groupId: String, lessonId: String, month: String, studentId: String, attendanceStatus: String)
 }
 

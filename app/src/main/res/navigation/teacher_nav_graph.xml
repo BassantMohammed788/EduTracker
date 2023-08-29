@@ -16,6 +16,18 @@
         <action
             android:id="@+id/action_teacherHomeFragment_to_allGroupsFragment"
             app:destination="@id/allGroupsFragment" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_allLessonsFragment"
+            app:destination="@id/allLessonsFragment" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_allStudentsFragment"
+            app:destination="@id/allStudentsFragment" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_attendanceFragment2"
+            app:destination="@id/attendanceFragment" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_takeAttendanceFragment"
+            app:destination="@id/takeAttendanceFragment" />
     </fragment>
     <fragment
         android:id="@+id/teacherAllAssistantFragment"
@@ -47,9 +59,12 @@
         <action
             android:id="@+id/action_assistantDetailsFragment_to_teacherAllAssistantFragment"
             app:destination="@id/teacherAllAssistantFragment" />
-      <!--  <argument
-            android:name="assistant_id"
-            app:argType="string" />-->
+        <argument
+            android:name="assistantId"
+            app:argType="string" />
+        <!--  <argument
+              android:name="assistant_id"
+              app:argType="string" />-->
     </fragment>
     <fragment
         android:id="@+id/allGroupsFragment"
@@ -69,4 +84,95 @@
             android:id="@+id/action_addNewGroupFragment_to_allGroupsFragment"
             app:destination="@id/allGroupsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/allLessonsFragment"
+        android:name="com.example.edutracker.teacher.lessons.view.AllLessonsFragment"
+        android:label="fragment_all_lessons"
+        tools:layout="@layout/fragment_all_lessons" >
+        <action
+            android:id="@+id/action_allLessonsFragment_to_addLessonFragment"
+            app:destination="@id/addLessonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLessonFragment"
+        android:name="com.example.edutracker.teacher.lessons.view.AddLessonFragment"
+        android:label="fragment_add_lesson"
+        tools:layout="@layout/fragment_add_lesson" >
+        <action
+            android:id="@+id/action_addLessonFragment_to_allLessonsFragment"
+            app:destination="@id/allLessonsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addStudentFragment"
+        android:name="com.example.edutracker.teacher.students.view.AddStudentFragment"
+        android:label="fragment_add_student"
+        tools:layout="@layout/fragment_add_student" >
+        <action
+            android:id="@+id/action_addStudentFragment_to_allStudentsFragment"
+            app:destination="@id/allStudentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allStudentsFragment"
+        android:name="com.example.edutracker.teacher.students.view.AllStudentsFragment"
+        android:label="fragment_all_students"
+        tools:layout="@layout/fragment_all_students" >
+        <action
+            android:id="@+id/action_allStudentsFragment_to_addStudentFragment"
+            app:destination="@id/addStudentFragment" />
+        <action
+            android:id="@+id/action_allStudentsFragment_to_studentDetailsFragment"
+            app:destination="@id/studentDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.example.edutracker.teacher.attendance.view.AttendanceFragment"
+        android:label="fragment_attendance"
+        tools:layout="@layout/fragment_attendance" >
+        <action
+            android:id="@+id/action_attendanceFragment_to_takeAttendanceFragment"
+            app:destination="@id/takeAttendanceFragment" />
+        <action
+            android:id="@+id/action_attendanceFragment_to_allLessonsFragment"
+            app:destination="@id/allLessonsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentDetailsFragment"
+        android:name="com.example.edutracker.teacher.students.view.StudentDetailsFragment"
+        android:label="fragment_student_details"
+        tools:layout="@layout/fragment_student_details" >
+        <action
+            android:id="@+id/action_studentDetailsFragment_to_allStudentsFragment"
+            app:destination="@id/allStudentsFragment" />
+        <argument
+            android:name="studentId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/takeAttendanceFragment"
+        android:name="com.example.edutracker.teacher.attendance.view.TakeAttendanceFragment"
+        android:label="fragment_take_attendance"
+        tools:layout="@layout/fragment_take_attendance" >
+        <action
+            android:id="@+id/action_takeAttendanceFragment_to_attendanceFragment"
+            app:destination="@id/attendanceFragment" />
+        <argument
+            android:name="lessonId"
+            app:argType="string" />
+        <argument android:name="groupId"
+            app:argType="string"/>
+        <argument
+            android:name="month"
+            app:argType="string" />
+        <argument
+            android:name="gradeLevelId"
+            app:argType="string" />
+        <argument
+            android:name="groupName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.edutracker.teacher.payment.view.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
 </navigation>

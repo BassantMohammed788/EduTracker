@@ -13,10 +13,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.example.edutracker.R
 import com.example.edutracker.databinding.AlertDialogBinding
 import com.example.edutracker.databinding.FragmentAssistantDetailsBinding
-import com.example.edutracker.databinding.FragmentTeacherAllAssistantBinding
 import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
@@ -27,22 +27,17 @@ import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
 import com.example.edutracker.utilities.checkEgyptianPhoneNumber
 import com.example.edutracker.utilities.isValidEmail
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AssistantDetailsFragment : Fragment() {
 
-    lateinit var binding: FragmentAssistantDetailsBinding
-    lateinit var viewModel: AssistantDataViewModel
-    lateinit var viewModelFactory: AssistantDataViewModelFactory
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var binding: FragmentAssistantDetailsBinding
+    private lateinit var viewModel: AssistantDataViewModel
+    private lateinit var viewModelFactory: AssistantDataViewModelFactory
+    private val args: AssistantDetailsFragmentArgs by navArgs()
 
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentAssistantDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,13 +52,15 @@ class AssistantDetailsFragment : Fragment() {
         binding.assistantEmailETt.isEnabled = false
         binding.assistantEmailETt.isFocusable = false
         binding.assistantEmailETt.isFocusableInTouchMode = false
-        val email = "bassant,mohammed788@gmail,com"
-        val teacher_id = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+        var email = args.assistantId
+        email= email.replace(".", ",")
+
+        val teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
         if (checkConnectivity(requireContext())) {
-            viewModel.getAssistantByEmail(teacher_id, email)
+            viewModel.getAssistantByEmail(teacherId, email)
             lifecycleScope.launch {
                 viewModel.getAssistantByEmail(
-                    teacher_id,
+                    teacherId,
                     email
                 )
                 viewModel.oneAssistants.collect { result ->
@@ -117,8 +114,8 @@ class AssistantDetailsFragment : Fragment() {
             dialog.dismiss()
             val navController = Navigation.findNavController(requireView())
             navController.apply {
-                navigate(R.id.action_assistantDetailsFragment_to_teacherAllAssistantFragment)
-               // popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+               // navigate(R.id.action_assistantDetailsFragment_to_teacherAllAssistantFragment)
+               popBackStack() // Clear the back stack up to teacherAllAssistantFragment
             }
         }
         alertDialog.dialogNoBtn.setOnClickListener {
@@ -152,8 +149,9 @@ class AssistantDetailsFragment : Fragment() {
                                         "updated successfully",
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    Navigation.findNavController(requireView())
-                                        .navigate(R.id.action_assistantDetailsFragment_to_teacherAllAssistantFragment)
+                                    Navigation.findNavController(requireView()).apply {
+                                       popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+                                    }
                                 }
                                 else -> {}
                             }
@@ -167,7 +165,6 @@ class AssistantDetailsFragment : Fragment() {
                 }
             }else{
                 Toast.makeText(requireContext(), getString(R.string.fillAllFields), Toast.LENGTH_SHORT).show()
-
             }
         }
     }

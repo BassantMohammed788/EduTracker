@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edutracker.R
@@ -27,17 +26,14 @@ import kotlinx.coroutines.launch
 
 
 class TeacherAllAssistantFragment : Fragment() {
-    lateinit var binding: FragmentTeacherAllAssistantBinding
-    lateinit var viewModel: AssistantDataViewModel
-    lateinit var viewModelFactory: AssistantDataViewModelFactory
-    lateinit var recyclerView: RecyclerView
-    lateinit var Aadapter:AssistantAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var binding: FragmentTeacherAllAssistantBinding
+    private lateinit var viewModel: AssistantDataViewModel
+    private lateinit var viewModelFactory: AssistantDataViewModelFactory
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter:AssistantAdapter
 
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentTeacherAllAssistantBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,10 +42,10 @@ class TeacherAllAssistantFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModelFactory = AssistantDataViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         viewModel = ViewModelProvider(this, viewModelFactory)[AssistantDataViewModel::class.java]
-        Aadapter = AssistantAdapter(cardLambda)
+        adapter = AssistantAdapter(cardLambda)
         recyclerView = binding.assistantsRecycler
         recyclerView.apply {
-            adapter = Aadapter
+            adapter = adapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
 
@@ -75,7 +71,7 @@ class TeacherAllAssistantFragment : Fragment() {
                                 binding.noAssistantTv.visibility=View.VISIBLE
                                 Log.i("TAG", "onViewCreated: no assistant yet")
                             }else{
-                                Aadapter.submitList(result.data)
+                                adapter.submitList(result.data)
                                 binding.noAssistantTv.visibility=View.GONE
                                 binding.assistantProgressBar.visibility=View.GONE
                                 Log.i("TAG", "onViewCreated: ${result.data[0].name}")
@@ -96,8 +92,7 @@ class TeacherAllAssistantFragment : Fragment() {
 
     }
     private val cardLambda = { assistant: Assistant ->
-        /*val action = TAAD.actionCategoryFragmentToSubCategoryFragment("",
-            categoryID.toString())*/
-        Navigation.findNavController(requireView()).navigate(R.id.action_teacherAllAssistantFragment_to_assistantDetailsFragment)
+        val action = TeacherAllAssistantFragmentDirections.actionTeacherAllAssistantFragmentToAssistantDetailsFragment(assistant.email)
+        Navigation.findNavController(requireView()).navigate(action)
     }
 }

@@ -65,12 +65,58 @@
     <string name="enter_assistant_name">Enter Assistant name</string>
     <string name="enter_assistant_email">Enter Assistant Email</string>
     <string name="semester_prompt">Select Semester</string>
-    <string name="no">no</string>
+    <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="add_group">Add Group</string>
     <string name="no_groups_yet">No Groups Yet</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="choose_grade_level">Choose Grade Level</string>
+    <string name="choose_group">Choose Group</string>
+    <string name="choose_month">Choose Month</string>
+    <string name="no_lessons_yet">No Lessons Yet</string>
+
+    <string name="you_should_choose_grade_level">You should choose Grade Level First</string>
+
+    <string name="you_should_choose_time">You should choose Grade Level and Group and time</string>
+
+    <string name="you_should_choose_grade_level_and_group">You should choose Grade Level and Group</string>
+
+    <string name="add_lesson">Add Lesson</string>
+
+    <string name="no_grades_yet">No Grade Levels Yet</string>
+
+    <string name="no_months_yet">No Months Yet</string>
+    <string name="you_should_choose_semester_level">You should choose semester and group</string>
+
+    <string name="you_should_choose_semester">You should choose semester</string>
+
+    <string name="choose_date">Choose Date </string>
+    <string name="choose_semester">Choose Semester</string>
+
+    <string name="should_choose_semester"> You Should Choose Semester</string>
+    <string name="enter_student_name">Enter Student Name</string>
+    <string name="enter_student_email">Enter Student Email</string>
+    <string name="enter_student_phone">Enter Student Phone</string>
+    <string name="enter_student_password">Enter Student Password</string>
+    <string name="enter_parent_email">Enter Parent Email</string>
+    <string name="enter_parent_phone">Enter Parent Phone</string>
+    <string name="add_student">Add Student</string>
+    <string name="attendance">Attendance</string>
+    <string name="choose_lesson">Choose Lesson</string>
+
+    <string name="you_should_choose_month">You should choose Month First</string>
+    <string name="no_students_yet">No Students Yet</string>
+    <string name="search_by_student_name">Search By Student Name</string>
+    <string name="exams">Exams</string>
+    <string name="details">Details</string>
+    <string name="take_attendance">Take Attendance</string>
+    <string name="permitted">permitted</string>
+    <string name="present">present</string>
+    <string name="absent">absent</string>
+    <string name="late">late</string>
+    <string name="payment">Payment</string>
+
+
     <string-array name="grade_levels">
         <item>First preparatory Grade</item>
         <item>Second preparatory Grade</item>

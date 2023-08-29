@@ -1,6 +1,5 @@
 package com.example.edutracker.teacher.assistantdata.view
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -23,23 +22,18 @@ import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
 import com.example.edutracker.utilities.checkEgyptianPhoneNumber
 import com.example.edutracker.utilities.isValidEmail
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class TeacherAddNewAssistantFragment : Fragment() {
 
-    lateinit var binding: FragmentTeacherAddNewAssistantBinding
+    private lateinit var binding: FragmentTeacherAddNewAssistantBinding
 
-    lateinit var viewModel: AssistantDataViewModel
-    lateinit var viewModelFactory: AssistantDataViewModelFactory
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+   private lateinit var viewModel: AssistantDataViewModel
+    private lateinit var viewModelFactory: AssistantDataViewModelFactory
 
-    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentTeacherAddNewAssistantBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -59,15 +53,15 @@ class TeacherAddNewAssistantFragment : Fragment() {
             val email=binding.assistantEmailET.text.toString()
             val password = binding.assistantPasswordET.text.toString()
             val phone = binding.assistantPhoneNumberET.text.toString()
-            val teacher_id = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+            val teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
             val transformedEmail = email.replace(".", ",")
           if (checkConnectivity(requireContext())){
               if (name.isNotEmpty()&&email.isNotEmpty()&&password.isNotEmpty()&&phone.isNotEmpty()){
                   if (isValidEmail(email)){
                       if (checkEgyptianPhoneNumber(phone)){
-                          val assistant=Assistant(name,transformedEmail,phone,password,teacher_id)
+                          val assistant=Assistant(name,transformedEmail,phone,password,teacherId)
                           lifecycleScope.launch {
-                              viewModel.addAssistant(teacher_id, assistant)
+                              viewModel.addAssistant(teacherId, assistant)
                                  viewModel.addAssistant.collect { result ->
                                       when (result) {
                                           is FirebaseState.Loading -> {
@@ -76,8 +70,10 @@ class TeacherAddNewAssistantFragment : Fragment() {
                                           is FirebaseState.Success -> {
                                               if (result.data) {
                                                   Toast.makeText(requireContext(), "Added Successfully", Toast.LENGTH_SHORT).show()
-                                                  Navigation.findNavController(requireView()).navigate(R.id.action_teacherAddNewAssistantFragment_to_teacherAllAssistantFragment)
-                                              } else {
+                                                  Navigation.findNavController(requireView()).apply {
+                                                      popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+                                                  }
+                                                  } else {
                                                   Toast.makeText(requireContext(), "The email already exists", Toast.LENGTH_SHORT).show()
                                               }
                                           }

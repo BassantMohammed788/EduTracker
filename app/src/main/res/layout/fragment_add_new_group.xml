@@ -8,11 +8,9 @@
     android:background="@color/background_color"
     tools:context=".teacher.groups.view.AddNewGroupFragment">
 <androidx.constraintlayout.widget.ConstraintLayout
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
-
     <ProgressBar
         android:id="@+id/groupProgressBar"
         style="?android:attr/progressBarStyle"
@@ -23,7 +21,6 @@
         android:indeterminateTintMode="src_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartO-f="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 <TextView
@@ -70,7 +67,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
-                android:text="Choose Grade Level"
+                android:text="@string/choose_grade_level"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -103,6 +100,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:weightSum="2"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
@@ -111,12 +109,12 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/AddButton"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_login_btn"
-                android:paddingStart="35dp"
-                android:paddingEnd="35dp"
+                android:layout_marginBottom="32dp"
                 android:text="@string/add"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -125,7 +123,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/cancelButton"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="32dp"

@@ -34,6 +34,13 @@ class MySharedPreferences private constructor(context: Context) {
     fun getTeacherID(): String? {
         return sharedPreferences.getString(Constants.TEACHER_ID, null)
     }
+    fun saveSemester(type: String) {
+        sharedPreferences.edit().putString(Constants.SEMESTER, type).apply()
+    }
+
+    fun getSemester(): String? {
+        return sharedPreferences.getString(Constants.SEMESTER, null)
+    }
 
 
 

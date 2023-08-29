@@ -11,7 +11,7 @@ object Constants {
     const val TEACHER_ID="teacher_id"
     const val TEACHER_NODE="Teachers"
     const val YEAR_NODE="Years"
-    const val STUDENT_NODE="Students"
+    const val STUDENT_NODE="Studentss"
     const val ASSISTANT_NODE="Assistants"
     const val GROUP_NODE="Groups"
     const val GRADE_NODE="Grades"
@@ -19,6 +19,8 @@ object Constants {
     const val EXAM_GRADE_NODE="Exam_Grades"
     const val LESSON_NODE="Lessons"
     const val STUDENT_ATTENDANCE_NODE="Student_Attendance"
+    const val SEMESTER_NODE = "Semesters"
+    const val SEMESTER = "Semester"
 
 
 
