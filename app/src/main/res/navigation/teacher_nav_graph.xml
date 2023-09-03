@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_teacherHomeFragment_to_takeAttendanceFragment"
             app:destination="@id/takeAttendanceFragment" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_allExamsFragment"
+            app:destination="@id/allExamsFragment" />
     </fragment>
     <fragment
         android:id="@+id/teacherAllAssistantFragment"
@@ -60,8 +63,8 @@
             android:id="@+id/action_assistantDetailsFragment_to_teacherAllAssistantFragment"
             app:destination="@id/teacherAllAssistantFragment" />
         <argument
-            android:name="assistantId"
-            app:argType="string" />
+            android:name="assistant"
+            app:argType="com.example.edutracker.dataclasses.Assistant" />
         <!--  <argument
               android:name="assistant_id"
               app:argType="string" />-->
@@ -122,6 +125,21 @@
         <action
             android:id="@+id/action_allStudentsFragment_to_studentDetailsFragment"
             app:destination="@id/studentDetailsFragment" />
+        <action
+            android:id="@+id/action_allStudentsFragment_to_studentPaymentFragment"
+            app:destination="@id/studentPaymentFragment" />
+        <action
+            android:id="@+id/action_allStudentsFragment_to_studentAttendanceFragment"
+            app:destination="@id/studentAttendanceFragment" />
+        <action
+            android:id="@+id/action_allStudentsFragment_to_studentExamDegreesFragment"
+            app:destination="@id/studentExamDegreesFragment" />
+        <action
+            android:id="@+id/action_allStudentsFragment_to_parentFragment"
+            app:destination="@id/parentFragment" />
+        <action
+            android:id="@+id/action_allStudentsFragment_to_addExistingStudentFragment"
+            app:destination="@id/addExistingStudentFragment" />
     </fragment>
     <fragment
         android:id="@+id/attendanceFragment"
@@ -144,8 +162,8 @@
             android:id="@+id/action_studentDetailsFragment_to_allStudentsFragment"
             app:destination="@id/allStudentsFragment" />
         <argument
-            android:name="studentId"
-            app:argType="string" />
+            android:name="student"
+            app:argType="com.example.edutracker.dataclasses.Student" />
     </fragment>
     <fragment
         android:id="@+id/takeAttendanceFragment"
@@ -174,5 +192,134 @@
         android:id="@+id/paymentFragment"
         android:name="com.example.edutracker.teacher.payment.view.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_recordPaymentFragment"
+            app:destination="@id/recordPaymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordPaymentFragment"
+        android:name="com.example.edutracker.teacher.payment.view.RecordPaymentFragment"
+        android:label="fragment_record_payment"
+        tools:layout="@layout/fragment_record_payment">
+        <argument android:name="groupId"
+            app:argType="string"/>
+        <argument
+            android:name="month"
+            app:argType="string" />
+        <argument
+            android:name="gradeLevelId"
+            app:argType="string" />
+        <argument
+            android:name="groupName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentPaymentFragment"
+        android:name="com.example.edutracker.teacher.students.view.StudentPaymentFragment"
+        android:label="fragment_student_payment"
+        tools:layout="@layout/fragment_student_payment" >
+        <action
+            android:id="@+id/action_studentPaymentFragment_to_allStudentsFragment"
+            app:destination="@id/allStudentsFragment" />
+        <argument
+            android:name="student"
+            app:argType="com.example.edutracker.dataclasses.Student" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentAttendanceFragment"
+        android:name="com.example.edutracker.teacher.students.view.StudentAttendanceFragment"
+        android:label="fragment_student_attendance"
+        tools:layout="@layout/fragment_student_attendance" >
+        <action
+            android:id="@+id/action_studentAttendanceFragment_to_allStudentsFragment"
+            app:destination="@id/allStudentsFragment" />
+        <argument
+            android:name="student"
+            app:argType="com.example.edutracker.dataclasses.Student" />
+    </fragment>
+    <fragment
+        android:id="@+id/allExamsFragment"
+        android:name="com.example.edutracker.teacher.exams.view.AllExamsFragment"
+        android:label="fragment_all_exams"
+        tools:layout="@layout/fragment_all_exams" >
+        <action
+            android:id="@+id/action_allExamsFragment_to_addExamFragment"
+            app:destination="@id/addExamFragment" />
+        <action
+            android:id="@+id/action_allExamsFragment_to_recordExamDegreesFragment"
+            app:destination="@id/recordExamDegreesFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/addExamFragment"
+        android:name="com.example.edutracker.teacher.exams.view.AddExamFragment"
+        android:label="fragment_add_exam"
+        tools:layout="@layout/fragment_add_exam" >
+        <action
+            android:id="@+id/action_addExamFragment_to_allExamsFragment"
+            app:destination="@id/allExamsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recordExamDegreesFragment"
+        android:name="com.example.edutracker.teacher.exams.view.RecordExamDegreesFragment"
+        android:label="fragment_record_exam_degrees"
+        tools:layout="@layout/fragment_record_exam_degrees" >
+        <argument
+            android:name="groupId"
+            app:argType="string" />
+        <argument
+            android:name="groupName"
+            app:argType="string" />
+        <argument
+            android:name="gradeLevel"
+            app:argType="string" />
+        <argument
+            android:name="exam"
+            app:argType="com.example.edutracker.dataclasses.Exam" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentExamDegreesFragment"
+        android:name="com.example.edutracker.teacher.students.view.StudentExamDegreesFragment"
+        android:label="StudentExamDegreesFragment" >
+        <argument
+            android:name="student"
+            app:argType="com.example.edutracker.dataclasses.Student" />
+    </fragment>
+    <fragment
+        android:id="@+id/addParentFragment"
+        android:name="com.example.edutracker.teacher.students.view.AddParentFragment"
+        android:label="AddParentFragment" >
+        <argument
+            android:name="studentId"
+            app:argType="string" />
+        <argument
+            android:name="studentName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/parentFragment"
+        android:name="com.example.edutracker.teacher.students.view.ParentFragment"
+        android:label="fragment_parent"
+        tools:layout="@layout/fragment_parent" >
+        <action
+            android:id="@+id/action_parentFragment_to_addParentFragment"
+            app:destination="@id/addParentFragment" />
+        <argument
+            android:name="studentId"
+            app:argType="string" />
+        <argument android:name="studentName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/addExistingStudentFragment"
+        android:name="com.example.edutracker.teacher.students.view.AddExistingStudentFragment"
+        android:label="fragment_add_existing_student"
+        tools:layout="@layout/fragment_add_existing_student" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.edutracker.teacher.profile.view.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>

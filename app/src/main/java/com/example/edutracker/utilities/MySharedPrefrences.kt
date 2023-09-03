@@ -41,6 +41,42 @@ class MySharedPreferences private constructor(context: Context) {
     fun getSemester(): String? {
         return sharedPreferences.getString(Constants.SEMESTER, null)
     }
+    fun saveTeacherEmail(type: String) {
+        sharedPreferences.edit().putString(Constants.TEACHER_EMAIL, type).apply()
+    }
+
+    fun getTeacherEmail(): String? {
+        return sharedPreferences.getString(Constants.TEACHER_EMAIL, null)
+    }
+    fun saveTeacherName(type: String) {
+        sharedPreferences.edit().putString(Constants.TEACHER_NAME, type).apply()
+    }
+
+    fun getTeacherName(): String? {
+        return sharedPreferences.getString(Constants.TEACHER_NAME, null)
+    }
+    fun saveTeacherPhone(type: String) {
+        sharedPreferences.edit().putString(Constants.TEACHER_PHONE, type).apply()
+    }
+
+    fun getTeacherPhone(): String? {
+        return sharedPreferences.getString(Constants.TEACHER_PHONE, null)
+    }
+    fun saveTeacherSubject(type: String) {
+        sharedPreferences.edit().putString(Constants.TEACHER_SUBJECT, type).apply()
+    }
+
+    fun getTeacherSubject(): String? {
+        return sharedPreferences.getString(Constants.TEACHER_SUBJECT, null)
+    }
+    fun saveIsUserLoggedIn(type: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.IS_USER_LOGGED_IN, type).apply()
+    }
+
+    fun getIsUserLoggedIn(): Boolean {
+        return sharedPreferences.getBoolean(Constants.IS_USER_LOGGED_IN, false)
+    }
+
 
 
 

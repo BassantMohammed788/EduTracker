@@ -44,9 +44,9 @@ class LessonAdapter( private var Listener: (Lesson) -> Unit) :
         holder.binding.dayTextView.text=parts[0]
         holder.binding.dateTextView.text=parts[1]
         holder.binding.timeTextView.text=parts[2]
-        holder.binding.deleteIcon.setOnClickListener {
+     /*   holder.binding.deleteIcon.setOnClickListener {
             Listener(currentObject)
-        }
+        }*/
 
     }
     override fun getItemCount(): Int {

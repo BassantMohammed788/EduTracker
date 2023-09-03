@@ -63,6 +63,8 @@ tools:context=".authentication.SignUpFragment">
             android:id="@+id/signupUserNameET"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+
+            android:textColorHint="@color/colorHint"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
@@ -79,6 +81,8 @@ tools:context=".authentication.SignUpFragment">
             android:id="@+id/SignUpEmailET"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+
+            android:textColorHint="@color/colorHint"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
@@ -97,6 +101,8 @@ tools:context=".authentication.SignUpFragment">
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
+
+            android:textColorHint="@color/colorHint"
             android:layout_marginEnd="32dp"
             android:background="@drawable/background_edit_text"
             android:ems="10"
@@ -110,8 +116,11 @@ tools:context=".authentication.SignUpFragment">
             android:id="@+id/signupPhoneNumberET"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+
+            android:textColorHint="@color/colorHint"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
+
             android:layout_marginEnd="32dp"
             android:background="@drawable/background_edit_text"
             android:ems="10"
@@ -132,6 +141,8 @@ tools:context=".authentication.SignUpFragment">
             android:background="@drawable/background_edit_text"
             android:ems="10"
             android:hint="@string/enter_your_password"
+
+            android:textColorHint="@color/colorHint"
             android:inputType="textPassword"
             android:minHeight="48dp"
             android:padding="8dp"
@@ -143,6 +154,8 @@ tools:context=".authentication.SignUpFragment">
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="32dp"
+
+            android:textColorHint="@color/colorHint"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/background_edit_text"

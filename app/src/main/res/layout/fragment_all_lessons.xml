@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/background_color"
     tools:context=".teacher.lessons.view.AllLessonsFragment">
 
@@ -11,7 +11,6 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -82,7 +81,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
                 android:src="@drawable/drop_down_arrow"
-                android:contentDescription="Icon"
+                android:contentDescription="@string/todo"
                 app:tint="@color/primary" />
         </LinearLayout>
     <LinearLayout
@@ -119,7 +118,7 @@
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/drop_down_arrow"
-            android:contentDescription="Icon"
+            android:contentDescription="@string/todo"
             app:tint="@color/primary" />
     </LinearLayout>
 
@@ -157,7 +156,7 @@
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/drop_down_arrow"
-            android:contentDescription="Icon"
+            android:contentDescription="@string/todo"
             app:tint="@color/primary" />
     </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
@@ -178,15 +177,15 @@
             android:id="@+id/addLessonFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="370dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="380dp"
+            android:layout_marginStart="32dp"
             android:backgroundTint="@color/primary"
             android:clickable="true"
             android:contentDescription="@string/app_name"
             android:focusable="true"
 
             android:src="@drawable/add_icon"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chooseLevel"
             app:rippleColor="@color/white"
             tools:ignore="SpeakableTextPresentCheck" />

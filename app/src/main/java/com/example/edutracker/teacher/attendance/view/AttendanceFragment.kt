@@ -21,8 +21,6 @@ import com.example.edutracker.dataclasses.Lesson
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
 import com.example.edutracker.network.RemoteClient
-import com.example.edutracker.teacher.attendance.viewmodel.AttendanceViewModel
-import com.example.edutracker.teacher.attendance.viewmodel.AttendanceViewModelFactory
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModel
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.teacher.lessons.view.GroupAdapter
@@ -32,7 +30,6 @@ import com.example.edutracker.teacher.students.viewmodel.StudentsViewModel
 import com.example.edutracker.teacher.students.viewmodel.StudentsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
-import com.example.edutracker.utilities.gradeLevel
 import kotlinx.coroutines.launch
 
 
@@ -41,8 +38,6 @@ class AttendanceFragment : Fragment() {
 
     private lateinit var studentsViewModel: StudentsViewModel
     private lateinit var studentsViewModelFactory: StudentsViewModelFactory
-    private lateinit var attendanceViewModel: AttendanceViewModel
-    private lateinit var attendanceViewModelFactory: AttendanceViewModelFactory
     private lateinit var groupsViewModel: GroupsViewModel
     private lateinit var groupsViewModelFactory: GroupsViewModelFactory
     private lateinit var lessonViewModel: LessonsViewModel
@@ -72,8 +67,6 @@ class AttendanceFragment : Fragment() {
         studentsViewModelFactory = StudentsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         studentsViewModel = ViewModelProvider(this, studentsViewModelFactory)[StudentsViewModel::class.java]
 
-        attendanceViewModelFactory = AttendanceViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
-        attendanceViewModel = ViewModelProvider(this, attendanceViewModelFactory)[AttendanceViewModel::class.java]
         groupsViewModelFactory = GroupsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         groupsViewModel = ViewModelProvider(this, groupsViewModelFactory)[GroupsViewModel::class.java]
         lessonsViewModelFactory = LessonsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
@@ -95,18 +88,21 @@ class AttendanceFragment : Fragment() {
         }
 
         binding.chooseGroup.setOnClickListener{
-            if (gradeVar!=null){
-                displayGroupDialog()
-            }else{
-                Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
+            /*  if (gradeVar!=null){
+                    displayGroupDialog()
+                }else{
+                    Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
+                }*/
         }
         binding.chooseMonth.setOnClickListener {
-            if (gradeVar!=null&&groupNameVar!=null){
-                displayMonthDialog()
-            }else{
-                Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
+
+            /*   if (gradeVar!=null&&groupNameVar!=null){
+                    displayMonthDialog()
+                }else{
+                    Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
+                }*/
         }
         binding.chooseLesson.setOnClickListener{
             if (monthVar!=null){
@@ -116,17 +112,13 @@ class AttendanceFragment : Fragment() {
             }
         }
         binding.takeAttendanceButton.setOnClickListener{
-
             if (monthVar!=null) {
                 val view = view
-                val action =  //AttendanceFragmentDirections.actionAttendanceFragmentToAllLessonsFragment()
+                val action =
                    AttendanceFragmentDirections.actionAttendanceFragmentToTakeAttendanceFragment(lessonIdVar!!,groupIdVar!!,monthVar!!,gradeVar!!,groupNameVar!!)
                     Navigation.findNavController(view).navigate(action)
             }
-
         }
-
-
     }
     private fun displayGradeLevelDialog() {
         val builder = AlertDialog.Builder(requireContext())
@@ -158,7 +150,7 @@ class AttendanceFragment : Fragment() {
                                 gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data){
-                                    list.add(gradeLevel(i)!!)
+                                    list.add(i)
                                 }
                                 gradeLevelAdapter.setGradeLevelsList(list)
                             }
@@ -174,7 +166,10 @@ class AttendanceFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
-            binding.gradeName.text = gradeVar
+            if (gradeVar!=null) {
+                binding.gradeName.text = gradeVar
+                displayGroupDialog()
+            }
             dialog.dismiss()
         }
     }
@@ -187,10 +182,10 @@ class AttendanceFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
         if (checkConnectivity(requireContext())){
-            if (gradeLevel(gradeVar) != null){
+            if (gradeVar != null){
                 lifecycleScope.launch {
                     groupsViewModel.getAllGroups(semesterVar!!,MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,
-                        gradeLevel(gradeVar)!!)
+                        gradeVar!!)
                     groupsViewModel.getGroups.collect{ result->
                         when(result){
                             is FirebaseState.Loading ->{
@@ -223,7 +218,10 @@ class AttendanceFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
-            binding.groupName.text = groupNameVar
+            if (groupNameVar!=null) {
+                binding.groupName.text = groupNameVar
+                displayMonthDialog()
+            }
             dialog.dismiss()
         }
     }
@@ -239,7 +237,7 @@ class AttendanceFragment : Fragment() {
         if (checkConnectivity(requireContext())){
             lifecycleScope.launch {
                 lessonViewModel.getAllMonths(semesterVar!!, MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,
-                    gradeLevel(gradeVar!!)!!,groupIdVar!!)
+                    gradeVar!!,groupIdVar!!)
                 lessonViewModel.getAllMonths.collect{ result->
                     when(result){
                         is FirebaseState.Loading ->{
@@ -258,12 +256,12 @@ class AttendanceFragment : Fragment() {
                                 monthDialog.progressBar.visibility=View.GONE
                                 monthDialog.GradeLevelRecycler.visibility=View.VISIBLE
                                 val list = mutableListOf<String>()
-                                val englishMonthList = listOf(
-                                    "January", "February", "March", "April", "May", "June",
-                                    "July", "August", "September", "October", "November", "December"
+                                val arabicMonthList = listOf(
+                                    "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                                    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
                                 )
                                 for (i in result.data){
-                                    if (i in englishMonthList) {
+                                    if (i in arabicMonthList) {
                                         list.add(i)
                                     }
                                 }
@@ -281,7 +279,10 @@ class AttendanceFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
         }
         monthDialog.okBTN.setOnClickListener {
+            if (monthVar!=null){
             binding.monthName.text = monthVar
+                displayLessonDialog()
+            }
             dialog.dismiss()
         }
     }
@@ -296,7 +297,7 @@ class AttendanceFragment : Fragment() {
         if (monthVar!=null){
             if (checkConnectivity(requireContext())){
                 lifecycleScope.launch {
-                    lessonViewModel.getAllLessons(teacherIdVar!!,semesterVar!!, gradeLevel(gradeVar!!)!!,groupIdVar!!,monthVar!!)
+                    lessonViewModel.getAllLessons(teacherIdVar!!,semesterVar!!, gradeVar!!,groupIdVar!!,monthVar!!)
                     lessonViewModel.getAllLessons.collect{ result->
                         when(result){
                             is FirebaseState.Loading->{
@@ -330,7 +331,9 @@ class AttendanceFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
+            if(lessonVar!=null){
             binding.LessonName.text = lessonVar
+            }
             dialog.dismiss()
         }
     }

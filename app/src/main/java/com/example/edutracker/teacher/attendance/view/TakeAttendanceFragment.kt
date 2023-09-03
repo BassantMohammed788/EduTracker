@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentTakeAttendanceBinding
@@ -77,8 +78,9 @@ class TakeAttendanceFragment : Fragment() {
         recyclerView = binding.attendanceRecycler
         recyclerView.apply {
             adapter = groupAttendanceAdapter
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
+
 
         binding.attendanceTV.text = "$groupNameVar ${getString(R.string.attendance)}"
 
@@ -88,23 +90,21 @@ class TakeAttendanceFragment : Fragment() {
     private fun getGroupStudentsAttendance(){
         if (checkConnectivity(requireContext())){
             lifecycleScope.launch {
-                studentsViewModel.getAllStudents(teacherIdVar!!)
-                studentsViewModel.getStudent.collect{ result->
+                studentsViewModel.getGroupStudents(teacherIdVar!!,groupIdVar!!,semesterVar!!)
+                studentsViewModel.getGroupStudent.collect{ result->
                     when (result) {
                         is FirebaseState.Loading -> {
                             binding.attendanceProgressBar.visibility=View.VISIBLE
                             binding.attendanceRecycler.visibility=View.INVISIBLE
                             binding.noStudentsTv.visibility=View.INVISIBLE
-
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()){
-
                                 binding.attendanceProgressBar.visibility=View.INVISIBLE
-                                binding.attendanceRecycler.visibility=View.INVISIBLE
+                                binding.attendanceRecycler.visibility=View.VISIBLE
                                 binding.noStudentsTv.visibility=View.VISIBLE
                             }else{
-                                Log.i("TAG", "getAllStudents: ${result.data}")
+                                Log.i("TAG", "getGroupStudents: ${result.data}")
                                 attendanceViewModel.getLessonAttendance(semesterVar!!, gradeVar!!,groupIdVar!!,lessonIdVar!!,monthVar!!,result.data)
                                 attendanceViewModel.getLessonAttendance.collect{ result->
                                     when(result){

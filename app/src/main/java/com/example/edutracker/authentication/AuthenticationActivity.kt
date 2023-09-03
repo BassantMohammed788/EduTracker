@@ -12,6 +12,6 @@ class AuthenticationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
         val navController: NavController = Navigation.findNavController(this , R.id.auth_nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this,navController)
+
     }
 }

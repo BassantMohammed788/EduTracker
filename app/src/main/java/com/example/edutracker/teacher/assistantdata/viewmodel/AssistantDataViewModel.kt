@@ -1,6 +1,5 @@
 package com.example.edutracker.teacher.assistantdata.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,48 +20,32 @@ class AssistantDataViewModel(private val repo: RepositoryInterface): ViewModel()
         MutableStateFlow(FirebaseState.Loading)
     val getAllAssistants: StateFlow<FirebaseState<List<Assistant>>> = getAllAssistantsMutable
 
-    private var oneAssistantsMutable: MutableStateFlow<FirebaseState<Assistant>> =
-        MutableStateFlow(FirebaseState.Loading)
-    val oneAssistants: StateFlow<FirebaseState<Assistant>> = oneAssistantsMutable
 
-    private var updateAssistantsMutable: MutableStateFlow<FirebaseState<Assistant>> =
+    private var updateAssistantsMutable: MutableStateFlow<FirebaseState<Boolean>> =
         MutableStateFlow(FirebaseState.Loading)
-    val updateAssistant: StateFlow<FirebaseState<Assistant>> = updateAssistantsMutable
+    val updateAssistant: StateFlow<FirebaseState<Boolean>> = updateAssistantsMutable
 
     fun getAllAssistants(teacher_id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getAllAssistants(teacher_id)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getAllAssistantsFail: $e")
                     getAllAssistantsMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getAllAssistantsSuccess: $data")
                     getAllAssistantsMutable.value = FirebaseState.Success(data)
                 }
         }
     }
-    fun getAssistantByEmail(teacher_id: String,email: String) {
+    fun updateAssistant(assistant: Assistant) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getAssistantByEmail(teacher_id,email)
-                ?.catch { e ->
-                    Log.e("TAG", "getAllAssistantsFail: $e")
-                    oneAssistantsMutable.value = FirebaseState.Failure(e)
-                }
-                ?.collect { data ->
-                    Log.i("TAG", "getAllAssistantsSuccess: $data")
-                    oneAssistantsMutable.value = FirebaseState.Success(data)
-                }
-        }
-    }
-    fun updateAssistant(teacher_id: String,email: String,assistant: Assistant) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.updateAssistantData(teacher_id,email,assistant)
-                ?.catch { e ->
+            repo.updateAssistantData(assistant)
+                .catch { e ->
                     Log.e("TAG", "updateAssistant: $e")
                     updateAssistantsMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getAllAssistantsSuccess: $data")
                     updateAssistantsMutable.value = FirebaseState.Success(data)
                 }
@@ -71,11 +54,11 @@ class AssistantDataViewModel(private val repo: RepositoryInterface): ViewModel()
     fun addAssistant(teacher_id: String,assistant: Assistant){
         viewModelScope.launch(Dispatchers.IO){
         repo.addAssistant(assistant,teacher_id)
-            ?.catch { e ->
+            .catch { e ->
                 Log.e("TAG", "updateAssistant: $e")
                 addAssistantsMutable.value = FirebaseState.Failure(e)
             }
-            ?.collect { data ->
+            .collect { data ->
                 Log.i("TAG", "getAllAssistantsSuccess: $data")
                 addAssistantsMutable.value = FirebaseState.Success(data)
             }

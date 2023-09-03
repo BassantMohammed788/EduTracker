@@ -44,16 +44,19 @@ class TeacherHomeFragment : Fragment() {
             Navigation.findNavController(requireView()).navigate(R.id.action_teacherHomeFragment_to_allLessonsFragment)
         }
 
+
         if (MySharedPreferences.getInstance(requireContext()).getSemester()!=null){
             binding.AssistantCard.visibility=View.VISIBLE
             binding.StudentCard.visibility=View.VISIBLE
             binding.GroupCard.visibility=View.VISIBLE
             binding.lessonsCard.visibility=View.VISIBLE
+
         }else{
             binding.AssistantCard.visibility=View.INVISIBLE
             binding.StudentCard.visibility=View.INVISIBLE
             binding.GroupCard.visibility=View.INVISIBLE
             binding.lessonsCard.visibility=View.INVISIBLE
+
         }
         binding.chooseSemester.setOnClickListener {
             displaySemesterDialog()
@@ -65,7 +68,7 @@ class TeacherHomeFragment : Fragment() {
         semesterVar = string
     }
     private fun retrieveSemestersList():List<String>{
-        val year1 = "2023-2024 First Semester"
+    /*    val year1 = "2023-2024 First Semester"
         val year2 = "2023-2024 Second Semester"
         val year3 = "2024-2025 First Semester"
         val year4 =  "2024-2025 Second Semester"
@@ -84,8 +87,8 @@ class TeacherHomeFragment : Fragment() {
         val year17 = "2031-2032 First Semester"
         val year18 = "2031-2032 Second Semester"
         val year19 = "2032-2033 First Semester"
-        val year20 = "2032-2033 Second Semester"
-   /*     val year1 = "الفصل الدراسي الأول ٢٠٢٣-٢٠٢٤"
+        val year20 = "2032-2033 Second Semester"*/
+        val year1 = "الفصل الدراسي الأول ٢٠٢٣-٢٠٢٤"
         val year2 = "الفصل الدراسي الثاني ٢٠٢٣-٢٠٢٤"
         val year3 = "الفصل الدراسي الأول ٢٠٢٤-٢٠٢٥"
         val year4 = "الفصل الدراسي الثاني ٢٠٢٤-٢٠٢٥"
@@ -104,7 +107,7 @@ class TeacherHomeFragment : Fragment() {
         val year17 = "الفصل الدراسي الأول ٢٠٣١-٢٠٣٢"
         val year18 = "الفصل الدراسي الثاني ٢٠٣١-٢٠٣٢"
         val year19 = "الفصل الدراسي الأول ٢٠٣٢-٢٠٣٣"
-        val year20 = "الفصل الدراسي الثاني ٢٠٣٢-٢٠٣٣"*/
+        val year20 = "الفصل الدراسي الثاني ٢٠٣٢-٢٠٣٣"
         return listOf(year1,year2,year3,year4,year5,year6,year7,year8,year9,year10,year11,year12,year13,year14,year15,year16,year17,year18,year19,year20)
     }
 
@@ -113,6 +116,7 @@ class TeacherHomeFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
         gradeLevelDialog.GradeLevelRecycler.adapter = semesterAdapter
+        gradeLevelDialog.GradeTv.text=getString(R.string.choose_semester)
         builder.setView(gradeLevelDialog.root)
         val dialog = builder.create()
         dialog.show()

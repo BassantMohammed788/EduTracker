@@ -1,5 +1,6 @@
 package com.example.edutracker.teacher.assistantdata.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edutracker.R
+import com.example.edutracker.databinding.AlertDialogBinding
 import com.example.edutracker.databinding.FragmentTeacherAllAssistantBinding
 import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.models.Repository
@@ -30,7 +32,7 @@ class TeacherAllAssistantFragment : Fragment() {
     private lateinit var viewModel: AssistantDataViewModel
     private lateinit var viewModelFactory: AssistantDataViewModelFactory
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter:AssistantAdapter
+    private lateinit var assistantAdapter:AssistantAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -42,10 +44,10 @@ class TeacherAllAssistantFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModelFactory = AssistantDataViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         viewModel = ViewModelProvider(this, viewModelFactory)[AssistantDataViewModel::class.java]
-        adapter = AssistantAdapter(cardLambda)
+        assistantAdapter = AssistantAdapter(cardLambda,deleteLambda)
         recyclerView = binding.assistantsRecycler
         recyclerView.apply {
-            adapter = adapter
+            adapter = assistantAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
 
@@ -71,8 +73,10 @@ class TeacherAllAssistantFragment : Fragment() {
                                 binding.noAssistantTv.visibility=View.VISIBLE
                                 Log.i("TAG", "onViewCreated: no assistant yet")
                             }else{
-                                adapter.submitList(result.data)
+                                assistantAdapter.submitList(result.data)
+                                recyclerView.visibility=View.VISIBLE
                                 binding.noAssistantTv.visibility=View.GONE
+                                binding.noAssistantTv.text=result.data[0].name
                                 binding.assistantProgressBar.visibility=View.GONE
                                 Log.i("TAG", "onViewCreated: ${result.data[0].name}")
                             }
@@ -92,7 +96,38 @@ class TeacherAllAssistantFragment : Fragment() {
 
     }
     private val cardLambda = { assistant: Assistant ->
-        val action = TeacherAllAssistantFragmentDirections.actionTeacherAllAssistantFragmentToAssistantDetailsFragment(assistant.email)
+        val action = TeacherAllAssistantFragmentDirections.actionTeacherAllAssistantFragmentToAssistantDetailsFragment(assistant)
         Navigation.findNavController(requireView()).navigate(action)
+    }
+    private val deleteLambda={ assistant : Assistant->
+            val builder = AlertDialog.Builder(requireContext())
+            val alertDialog = AlertDialogBinding.inflate(layoutInflater)
+            builder.setView(alertDialog.root)
+            val dialog = builder.create()
+            dialog.show()
+            alertDialog.dialogYesBtn.setOnClickListener {
+                if (checkConnectivity(requireContext())) {
+                    viewModel.deleteAssistant(
+                        MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,
+                        assistant.email
+                    )
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.deleted_successfully),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }else{
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.network_lost_title),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                    dialog.dismiss()
+            }
+            alertDialog.dialogNoBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+
     }
 }

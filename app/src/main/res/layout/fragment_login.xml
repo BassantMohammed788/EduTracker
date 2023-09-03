@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -45,25 +46,27 @@
                     android:layout_height="150dp"
                     android:src="@drawable/women2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="28dp"
+                    android:layout_marginEnd="28dp"
                     android:text="@string/login"
                     android:textColor="@color/white"
                     android:textSize="34sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <EditText
                 android:id="@+id/loginEmailET"
                 android:layout_width="match_parent"
+
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
@@ -75,11 +78,14 @@
                 android:minHeight="48dp"
                 android:padding="8dp"
                 android:textColor="#A2A4b5"
+                android:textColorHint="@color/colorHint"
                 android:textSize="16sp" />
+
             <EditText
                 android:id="@+id/loginPasswordET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
@@ -90,6 +96,7 @@
                 android:minHeight="48dp"
                 android:padding="8dp"
                 android:textColor="#A2A4b5"
+                android:textColorHint="@color/colorHint"
                 android:textSize="16sp" />
 
             <TextView
@@ -99,6 +106,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
+                android:visibility="invisible"
                 android:text="@string/reset_password"
                 android:textAlignment="textEnd"
                 android:textSize="14sp" />
@@ -110,36 +118,41 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="4">
 
                 <RadioButton
                     android:id="@+id/radioButtonStudent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:buttonTint="#6672ff"
                     android:text="@string/student"
                     android:textSize="13sp" />
 
                 <RadioButton
                     android:id="@+id/radioButtonTeacher"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:buttonTint="#6672ff"
                     android:text="@string/teacher"
                     android:textSize="13sp" />
 
                 <RadioButton
                     android:id="@+id/radioButtonAssistant"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:buttonTint="#6672ff"
                     android:text="@string/assistant"
                     android:textSize="13sp" />
 
                 <RadioButton
                     android:id="@+id/radioButtonParent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:buttonTint="#6672ff"
                     android:text="@string/parent"
                     android:textSize="13sp" />
@@ -170,7 +183,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/background_teacher_btn"
-               android:padding="4dp"
+                android:padding="4dp"
                 android:text="@string/teacher_sign_up"
                 android:textAllCaps="false"
                 android:textColor="@color/primary"

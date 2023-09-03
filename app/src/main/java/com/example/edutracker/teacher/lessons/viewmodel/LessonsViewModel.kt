@@ -41,11 +41,11 @@ class LessonsViewModel(private val repo: RepositoryInterface): ViewModel() {
     fun getAllLessons( teacher_id: String, semester: String,grade_level: String,group_id:String,month:String) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getAllLessons(teacher_id, semester, grade_level, group_id, month)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getAllLessons: $e")
                     getAllLessonssMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getAllLessons: $data")
                     getAllLessonssMutable.value = FirebaseState.Success(data)
                 }

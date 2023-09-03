@@ -47,8 +47,13 @@ class GroupAttendanceAdapter(private var clickListener: (Triple<String, String, 
     override fun onBindViewHolder(holder: GroupAttendanceViewHolder, position: Int) {
         val currentObject = getItem(position)
         holder.binding.studentNameIenttextView.text=currentObject.second
-        holder.binding.attendancetextView.text=currentObject.third
-        val attendanceStatus = currentObject.third
+        var attendanceStatus = currentObject.third
+        if (currentObject.third == "null"){
+            attendanceStatus =context.getString(R.string.attendance_not_taken_yet)
+        }
+
+            holder.binding.attendancetextView.text=attendanceStatus
+
         val cardColor = when (attendanceStatus) {
             context.getString(R.string.present) -> R.color.green
             context.getString(R.string.absent)  -> R.color.red

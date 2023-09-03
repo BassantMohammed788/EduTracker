@@ -27,7 +27,7 @@ lateinit var context:Context
         val currentLevel = GradeLevelsList[position]
         holder.binding.GradeName.text = currentLevel
         val hoverBackgroundDrawable = ContextCompat.getDrawable(context, R.drawable.selector_hover_background)
-        holder.binding.currencyItem.setOnClickListener {
+        holder.binding.gradeLevelItem.setOnClickListener {
             holder.binding.constraint.background = hoverBackgroundDrawable
             clickListener(currentLevel)
         }

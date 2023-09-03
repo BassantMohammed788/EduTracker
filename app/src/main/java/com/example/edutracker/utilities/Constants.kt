@@ -21,6 +21,19 @@ object Constants {
     const val STUDENT_ATTENDANCE_NODE="Student_Attendance"
     const val SEMESTER_NODE = "Semesters"
     const val SEMESTER = "Semester"
+    const val ATTENDANCE_STATUS_NODE = "AttendanceStatus"
+    const val PAYMENT_STATUS_NODE = "Payment"
+    const val PARENT_NODE  = "Parents"
+    const val TEACHER_EMAIL="teacher_email"
+    const val TEACHER_NAME="teacher_name"
+    const val TEACHER_PHONE="teacher_phone"
+    const val TEACHER_SUBJECT="teacher_subject"
+    const val IS_USER_LOGGED_IN="is_user_logged_in"
+
+
+
+
+
 
 
 

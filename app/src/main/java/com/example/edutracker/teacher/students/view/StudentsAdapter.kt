@@ -3,10 +3,12 @@ package com.example.edutracker.teacher.students.view
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.edutracker.R
 import com.example.edutracker.databinding.AssistantItemBinding
 import com.example.edutracker.dataclasses.Student
 
@@ -41,10 +43,11 @@ class StudentsAdapter( private var clickListener: (Student) -> Unit) :
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
         val currentObject = getItem(position)
         holder.binding.textAssistant.text=currentObject.name
-        holder.binding.AssistantCard.setOnClickListener {
+        holder.binding.assistantNextIcon.visibility=View.INVISIBLE
+        holder.binding.deleteImageView.setImageResource(R.drawable.student_choices)
+        holder.binding.deleteImageView.setOnClickListener {
             clickListener(currentObject)
         }
-
 
     }
     override fun getItemCount(): Int {

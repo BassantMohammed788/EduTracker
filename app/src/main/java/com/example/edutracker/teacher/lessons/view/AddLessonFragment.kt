@@ -20,7 +20,6 @@ import com.example.edutracker.databinding.FragmentAddLessonBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.dataclasses.Lesson
-import com.example.edutracker.dataclasses.Student
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
 import com.example.edutracker.network.RemoteClient
@@ -28,11 +27,8 @@ import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModel
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.teacher.lessons.viewmodel.LessonsViewModel
 import com.example.edutracker.teacher.lessons.viewmodel.LessonsViewModelFactory
-import com.example.edutracker.teacher.students.viewmodel.StudentsViewModel
-import com.example.edutracker.teacher.students.viewmodel.StudentsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
-import com.example.edutracker.utilities.gradeLevel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -89,15 +85,11 @@ class AddLessonFragment : Fragment() {
             }
         }
         binding.chooseGroup.setOnClickListener {
-            if (gradeVar != null) {
-                displayGroupDialog()
-            } else {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.you_should_choose_grade_level),
                     Toast.LENGTH_SHORT
                 ).show()
-            }
         }
         binding.chooseDate.setOnClickListener {
             showDateTimePicker(requireContext())
@@ -121,7 +113,7 @@ class AddLessonFragment : Fragment() {
                         lessonViewModel.addLesson(
                             teacherId,
                             semesterVar!!,
-                            gradeLevel(gradeVar!!)!!,
+                            gradeVar!!,
                             selectedMonthString!!,
                             lesson)
                         lessonViewModel.addLesson.collect { result ->
@@ -180,6 +172,77 @@ class AddLessonFragment : Fragment() {
         }
     }
 
+
+    private val gradeLambda = { string: String ->
+        gradeVar = string
+        binding.gradeName.text = gradeVar
+    }
+
+    private val groupClickLambda = { group: Group ->
+        Log.i("TAG", "groupVar:$groupNameVar ")
+        binding.groupName.text = groupNameVar
+        groupIdVar = group.id
+        groupNameVar = group.name
+    }
+
+    private fun displayGradeLevelDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
+        gradeLevelDialog.GradeLevelRecycler.adapter = gradeLevelAdapter
+        builder.setView(gradeLevelDialog.root)
+        val dialog = builder.create()
+        dialog.show()
+        if (checkConnectivity(requireContext())) {
+            lifecycleScope.launch {
+                groupsViewModel.getAllGrades(
+                    semesterVar!!,
+                    MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+                )
+                groupsViewModel.getGrades.collect { result ->
+                    when (result) {
+                        is FirebaseState.Loading -> {
+                            gradeLevelDialog.progressBar.visibility = View.VISIBLE
+                            gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                        }
+                        is FirebaseState.Success -> {
+                            if (result.data.isEmpty()) {
+                                gradeLevelDialog.progressBar.visibility = View.GONE
+                                gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                                gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                gradeLevelDialog.noDataTv.text = getString(R.string.no_grades_yet)
+                            } else {
+                                gradeLevelDialog.progressBar.visibility = View.GONE
+                                gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
+                                gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                val list = mutableListOf<String>()
+                                for (i in result.data) {
+                                    list.add(i)
+                                }
+                                gradeLevelAdapter.setGradeLevelsList(list)
+                            }
+
+                        }
+                        is FirebaseState.Failure -> {}
+
+                    }
+
+                }
+            }
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.network_lost_title),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        gradeLevelDialog.okBTN.setOnClickListener {
+            if (gradeVar!=null) {
+                binding.gradeName.text = gradeVar
+                displayGroupDialog()
+            }
+            dialog.dismiss()
+        }
+    }
     private fun displayGroupDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
@@ -189,12 +252,12 @@ class AddLessonFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
         if (checkConnectivity(requireContext())) {
-            if (gradeLevel(gradeVar) != null) {
+            if (gradeVar != null) {
                 lifecycleScope.launch {
                     groupsViewModel.getAllGroups(
                         semesterVar!!,
                         MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,
-                        gradeLevel(gradeVar)!!
+                        gradeVar!!
                     )
                     groupsViewModel.getGroups.collect { result ->
                         when (result) {
@@ -238,120 +301,55 @@ class AddLessonFragment : Fragment() {
             ).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
-            binding.gradeName.text = gradeVar
-            dialog.dismiss()
-        }
-    }
-
-    private fun displayGradeLevelDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
-        gradeLevelDialog.GradeLevelRecycler.adapter = gradeLevelAdapter
-        builder.setView(gradeLevelDialog.root)
-        val dialog = builder.create()
-        dialog.show()
-        if (checkConnectivity(requireContext())) {
-            lifecycleScope.launch {
-                groupsViewModel.getAllGrades(
-                    semesterVar!!,
-                    MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
-                )
-                groupsViewModel.getGrades.collect { result ->
-                    when (result) {
-                        is FirebaseState.Loading -> {
-                            gradeLevelDialog.progressBar.visibility = View.VISIBLE
-                            gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
-                        }
-                        is FirebaseState.Success -> {
-                            if (result.data.isEmpty()) {
-                                gradeLevelDialog.progressBar.visibility = View.GONE
-                                gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
-                                gradeLevelDialog.noDataTv.visibility = View.VISIBLE
-                                gradeLevelDialog.noDataTv.text = getString(R.string.no_grades_yet)
-                            } else {
-                                gradeLevelDialog.progressBar.visibility = View.GONE
-                                gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
-                                gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
-                                val list = mutableListOf<String>()
-                                for (i in result.data) {
-                                    list.add(gradeLevel(i)!!)
-                                }
-                                gradeLevelAdapter.setGradeLevelsList(list)
-                            }
-
-                        }
-                        is FirebaseState.Failure -> {}
-
-                    }
-
-                }
+            if (groupNameVar!=null) {
+                binding.groupName.text = groupNameVar
             }
-        } else {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.network_lost_title),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        gradeLevelDialog.okBTN.setOnClickListener {
-            binding.gradeName.text = gradeVar
             dialog.dismiss()
         }
-    }
-
-    private val gradeLambda = { string: String ->
-        gradeVar = string
-    }
-
-    private val groupClickLambda = { group: Group ->
-        Log.i("TAG", "groupVar:$groupNameVar ")
-        binding.groupName.text = groupNameVar
-        groupIdVar = group.id
-        groupNameVar = group.name
     }
 
     private fun showDateTimePicker(context: Context) {
-        // Get current date and time
-        val calendar = Calendar.getInstance()
+
+        val arabicLocale = Locale("ar")
+
+        val calendar = Calendar.getInstance(arabicLocale)
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH)
         val currentDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
 
-        // Date Picker Dialog
         val datePickerDialog = DatePickerDialog(
             context,
             { _, year, month, dayOfMonth ->
-                val selectedDate = Calendar.getInstance()
+                val selectedDate = Calendar.getInstance(arabicLocale)
                 selectedDate.set(year, month, dayOfMonth)
                 val chosenMonth =
-                    SimpleDateFormat("MMMM", Locale.getDefault()).format(selectedDate.time)
-                val years = SimpleDateFormat("yyyy", Locale.getDefault()).format(selectedDate.time)
+                    SimpleDateFormat("MMMM", arabicLocale).format(selectedDate.time)
+                val years = SimpleDateFormat("yyyy", arabicLocale).format(selectedDate.time)
                 selectedMonthString = chosenMonth
                 Log.i("TAG", "year: $years")
-
                 Log.i("TAG", "month: $selectedMonthString")
+
                 // Time Picker Dialog
                 val timePickerDialog = TimePickerDialog(
                     context,
                     { _, hourOfDay, minute ->
                         // Format the selected date and time
-                        val selectedTimeCalendar = Calendar.getInstance()
+                        val selectedTimeCalendar = Calendar.getInstance(arabicLocale)
                         selectedTimeCalendar.set(year, month, dayOfMonth, hourOfDay, minute)
                         val selectedDateTime = selectedTimeCalendar.time
                         val dateTimeFormat =
-                            SimpleDateFormat("EEEE, d MMMM yyyy, h:mm a", Locale.getDefault())
+                            SimpleDateFormat("EEEE, d MMMM yyyy, h:mm a", arabicLocale)
                         selectedDateTimeString = dateTimeFormat.format(selectedDateTime)
                         binding.dateName.text = selectedDateTimeString
-                        // Handle the selected date and time here
+
                     },
                     currentHour,
                     currentMinute,
                     false
                 )
 
-                // Show TimePickerDialog
                 timePickerDialog.show()
 
             },
@@ -360,9 +358,9 @@ class AddLessonFragment : Fragment() {
             currentDayOfMonth
         )
 
-        // Show DatePickerDialog
         datePickerDialog.show()
     }
+
 
 
 }

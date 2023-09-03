@@ -48,12 +48,6 @@ class AddStudentFragment : Fragment() {
 
 
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddStudentBinding.inflate(inflater, container, false)
         return binding.root
@@ -107,16 +101,12 @@ class AddStudentFragment : Fragment() {
             val studentName = binding.studentNameET.text.toString()
             val studentPhone= binding.studentPhoneNumberET.text.toString()
             val studentPassword= binding.studentPasswordET.text.toString()
-            val parentEmail = binding.parentEmailET.text.toString()
-            val parentPhone= binding.parentPhoneNumberET.text.toString()
-            val parentPassword= binding.parentPasswordET.text.toString()
-
             val transformedEmail = studentEmail.replace(".", ",")
             if (checkConnectivity(requireContext())){
-                if (studentName.isNotEmpty()&&studentEmail.isNotEmpty()&&studentPassword.isNotEmpty()&&studentPhone.isNotEmpty() &&parentEmail.isNotEmpty()&&parentPassword.isNotEmpty()&&parentPhone.isNotEmpty()&&gradeVar!=null&&groupIdVar!=null){
+                if (studentName.isNotEmpty()&&studentEmail.isNotEmpty()&&studentPassword.isNotEmpty()&&studentPhone.isNotEmpty()&&gradeVar!=null&&groupIdVar!=null){
                     if (isValidEmail(studentEmail)){
                         if (checkEgyptianPhoneNumber(studentPhone)){
-                            val student = Student(transformedEmail,studentName,teacherIdVar!!,studentPassword,studentPhone,parentEmail,parentPassword,parentPhone,gradeVar!!,groupIdVar!!)
+                            val student = Student(transformedEmail,studentName,teacherIdVar!!,studentPassword,studentPhone,gradeVar!!,groupIdVar!!,semesterVar!!)
                             lifecycleScope.launch {
                                 studentsViewModel.addStudent(student,teacherIdVar!!,semesterVar!!,gradeVar!!,groupIdVar!!)
                                 studentsViewModel.addStudent.collect { result ->
@@ -126,12 +116,12 @@ class AddStudentFragment : Fragment() {
                                         }
                                         is FirebaseState.Success -> {
                                             if (result.data) {
-                                                Toast.makeText(requireContext(), "Added Successfully", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(requireContext(), getString(R.string.added_successfully) , Toast.LENGTH_SHORT).show()
                                                 Navigation.findNavController(requireView()).apply {
                                                     popBackStack() // Clear the back stack up to teacherAllAssistantFragment
                                                 }
                                             } else {
-                                                Toast.makeText(requireContext(), "The email already exists", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(requireContext(), getString(R.string.The_email_already_exists), Toast.LENGTH_SHORT).show()
                                             }
                                         }
                                         is FirebaseState.Failure -> {
@@ -171,12 +161,12 @@ class AddStudentFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
         if (checkConnectivity(requireContext())) {
-            if (gradeLevel(gradeVar) != null) {
+            if (gradeVar != null) {
                 lifecycleScope.launch {
                     groupsViewModel.getAllGroups(
                         semesterVar!!,
                         MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,
-                        gradeLevel(gradeVar)!!
+                        gradeVar!!
                     )
                     groupsViewModel.getGroups.collect { result ->
                         when (result) {
@@ -219,7 +209,9 @@ class AddStudentFragment : Fragment() {
             ).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
-            binding.gradeName.text = gradeVar
+            if (groupNameVar!=null) {
+                binding.groupName.text = groupNameVar
+            }
             dialog.dismiss()
         }
     }
@@ -255,7 +247,7 @@ class AddStudentFragment : Fragment() {
                                 gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data) {
-                                    list.add(gradeLevel(i)!!)
+                                    list.add(i)
                                 }
                                 gradeLevelAdapter.setGradeLevelsList(list)
                             }
@@ -275,7 +267,10 @@ class AddStudentFragment : Fragment() {
             ).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
+            if (gradeVar!=null){
             binding.gradeName.text = gradeVar
+                displayGroupDialog()
+            }
             dialog.dismiss()
         }
     }

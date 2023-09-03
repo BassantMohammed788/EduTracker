@@ -12,12 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edutracker.R
 import com.example.edutracker.databinding.AlertDialogBinding
 import com.example.edutracker.databinding.FragmentAllGroupsBinding
-import com.example.edutracker.databinding.FragmentTeacherAllAssistantBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.models.Repository
@@ -27,8 +25,6 @@ import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModel
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
-import com.example.edutracker.utilities.gradeLevel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AllGroupsFragment : Fragment() {
@@ -40,11 +36,10 @@ class AllGroupsFragment : Fragment() {
     private lateinit var groupsAdapter: GroupsAdapter
     lateinit var recyclerView: RecyclerView
     var semester : String = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    var teacherId :String?=null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentAllGroupsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -53,11 +48,11 @@ class AllGroupsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModelFactory = GroupsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         viewModel = ViewModelProvider(this, viewModelFactory)[GroupsViewModel::class.java]
-        gradeLevelAdapter = GradeLevelAdapter(emptyList<String>() ,gradeLambda)
+        gradeLevelAdapter = GradeLevelAdapter(emptyList() ,gradeLambda)
         binding.groupProgressBar.visibility=View.GONE
-        binding.groupsRecycler.visibility=View.GONE
+        binding.groupsRecycler.visibility=View.INVISIBLE
         binding.noGroupsTv.visibility=View.GONE
-        val teacher_id = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+         teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
          semester = MySharedPreferences.getInstance(requireContext()).getSemester()!!
         groupsAdapter=GroupsAdapter(deleteGroupLambda)
         recyclerView = binding.groupsRecycler
@@ -78,22 +73,23 @@ class AllGroupsFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         val gradeLevelDialog = GradeLevelDialogBinding.inflate(layoutInflater)
         gradeLevelDialog.GradeLevelRecycler.adapter = gradeLevelAdapter
+        gradeLevelDialog.GradeTv.text=getString(R.string.choose_grade_level)
         builder.setView(gradeLevelDialog.root)
         val dialog = builder.create()
         dialog.show()
         if (checkConnectivity(requireContext())){
             lifecycleScope.launch {
-                viewModel.getAllGrades(semester, MySharedPreferences.getInstance(requireContext()).getTeacherID()!!)
+                viewModel.getAllGrades(semester, teacherId!! )
                 viewModel.getGrades.collect{ result->
                     when(result){
                         is FirebaseState.Loading ->{
                             gradeLevelDialog.progressBar.visibility=View.VISIBLE
-                            gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                            gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success ->{
                             if (result.data.isEmpty()){
                                 gradeLevelDialog.progressBar.visibility=View.GONE
-                                gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                                gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
                                 gradeLevelDialog.noDataTv.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.text=getString(R.string.no_grades_yet)
                             }else{
@@ -102,11 +98,10 @@ class AllGroupsFragment : Fragment() {
                                 gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data){
-                                    list.add(gradeLevel(i)!!)
+                                    list.add(i)
                                 }
                                 gradeLevelAdapter.setGradeLevelsList(list)
                             }
-
                         }
                         is FirebaseState.Failure ->{}
 
@@ -118,30 +113,32 @@ class AllGroupsFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
         }
         gradeLevelDialog.okBTN.setOnClickListener {
-            binding.gradeName.text = gradeVar
+            if (gradeVar!=null) {
+                binding.gradeName.text = gradeVar
+            }
             dialog.dismiss()
             if (checkConnectivity(requireContext())){
                 binding.constraintLayout.visibility = View.VISIBLE
-                if (gradeLevel(gradeVar)!= null && semester != null){
+                if (gradeVar!= null){
                     lifecycleScope.launch {
-                        viewModel.getAllGroups(semester,MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,gradeLevel(gradeVar)!!)
+                        viewModel.getAllGroups(semester,MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,gradeVar!!)
                         viewModel.getGroups.collect{ result->
                             when(result){
                                 is FirebaseState.Loading ->{
                                     binding.groupProgressBar.visibility=View.VISIBLE
-                                    binding.groupsRecycler.visibility=View.GONE
+                                    binding.groupsRecycler.visibility=View.INVISIBLE
                                     binding.noGroupsTv.visibility=View.GONE
                                 }
                                 is FirebaseState.Success ->{
                                     if (result.data.isEmpty()){
                                         binding.groupProgressBar.visibility=View.GONE
-                                        binding.groupsRecycler.visibility=View.GONE
+                                        binding.groupsRecycler.visibility=View.INVISIBLE
                                         binding.noGroupsTv.visibility=View.VISIBLE
                                     }else{
                                         binding.groupProgressBar.visibility=View.GONE
                                         binding.groupsRecycler.visibility=View.VISIBLE
                                         binding.noGroupsTv.visibility=View.GONE
-                                        groupsAdapter.gradeLevel=gradeLevel(gradeVar)
+                                        groupsAdapter.gradeLevel=gradeVar
                                         groupsAdapter.submitList(result.data)
                                     }
 

@@ -15,12 +15,10 @@ import androidx.navigation.Navigation
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentAddNewGroupBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
-import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
 import com.example.edutracker.network.RemoteClient
-import com.example.edutracker.teacher.assistantdata.view.AssistantAdapter
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModel
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
@@ -29,20 +27,15 @@ import java.util.*
 
 class AddNewGroupFragment : Fragment() {
 
-    lateinit var binding: FragmentAddNewGroupBinding
-    lateinit var viewModel: GroupsViewModel
-    lateinit var viewModelFactory: GroupsViewModelFactory
-    lateinit var gradeLevelAdapter: GradeLevelAdapter
+    private lateinit var binding: FragmentAddNewGroupBinding
+    private lateinit var viewModel: GroupsViewModel
+    private lateinit var viewModelFactory: GroupsViewModelFactory
+    private lateinit var gradeLevelAdapter: GradeLevelAdapter
     private var gradeVar:String?= null
-    lateinit var gradeLevelsArray : List<String>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var gradeLevelsArray : List<String>
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentAddNewGroupBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -55,7 +48,7 @@ class AddNewGroupFragment : Fragment() {
         gradeLevelsArray = resources.getStringArray(R.array.grade_levels).toList()
         gradeLevelAdapter = GradeLevelAdapter(gradeLevelsArray,gradeLambda)
         binding.groupProgressBar.visibility=View.GONE
-        val teacher_id =MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+        val teacherId =MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
         val semester = MySharedPreferences.getInstance(requireContext()).getSemester()!!
         binding.chooseLevel.setOnClickListener{
             displayGradeLevelDialog()
@@ -68,10 +61,10 @@ class AddNewGroupFragment : Fragment() {
         binding.AddButton.setOnClickListener {
           if (gradeVar!=null&&binding.groupNameET.text.isNotEmpty()){
               lifecycleScope.launch {
-                  val  gradeLevel = gradeLevel(gradeVar!!)!!
+                  val  gradeLevel = gradeVar!!
                   val groupName= binding.groupNameET.text.toString()
-                  val group = Group(teacher_id,groupName, UUID.randomUUID().toString(),gradeLevel)
-                  viewModel.addGroup(group,teacher_id,semester)
+                  val group = Group(teacherId,groupName, UUID.randomUUID().toString(),gradeLevel)
+                  viewModel.addGroup(group,teacherId,semester)
                   viewModel.addGroup.collect{ result->
                       when (result) {
                           is FirebaseState.Loading -> {
@@ -81,9 +74,9 @@ class AddNewGroupFragment : Fragment() {
                           is FirebaseState.Success -> {
                               binding.groupProgressBar.visibility=View.GONE
                               if (result.data) {
-                                  Toast.makeText(requireContext(), "Added Successfully", Toast.LENGTH_SHORT).show()
+                                  Toast.makeText(requireContext(), getString(R.string.added_successfully), Toast.LENGTH_SHORT).show()
                                   Navigation.findNavController(requireView()).apply {
-                                      popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+                                      popBackStack()
                                   }
                                    } else {
                                   Toast.makeText(requireContext(), "The Group already exists", Toast.LENGTH_SHORT).show()
@@ -97,7 +90,7 @@ class AddNewGroupFragment : Fragment() {
                   }
               }
           }else{
-              Toast.makeText(requireContext(), "You must Choose the Grade Level and Group Name", Toast.LENGTH_SHORT).show()
+              Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
               binding.groupProgressBar.visibility=View.GONE
           }
 
@@ -113,7 +106,8 @@ class AddNewGroupFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
         gradeLevelDialog.okBTN.setOnClickListener {
-            binding.gradeName.text = gradeVar
+            if (gradeVar!=null){
+            binding.gradeName.text = gradeVar}
             dialog.dismiss()
 
         }
@@ -121,7 +115,7 @@ class AddNewGroupFragment : Fragment() {
     private val gradeLambda = { string: String ->
         gradeVar = string
     }
-     public fun gradeLevel(targetGrade: String): String? {
+    /* public fun gradeLevel(targetGrade: String): String? {
 
         val gradeLevelsList = listOf(
             "First preparatory Grade",
@@ -153,6 +147,6 @@ class AddNewGroupFragment : Fragment() {
             result=gradeLevelsList[5]
         }
         return result
-    }
+    }*/
 
 }

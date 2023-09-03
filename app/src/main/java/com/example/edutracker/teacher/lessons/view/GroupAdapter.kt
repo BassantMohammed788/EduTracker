@@ -46,7 +46,7 @@ class GroupAdapter( private var Listener: (Group) -> Unit) :
         val currentObject = getItem(position)
         holder.binding.GradeName.text=currentObject.name
         val hoverBackgroundDrawable = ContextCompat.getDrawable(context, R.drawable.selector_hover_background)
-        holder.binding.currencyItem.setOnClickListener {
+        holder.binding.gradeLevelItem.setOnClickListener {
             holder.binding.constraint.background = hoverBackgroundDrawable
             Listener(currentObject)
         }

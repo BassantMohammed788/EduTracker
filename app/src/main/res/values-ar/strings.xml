@@ -58,7 +58,7 @@
     <string name="name">الاسم</string>
     <string name="assistant_data">بيانات المساعد</string>
     <string name="delete">حذف</string>
-    <string name="update">تحديث</string>
+    <string name="update">تعديل</string>
     <string name="enter_assistant_password">أدخل كلمة مرور المساعد</string>
     <string name="enter_assistant_name">أدخل اسم المساعد</string>
     <string name="enter_assistant_email">أدخل البريد الإلكتروني للمساعد</string>
@@ -68,30 +68,30 @@
     <string name="add_group">إضافة مجموعة</string>
     <string name="no_groups_yet">لا توجد مجموعات بعد</string>
     <string name="ok">موافق</string>
-    <string name="choose_grade_level">اختر المستوى الدراسي</string>
+    <string name="choose_grade_level">اختر الصف الدراسي</string>
     <string name="choose_group">اختر المجموعة</string>
     <string name="choose_month">اختر الشهر</string>
     <string name="no_lessons_yet">لا توجد حصص بعد</string>
-    <string name="you_should_choose_grade_level">يجب عليك اختيار المستوى الدراسي أولاً</string>
-    <string name="you_should_choose_time">يجب عليك اختيار مستوى الصف والمجموعة والوقت</string>
+    <string name="you_should_choose_grade_level">يجب عليك اختيار الصف الدراسي أولاً</string>
+    <string name="you_should_choose_time">يجب عليك اختيار الصف الدراسي والمجموعة والوقت</string>
 
-    <string name="you_should_choose_grade_level_and_group">يجب عليك اختيار المستوى الدراسي والمجموعة</string>
+    <string name="you_should_choose_grade_level_and_group">يجب عليك اختيار الصف الدراسي والمجموعة</string>
 
-    <string name="add_lesson">إضافة درس</string>
+    <string name="add_lesson">إضافة حصة</string>
 
-    <string name="no_grades_yet">لا توجد مستويات دراسية حتى الآن</string>
+    <string name="no_grades_yet">لا توجد صفوف دراسية حتى الآن</string>
 
     <string name="no_months_yet">لا توجد أشهر حتى الآن</string>
 
-    <string name="you_should_choose_semester_level">يجب عليك اختيار الفصل الدراسي والمجموعة</string>
+    <string name="you_should_choose_semester_level">يجب عليك اختيار المجموعة أولاً</string>
     <string name="choose_semester">اختر الفصل الدراسي</string>
     <string name="should_choose_semester">يجب عليك اختيار الفصل الدراسي</string>
     <string name="enter_student_name">أدخل اسم الطالب</string>
     <string name="enter_student_email">أدخل بريد الطالب الإلكتروني</string>
     <string name="enter_student_phone">أدخل رقم هاتف الطالب</string>
     <string name="enter_student_password">أدخل كلمة مرور الطالب</string>
-    <string name="enter_parent_email">أدخل بريد الوالد</string>
-    <string name="enter_parent_phone">أدخل رقم هاتف الوالد</string>
+    <string name="enter_parent_email">أدخل بريد ولي الأمر</string>
+    <string name="enter_parent_phone">أدخل رقم هاتف ولي الأمر</string>
     <string name="add_student">إضافة طالب</string>
     <string name="attendance">الحضور</string>
     <string name="choose_lesson">اختر الدرس</string>
@@ -108,6 +108,59 @@
     <string name="you_should_choose_semester">يجب عليك اختيار الفصل الدراسي</string>
     <string name="choose_date">اختر التاريخ</string>
     <string name="payment">الدفع</string>
+    <string name="attendance_not_taken_yet">لم يتم تسجبل الحضور بعد</string>
+    <string name="icon">Icon</string>
+    <string name="record_payment">تسجيل الدفع</string>
+
+    <string name="payment_done">تم الدفع</string>
+
+    <string name="payment_not_done">لم يتم الدفع</string>
+    <string name="parent_email">بريد ولي الأمر</string>
+    <string name="parent_phone">هاتف ولي الأمر</string>
+    <string name="parent_password">كلمة مرور ولي الأمر</string>
+    <string name="student_data">تعديل بيانات الطالب</string>
+    <string name="grade_level">الصف الدراسي</string>
+    <string name="group">مجموعة</string>
+    <string name="enter_parent_password">أدخل كلمة مرور ولي الأمر</string>
+    <string name="todo">TODO</string>
+    <string name="deleted_successfully">تم الحذف</string>
+
+    <string name="updated_successfully">تم التعديل</string>
+    <string name="updated_successfully_and_move_to_new_group"> تم التعديل ونقل الطالب الي مجموعة أخري</string>
+    <string name="no_months_paid_yet">لم يتم دفع أي شهور بعد</string>
+    <string name="are_you_sure_you_want_to_delete_this">هل أنت متأكد أنك تريد الحذف ؟</string>
+    <string name="this_student_didn_t_attend_any_lesson_yet">هذا الطالب لم يحضر أي حصة حتى الآن</string>
+    <string name="welcome">مرحبا</string>
+    <string name="no_exams_added_to_this_group">لم يتم إضافة امتحانات لهذه المجموعة</string>
+    <string name="add_exam">إضافة امتحان</string>
+    <string name="enter_exam_name">أدخل اسم الامتحان</string>
+    <string name="record_degrees">تسجيل الدرجات</string>
+    <string name="you_should_enter_exam_name">يجب إدخال اسم الامتحان</string>
+    <string name="you_should_choose_exam">يجب اختيار الامتحان أولاً</string>
+
+    <string name="choose_exam">اختر الامتحان</string>
+    <string name="enter_group_name">أدخل اسم المجموعة</string>
+    <string name="record_exam_degrees">سجل درجات الامتحان</string>
+
+    <string name="no_degree">لم يتم تسجيل الدرجة</string>
+    <string name="enter_exam_degree">أدخل درجة الامتحان</string>
+    <string name="no_exams_yet">لا توجد امتحانات بعد</string>
+
+    <string name="added_successfully">تمت الإضافة بنجاح</string>
+    <string name="no_parent_added_to_this_student">لم يُضاف ولي أمر لهذا الطالب</string>
+    <string name="no_thing_change">لا يوجد تغيير لتعديله</string>
+
+    <string name="the_parent">ولي الامر</string>
+    <string name="choose_student">اختر الطالب</string>
+    <string name="no_students_exist_in_another_semester">لا يوجد طلاب في فصل دراسي آخر</string>
+    <string name="you_must_chhose_student_and_grade_and_group">يجب عليك اختيار الطالب وتحديد المستوى الدراسي والمجموعة الجديدة</string>
+    <string name="The_email_already_exists">البريد الإلكتروني موجود بالفعل</string>
+    <string name="existing_student">طالب موجود مسبقا</string>
+    <string name="new_student">طالب جديد</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+    <string name="grades">الصفوف</string>
+    <string name="profile">الملف الشخصي</string>
     <string-array name="grade_levels">
         <item>الصف الاول الاعدادي</item>
         <item>الصف الثاني الاعدادي</item>

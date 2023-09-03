@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/background_color"
     tools:context=".teacher.groups.view.AllGroupsFragment">
 
@@ -36,7 +36,7 @@
             android:id="@+id/groups"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/background_edit_text"
             android:fontFamily="serif-monospace"
             android:padding="12dp"
@@ -89,8 +89,7 @@
             android:id="@+id/groupsRecycler"
             android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="390dp"
             android:layout_marginEnd="32dp"
             android:layout_marginStart="32dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -104,16 +103,16 @@
             android:id="@+id/addGroupFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="370dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
             android:backgroundTint="@color/primary"
             android:clickable="true"
             android:contentDescription="@string/app_name"
             android:focusable="true"
 
             android:src="@drawable/add_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chooseLevel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/groupsRecycler"
             app:rippleColor="@color/white"
             tools:ignore="SpeakableTextPresentCheck" />
 

@@ -74,7 +74,6 @@
     <string name="choose_group">Choose Group</string>
     <string name="choose_month">Choose Month</string>
     <string name="no_lessons_yet">No Lessons Yet</string>
-
     <string name="you_should_choose_grade_level">You should choose Grade Level First</string>
 
     <string name="you_should_choose_time">You should choose Grade Level and Group and time</string>
@@ -86,7 +85,7 @@
     <string name="no_grades_yet">No Grade Levels Yet</string>
 
     <string name="no_months_yet">No Months Yet</string>
-    <string name="you_should_choose_semester_level">You should choose semester and group</string>
+    <string name="you_should_choose_semester_level">You should choose group</string>
 
     <string name="you_should_choose_semester">You should choose semester</string>
 
@@ -115,7 +114,58 @@
     <string name="absent">absent</string>
     <string name="late">late</string>
     <string name="payment">Payment</string>
+    <string name="attendance_not_taken_yet">Attendance Not Taken Yet</string>
+    <string name="icon">Icon</string>
+    <string name="record_payment">Record Payment</string>
 
+    <string name="payment_done">Payment is Done</string>
+
+    <string name="payment_not_done">Payment is not made</string>
+    <string name="parent_email">Parent Email</string>
+    <string name="parent_phone">Parent Phone</string>
+    <string name="parent_password">Parent Password</string>
+    <string name="student_data">Edit Student Data</string>
+    <string name="grade_level">Grade Level</string>
+    <string name="group">Group</string>
+    <string name="enter_parent_password">Enter Parent Password</string>
+    <string name="todo">TODO</string>
+    <string name="deleted_successfully"> Deleted successfully</string>
+    <string name="updated_successfully"> Updated successfully</string>
+
+    <string name="updated_successfully_and_move_to_new_group"> Updated successfully and moved to new group</string>
+    <string name="no_months_paid_yet">No Months Paid Yet</string>
+    <string name="are_you_sure_you_want_to_delete_this">Are You Sure You Want To delete this?</string>
+    <string name="this_student_didn_t_attend_any_lesson_yet">this student didn\'t attend any lesson yet</string>
+    <string name="welcome">Welcome</string>
+    <string name="no_exams_added_to_this_group">No Exams Added To This Group</string>
+    <string name="add_exam">Add Exam</string>
+    <string name="enter_exam_name">Enter Exam Name</string>
+    <string name="record_degrees">Record Degrees</string>
+    <string name="you_should_enter_exam_name">You should enter Exam Name</string>
+    <string name="you_should_choose_exam">You should choose exam First</string>
+
+    <string name="choose_exam">Choose Exam</string>
+    <string name="enter_group_name">Enter Group Name</string>
+    <string name="record_exam_degrees">Record Exam Degrees</string>
+
+    <string name="no_degree">Degree Not Recorded</string>
+    <string name="enter_exam_degree">Enter Exam Degree</string>
+    <string name="no_exams_yet">No Exams Yet</string>
+    <string name="added_successfully">Add Successfully</string>
+    <string name="no_parent_added_to_this_student">No Parent Added To This Student</string>
+    <string name="no_thing_change">No thing Change</string>
+    <string name="the_parent">parent</string>
+    <string name="choose_student">Choose Student</string>
+    <string name="no_students_exist_in_another_semester">No students Exist in another semester</string>
+    <string name="you_must_chhose_student_and_grade_and_group">You must choose student and determine new grade level and group </string>
+
+    <string name="The_email_already_exists">The email already exists </string>
+    <string name="existing_student">Existing Student</string>
+    <string name="new_student">New Student</string>
+    <string name="logout">Logout</string>
+    <string name="change_password">Change Password</string>
+    <string name="grades">Grades</string>
+    <string name="profile">Profile</string>
 
     <string-array name="grade_levels">
         <item>First preparatory Grade</item>

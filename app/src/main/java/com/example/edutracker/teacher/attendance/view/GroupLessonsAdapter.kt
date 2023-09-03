@@ -31,7 +31,7 @@ class GroupLessonsAdapter(private var GroupLessonsList: List<Lesson>, private va
         val currentLevel = GroupLessonsList[position]
         holder.binding.GradeName.text = currentLevel.time
         val hoverBackgroundDrawable = ContextCompat.getDrawable(context, R.drawable.selector_hover_background)
-        holder.binding.currencyItem.setOnClickListener {
+        holder.binding.gradeLevelItem.setOnClickListener {
             holder.binding.constraint.background = hoverBackgroundDrawable
             clickListener(currentLevel)
         }

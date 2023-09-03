@@ -43,9 +43,9 @@ class GroupsAdapter( private var deleteListener: (Group) -> Unit) :
         val currentObject = getItem(position)
         holder.binding.groupTextView.text=currentObject.name
         holder.binding.gradeTextView.text=gradeLevel
-        holder.binding.deleteIcon.setOnClickListener {
+       /* holder.binding.deleteIcon.setOnClickListener {
             deleteListener(currentObject)
-        }
+        }*/
 
     }
     override fun getItemCount(): Int {

@@ -21,7 +21,7 @@ class AssistantDiffUtil : DiffUtil.ItemCallback<Assistant>() {
     }
 }
 
-class AssistantAdapter( private var clickListener: (Assistant) -> Unit) :
+class AssistantAdapter( private var clickListener: (Assistant) -> Unit,private var deleteListener: (Assistant) -> Unit) :
     ListAdapter<Assistant, AssistantAdapter.AssistantViewHolder>(AssistantDiffUtil()) {
     lateinit var context: Context
 
@@ -40,10 +40,14 @@ class AssistantAdapter( private var clickListener: (Assistant) -> Unit) :
     override fun onBindViewHolder(holder: AssistantViewHolder, position: Int) {
         val currentObject = getItem(position)
         holder.binding.textAssistant.text=currentObject.name
+
+        Log.i("TAG", "currentObject.name: $currentObject.name")
         holder.binding.AssistantCard.setOnClickListener {
             clickListener(currentObject)
         }
-
+        holder.binding.deleteImageView.setOnClickListener {
+            deleteListener(currentObject)
+        }
 
     }
     override fun getItemCount(): Int {

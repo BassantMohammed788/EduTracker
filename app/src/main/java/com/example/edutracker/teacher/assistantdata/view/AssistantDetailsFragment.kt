@@ -35,6 +35,8 @@ class AssistantDetailsFragment : Fragment() {
     private lateinit var viewModel: AssistantDataViewModel
     private lateinit var viewModelFactory: AssistantDataViewModelFactory
     private val args: AssistantDetailsFragmentArgs by navArgs()
+    private lateinit var assistant: Assistant
+    private var teacherId=""
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -47,47 +49,19 @@ class AssistantDetailsFragment : Fragment() {
         viewModelFactory =
             AssistantDataViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         viewModel = ViewModelProvider(this, viewModelFactory)[AssistantDataViewModel::class.java]
-        binding.assistantEmailET.isEnabled = false
-        binding.assistantEmailET.isClickable = false
-        binding.assistantEmailETt.isEnabled = false
-        binding.assistantEmailETt.isFocusable = false
         binding.assistantEmailETt.isFocusableInTouchMode = false
-        var email = args.assistantId
-        email= email.replace(".", ",")
-
-        val teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
-        if (checkConnectivity(requireContext())) {
-            viewModel.getAssistantByEmail(teacherId, email)
-            lifecycleScope.launch {
-                viewModel.getAssistantByEmail(
-                    teacherId,
-                    email
-                )
-                viewModel.oneAssistants.collect { result ->
-                    when (result) {
-                        is FirebaseState.Loading -> {
-                            Log.i("TAG", "onViewCreated: loading")
-                        }
-                        is FirebaseState.Success -> {
-                            Log.i("TAG", "onViewCreated: ${result.data}")
-                            setDataInEditText(result.data)
-                            binding.signUpButton.setOnClickListener {
-                                updateAssistant()
-                            }
-                            binding.cancelButton.setOnClickListener {
-                                deleteAssistant()
-                            }
-                        }
-                        is FirebaseState.Failure -> {
-                            Log.i("TAG", "onViewCreated: fail")
-                        }
-                    }
-                }
-            }
-        }else{
-            binding.constraint.visibility=View.GONE
-            Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
+        assistant=args.assistant
+         teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+        setDataInEditText(assistant)
+        binding.updateButton.setOnClickListener {
+            updateAssistant()
         }
+        binding.cancelButton.setOnClickListener {
+            Navigation.findNavController(requireView()).apply {
+                popBackStack()
+            }
+        }
+
     }
     private fun setDataInEditText(assistant: Assistant){
        val transformedEmail = assistant.email.replace(",", ".")
@@ -100,72 +74,92 @@ class AssistantDetailsFragment : Fragment() {
         binding.assistantPasswordET.setText(assistant.password)
         binding.assistantPasswordET.isEnabled = true
     }
-    private fun deleteAssistant(){
-        val builder = AlertDialog.Builder(requireContext())
-        val alertDialog = AlertDialogBinding.inflate(layoutInflater)
-        builder.setView(alertDialog.root)
-        val dialog = builder.create()
-        dialog.show()
-        alertDialog.dialogYesBtn.setOnClickListener {
-            val transformedEmail =  binding.assistantEmailETt.text.toString().replace(".", ",")
-            viewModel.deleteAssistant(MySharedPreferences.getInstance(requireContext()).getTeacherID()!!,
-                transformedEmail)
-            Toast.makeText(requireContext(),"deleted successfully",Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-            val navController = Navigation.findNavController(requireView())
-            navController.apply {
-               // navigate(R.id.action_assistantDetailsFragment_to_teacherAllAssistantFragment)
-               popBackStack() // Clear the back stack up to teacherAllAssistantFragment
-            }
-        }
-        alertDialog.dialogNoBtn.setOnClickListener {
-            dialog.dismiss()
-        }
-    }
     private fun updateAssistant(){
+        if (checkConnectivity(requireContext())){
         lifecycleScope.launch {
             val email = binding.assistantEmailETt.text.toString()
             val transformedEmail = email.replace(".", ",")
             val name = binding.assistantNameET.text.toString()
             val pass = binding.assistantPasswordET.text.toString()
             val phone = binding.assistantPhoneET.text.toString()
-            if (name.isNotEmpty()&&email.isNotEmpty()&&pass.isNotEmpty()&&phone.isNotEmpty()){
-                if (isValidEmail(email)){
-                    if (checkEgyptianPhoneNumber(phone)){
-                        val assistant=Assistant(name,transformedEmail,phone,pass,MySharedPreferences.getInstance(requireContext()).getTeacherID().toString())
-                        viewModel.updateAssistant(
-                            MySharedPreferences.getInstance(
-                                requireContext()
-                            ).getTeacherID()!!, transformedEmail, assistant
+            if (name.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty() && phone.isNotEmpty()) {
+                if (isValidEmail(email)) {
+                    if (checkEgyptianPhoneNumber(phone)) {
+                        val assistant = Assistant(
+                            name,
+                            transformedEmail,
+                            phone,
+                            pass,
+                            teacherId
                         )
-                        viewModel.updateAssistant.collect {
-                            when (it) {
-                                is FirebaseState.Loading -> {
-                                    Log.i("TAG", "onViewCreated: loading update")
-                                }
-                                is FirebaseState.Success -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "updated successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    Navigation.findNavController(requireView()).apply {
-                                       popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+                        if (args.assistant==assistant){
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.no_thing_change),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }else {
+                            viewModel.updateAssistant(assistant)
+                            viewModel.updateAssistant.collect {
+                                when (it) {
+                                    is FirebaseState.Loading -> {
+                                        Log.i("TAG", "onViewCreated: loading update")
+                                    }
+                                    is FirebaseState.Success -> {
+                                        if (it.data) {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                getString(R.string.updated_successfully),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            Navigation.findNavController(requireView()).apply {
+                                                popBackStack() // Clear the back stack up to teacherAllAssistantFragment
+                                            }
+                                        } else {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "error",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+
+                                    }
+                                    else -> {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            getString(R.string.network_lost_title),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
                                     }
                                 }
-                                else -> {}
                             }
                         }
 
-                    }else{
-                        Toast.makeText(requireContext(), getString(R.string.phoneNotValid), Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.phoneNotValid),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                }else{
-                    Toast.makeText(requireContext(), getString(R.string.emailNotValid), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.emailNotValid),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }else{
-                Toast.makeText(requireContext(), getString(R.string.fillAllFields), Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.fillAllFields),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
+        }else{
+               Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.edutracker.teacher.students.view
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,17 +17,12 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.edutracker.R
-import com.example.edutracker.databinding.FragmentAddStudentBinding
+import com.example.edutracker.databinding.*
 import com.example.edutracker.databinding.FragmentAllStudentsBinding
-import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.dataclasses.Student
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
 import com.example.edutracker.network.RemoteClient
-import com.example.edutracker.teacher.assistantdata.view.AssistantAdapter
-import com.example.edutracker.teacher.assistantdata.view.TeacherAllAssistantFragmentDirections
-import com.example.edutracker.teacher.assistantdata.viewmodel.AssistantDataViewModel
-import com.example.edutracker.teacher.assistantdata.viewmodel.AssistantDataViewModelFactory
 import com.example.edutracker.teacher.students.viewmodel.StudentsViewModel
 import com.example.edutracker.teacher.students.viewmodel.StudentsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
@@ -42,13 +39,10 @@ class AllStudentsFragment : Fragment() {
     private var teacherIdVar : String? = null
     private var studentsList: List<Student> = listOf()
     private var filteredStudentsList: List<Student> = listOf()
+    private var semester : String=""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentAllStudentsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,6 +52,7 @@ class AllStudentsFragment : Fragment() {
         studentsViewModelFactory = StudentsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         studentsViewModel = ViewModelProvider(this, studentsViewModelFactory)[StudentsViewModel::class.java]
 
+
         studentsAdapter = StudentsAdapter(studentClickLambda)
         recyclerView = binding.studentsRecycler
         recyclerView.apply {
@@ -66,13 +61,14 @@ class AllStudentsFragment : Fragment() {
         }
 
         teacherIdVar = MySharedPreferences.getInstance(requireContext()).getTeacherID()
+        semester=MySharedPreferences.getInstance(requireContext()).getSemester()!!
         binding.addStudentFAB.setOnClickListener {
-            Navigation.findNavController(requireView()).navigate(R.id.action_allStudentsFragment_to_addStudentFragment)
+           displayNewOrOldStudent()
         }
 
         lifecycleScope.launch {
             if (checkConnectivity(requireContext())){
-                studentsViewModel.getAllStudents(teacherIdVar!!)
+                studentsViewModel.getAllStudents(teacherIdVar!!,semester)
                 studentsViewModel.getStudent.collect{ result->
                     when (result) {
                         is FirebaseState.Loading -> {
@@ -124,9 +120,81 @@ class AllStudentsFragment : Fragment() {
         })
     }
 
+    private fun displayNewOrOldStudent(){
+        val builder = AlertDialog.Builder(requireContext())
+        val newOrOldStudentDialog = NewOrOldStudentDialogBinding.inflate(layoutInflater)
+        builder.setView(newOrOldStudentDialog.root)
+        val dialog = builder.create()
+        dialog.show()
+        newOrOldStudentDialog.dialogExistingBtn.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToAddExistingStudentFragment()
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+        newOrOldStudentDialog.dialogNewBtn.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToAddStudentFragment()
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+    }
     private val studentClickLambda ={ student:Student ->
-        val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToStudentDetailsFragment(student.email.toString())
-        Navigation.findNavController(requireView()).navigate(action)
+        val builder = AlertDialog.Builder(requireContext())
+        val studentChoicesDialog = StudentChoiceDialogBinding.inflate(layoutInflater)
+        builder.setView(studentChoicesDialog.root)
+        val dialog = builder.create()
+        dialog.show()
+        studentChoicesDialog.updateStudentCard.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToStudentDetailsFragment(student)
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+        studentChoicesDialog.deleteCard.setOnClickListener {
+            deleteStudent(student.email)
+            dialog.dismiss()
+        }
+        studentChoicesDialog.studentPaymentCard.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToStudentPaymentFragment(student)
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+        studentChoicesDialog.studentAttendanceCard.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToStudentAttendanceFragment(student)
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+        studentChoicesDialog.studentExamsCard.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToStudentExamDegreesFragment(student)
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+        studentChoicesDialog.parentCard.setOnClickListener {
+            val action = AllStudentsFragmentDirections.actionAllStudentsFragmentToParentFragment(student.email,student.name)
+            Navigation.findNavController(requireView()).navigate(action)
+            dialog.dismiss()
+        }
+
+
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun deleteStudent(email:String){
+        val builder = AlertDialog.Builder(requireContext())
+        val alertDialog = AlertDialogBinding.inflate(layoutInflater)
+        builder.setView(alertDialog.root)
+        val dialog = builder.create()
+        dialog.show()
+        alertDialog.dialogYesBtn.setOnClickListener {
+            if (checkConnectivity(requireContext())){
+                studentsViewModel.deleteStudent(email)
+                studentsAdapter.notifyDataSetChanged()
+                Toast.makeText(requireContext(),getString(R.string.deleted_successfully),Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(),getString(R.string.network_lost_title),Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+        alertDialog.dialogNoBtn.setOnClickListener {
+            dialog.dismiss()
+        }
     }
     private fun filterStudents(filterText: String) {
         filteredStudentsList = studentsList.filter { student ->
