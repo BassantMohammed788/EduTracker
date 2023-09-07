@@ -10,23 +10,15 @@ import com.example.edutracker.dataclasses.Student
 import com.example.edutracker.models.RepositoryInterface
 import com.example.edutracker.network.FirebaseState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
-    private var addStudentMutable: MutableStateFlow<FirebaseState<Boolean>> =
-        MutableStateFlow(FirebaseState.Loading)
-    val addStudent: StateFlow<FirebaseState<Boolean>> = addStudentMutable
     private var addStudentToNewSemesterMutable: MutableStateFlow<FirebaseState<Boolean>> =
         MutableStateFlow(FirebaseState.Loading)
     val addStudentToNewSemester: StateFlow<FirebaseState<Boolean>> = addStudentToNewSemesterMutable
-
-    private var addParentMutable: MutableStateFlow<FirebaseState<Boolean>> =
-        MutableStateFlow(FirebaseState.Loading)
-    val addParent: StateFlow<FirebaseState<Boolean>> = addParentMutable
 
     private var getParentMutable: MutableStateFlow<FirebaseState<Parent?>> =
         MutableStateFlow(FirebaseState.Loading)
@@ -34,7 +26,11 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
 
     private var updateStudentMutable: MutableStateFlow<FirebaseState<Boolean>> =
         MutableStateFlow(FirebaseState.Loading)
-    val updateStudent: StateFlow<FirebaseState<Boolean>> = addStudentMutable
+    val updateStudent: StateFlow<FirebaseState<Boolean>> = updateStudentMutable
+
+    private var updateParentMutable: MutableStateFlow<FirebaseState<Boolean>> =
+        MutableStateFlow(FirebaseState.Loading)
+    val updateParent: StateFlow<FirebaseState<Boolean>> = updateParentMutable
 
     private var getStudentMutable: MutableStateFlow<FirebaseState<List<Student>>> =
         MutableStateFlow(FirebaseState.Loading)
@@ -66,27 +62,20 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
 
 
 
-    fun addStudent(student: Student, teacher_id: String, semester: String, grade_level: String, group_id: String){
+    fun addStudent(student: Student, teacher_id: String, semester: String, grade_level: String, group_id: String,callback: (Boolean) -> Unit)
+    {
         viewModelScope.launch(Dispatchers.IO){
-            repo.addStudent(student,teacher_id, semester,grade_level,group_id)
-                ?.catch { e ->
-                    Log.e("TAG", "addStudent: $e")
-                    addStudentMutable.value = FirebaseState.Failure(e)
-                }
-                ?.collect { data ->
-                    Log.i("TAG", "addStudentSuccess: $data")
-                    addStudentMutable.value = FirebaseState.Success(data)
-                }
+            repo.addStudent(student,teacher_id, semester,grade_level,group_id,callback)
         }}
 
     fun getAllStudents(teacher_id: String,semester: String){
         viewModelScope.launch(Dispatchers.IO){
             repo.getAllStudents(teacher_id,semester)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getAllStudentsOfGroup: $e")
                     getStudentMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getAllStudentsOfGroupSuccess: $data")
                     getStudentMutable.value = FirebaseState.Success(data)
                 }
@@ -94,11 +83,11 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
     fun getGroupStudents(teacher_id: String,group_id: String,semester: String){
         viewModelScope.launch(Dispatchers.IO){
             repo.getAllStudentsOfGroup(teacher_id,group_id,semester)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getGroupStudents: $e")
                     getGroupStudentMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getGroupStudentsSuccess: $data")
                     getGroupStudentMutable.value = FirebaseState.Success(data)
                 }
@@ -110,19 +99,27 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
         }
     }
 
-    fun  moveStudentToNewGroup(updatedStudent: Student,semester: String,oldGroupId:String) {
+    fun  updateStudent(updatedStudent: Student) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.moveStudentToNewGroup(updatedStudent,semester, oldGroupId)
+            repo.moveStudentToNewGroup(updatedStudent)
+                .catch { e ->
+                    Log.e("TAG", "updateStudentFailure: $e")
+                    updateStudentMutable.value = FirebaseState.Failure(e)
+                }
+                .collect { data ->
+                    Log.i("TAG", "updateStudentSuccess: $data")
+                    updateStudentMutable.value = FirebaseState.Success(data)
+                }
         }
     }
     fun getStudentPaymentStatusForAllMonths(studentId: String,semester: String){
         viewModelScope.launch(Dispatchers.IO){
             repo.getStudentPaymentStatusForAllMonths(studentId, semester)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getGroupStudents: $e")
                     getStudentPaymentStatusMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+              .collect { data ->
                     Log.i("TAG", "getGroupStudentsSuccess: $data")
                     getStudentPaymentStatusMutable.value = FirebaseState.Success(data)
                 }
@@ -149,11 +146,11 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
     fun getLessonTimeAndAttendanceStatus(teacherId: String, semester: String, gradeLevel: String, attendanceDetailsList: List<AttendanceDetails>){
         viewModelScope.launch(Dispatchers.IO){
             repo.getLessonTimeAndAttendanceStatus(teacherId, semester, gradeLevel, attendanceDetailsList)
-                ?.catch { e ->
+                .catch { e ->
                     Log.e("TAG", "getLessonTimeAndAttendanceStatus: $e")
                     getLessonTimeAndAttendanceStatusMutable.value = FirebaseState.Failure(e)
                 }
-                ?.collect { data ->
+                .collect { data ->
                     Log.i("TAG", "getLessonTimeAndAttendanceStatusSuccess: $data")
                     getLessonTimeAndAttendanceStatusMutable.value = FirebaseState.Success(data)
                 }
@@ -172,18 +169,9 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
         }
     }
 
-    fun addParent(parent: Parent, teacherId: String, studentId: String){
-        viewModelScope.launch(Dispatchers.IO){
-            repo.addParent(parent, teacherId, studentId)
-                ?.catch { e ->
-                    Log.e("TAG", "addParent: $e")
-                    addParentMutable.value = FirebaseState.Failure(e)
-                }
-                ?.collect { data ->
-                    Log.i("TAG", "addParentSuccess: $data")
-                    addParentMutable.value = FirebaseState.Success(data)
-                }
-        }}
+    fun addParent(parent: Parent, teacherId: String, studentId: String, callback: (Boolean) -> Unit) {
+            repo.addParent(parent, teacherId, studentId,callback)
+        }
     fun getParentByEmail(studentId: String){
         viewModelScope.launch(Dispatchers.IO){
             repo.getParentByEmail(studentId)
@@ -202,11 +190,11 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
             repo.updateParent(updatedParent)
                 ?.catch { e ->
                     Log.e("TAG", "updateParent: $e")
-                    updateStudentMutable.value = FirebaseState.Failure(e)
+                    updateParentMutable.value = FirebaseState.Failure(e)
                 }
                 ?.collect { data ->
                     Log.i("TAG", "updateParentSuccess: $data")
-                    updateStudentMutable.value = FirebaseState.Success(data)
+                    updateParentMutable.value = FirebaseState.Success(data)
                 }
         }}
     fun getAllExistingStudents(teacher_id: String,semester: String){
@@ -233,6 +221,11 @@ class StudentsViewModel(val repo:RepositoryInterface):ViewModel() {
                     Log.i("TAG", "addStudentToNewSemesterSuccess: $data")
                     addStudentToNewSemesterMutable.value = FirebaseState.Success(data)
                 }
+        }
+    }
+    fun deleteParent(studentId: String, callback: (Boolean) -> Unit){
+        viewModelScope.launch {
+            repo.deleteParent(studentId, callback)
         }
     }
 

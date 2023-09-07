@@ -51,27 +51,45 @@
             android:id="@+id/paymentRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/studentName"
             tools:listitem="@layout/attendance_item" />
-
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noDataAnimationView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:visibility="invisible"
+            android:contentDescription="@string/todo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:foregroundGravity="center"
+            android:layout_marginTop="140dp"
+            app:lottie_rawRes="@raw/no_data"
+            app:lottie_speed="1.5"
+            tools:ignore="ImageContrastCheck" />
 
         <TextView
             android:id="@+id/noMonthsTv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
             android:text="@string/no_months_paid_yet"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:visibility="invisible"
-            android:layout_marginTop="250dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/noDataAnimationView" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -78,16 +78,22 @@ class StudentPaymentFragment : Fragment() {
                             binding.paymentProgressBar.visibility=View.VISIBLE
                             binding.paymentRecycler.visibility=View.INVISIBLE
                             binding.noMonthsTv.visibility=View.INVISIBLE
+                            binding.noDataAnimationView.visibility=View.INVISIBLE
+
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()){
                                 binding.paymentProgressBar.visibility=View.INVISIBLE
                                 binding.paymentRecycler.visibility=View.INVISIBLE
                                 binding.noMonthsTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
+
                             }else{
                                 binding.paymentProgressBar.visibility=View.INVISIBLE
                                 binding.paymentRecycler.visibility=View.VISIBLE
                                 binding.noMonthsTv.visibility=View.INVISIBLE
+                                binding.noDataAnimationView.visibility=View.INVISIBLE
+
                                 studentPaymentAdapter.submitList(result.data)
                                 paymentList=result.data.toMutableList()
 

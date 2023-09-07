@@ -60,19 +60,33 @@
             tools:listitem="@layout/exam_degree_item" />
 
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noDataAnimationView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:visibility="invisible"
+            android:contentDescription="@string/todo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:foregroundGravity="center"
+            android:layout_marginTop="140dp"
+            app:lottie_rawRes="@raw/no_data"
+            app:lottie_speed="1.5"
+            tools:ignore="ImageContrastCheck" />
         <TextView
             android:id="@+id/noStudentsTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="250dp"
             android:text="@string/no_students_yet"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/noDataAnimationView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

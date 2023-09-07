@@ -52,6 +52,7 @@ class AllGroupsFragment : Fragment() {
         binding.groupProgressBar.visibility=View.GONE
         binding.groupsRecycler.visibility=View.INVISIBLE
         binding.noGroupsTv.visibility=View.GONE
+        binding.noDataAnimationView.visibility=View.GONE
          teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
          semester = MySharedPreferences.getInstance(requireContext()).getSemester()!!
         groupsAdapter=GroupsAdapter(deleteGroupLambda)
@@ -85,22 +86,23 @@ class AllGroupsFragment : Fragment() {
                         is FirebaseState.Loading ->{
                             gradeLevelDialog.progressBar.visibility=View.VISIBLE
                             gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
+
+                            gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                            gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success ->{
                             if (result.data.isEmpty()){
                                 gradeLevelDialog.progressBar.visibility=View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
                                 gradeLevelDialog.noDataTv.visibility=View.VISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.text=getString(R.string.no_grades_yet)
                             }else{
                                 gradeLevelDialog.progressBar.visibility=View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
-                                val list = mutableListOf<String>()
-                                for (i in result.data){
-                                    list.add(i)
-                                }
-                                gradeLevelAdapter.setGradeLevelsList(list)
+                                gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
+                                gradeLevelAdapter.setGradeLevelsList(result.data)
                             }
                         }
                         is FirebaseState.Failure ->{}
@@ -127,17 +129,21 @@ class AllGroupsFragment : Fragment() {
                                 is FirebaseState.Loading ->{
                                     binding.groupProgressBar.visibility=View.VISIBLE
                                     binding.groupsRecycler.visibility=View.INVISIBLE
-                                    binding.noGroupsTv.visibility=View.GONE
+                                    binding.noGroupsTv.visibility=View.INVISIBLE
+                                    binding.noDataAnimationView.visibility=View.INVISIBLE
+
                                 }
                                 is FirebaseState.Success ->{
                                     if (result.data.isEmpty()){
                                         binding.groupProgressBar.visibility=View.GONE
                                         binding.groupsRecycler.visibility=View.INVISIBLE
                                         binding.noGroupsTv.visibility=View.VISIBLE
+                                        binding.noDataAnimationView.visibility=View.VISIBLE
                                     }else{
                                         binding.groupProgressBar.visibility=View.GONE
                                         binding.groupsRecycler.visibility=View.VISIBLE
                                         binding.noGroupsTv.visibility=View.GONE
+                                        binding.noDataAnimationView.visibility=View.GONE
                                         groupsAdapter.gradeLevel=gradeVar
                                         groupsAdapter.submitList(result.data)
                                     }

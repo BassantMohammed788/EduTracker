@@ -1,5 +1,6 @@
 package com.example.edutracker.models
 
+import android.content.Context
 import com.example.edutracker.dataclasses.*
 import com.example.edutracker.network.RemoteInterface
 import kotlinx.coroutines.flow.Flow
@@ -15,8 +16,8 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
             }
         }
     }
-    override fun addAssistant(assistant: Assistant, teacher_id: String):Flow<Boolean> {
-        return remoteSource.addAssistant(assistant,teacher_id)
+    override  fun addAssistant(assistant: Assistant, teacher_id: String, callback: (Boolean) -> Unit) {
+         remoteSource.addAssistant(assistant,teacher_id,callback)
     }
 
     override fun getAllAssistants(teacher_id: String): Flow<List<Assistant>> {
@@ -79,14 +80,9 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
         remoteSource.deleteLesson(semester, teacher_id, gradeLevel, group_id, month, lesson_id)
     }
 
-    override fun addStudent(
-        student: Student,
-        teacher_id: String,
-        semester: String,
-        grade_level: String,
-        group_id: String
-    ): Flow<Boolean> {
-        return remoteSource.addStudent(student, teacher_id, semester, grade_level, group_id)
+    override fun addStudent(student: Student, teacher_id: String, semester: String, grade_level: String, group_id: String,callback: (Boolean) -> Unit)
+    {
+         remoteSource.addStudent(student, teacher_id, semester, grade_level, group_id,callback)
     }
 
     override fun getAllStudents(teacher_id: String,semester: String): Flow<List<Student>> {
@@ -148,11 +144,9 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
     }
 
     override fun moveStudentToNewGroup(
-        updatedStudent: Student,
-        semester: String,
-        oldGroupId: String
-    ) {
-        remoteSource.moveStudentToNewGroup(updatedStudent, semester, oldGroupId)
+        updatedStudent: Student
+    ): Flow<Boolean> {
+        return remoteSource.moveStudentToNewGroup(updatedStudent)
     }
 
     override fun getStudentPaymentStatusForAllMonths(
@@ -179,8 +173,9 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
         return remoteSource.getLessonTimeAndAttendanceStatus(teacherId, semester, gradeLevel, attendanceDetailsList)
     }
 
-    override fun addExam(teacher_id: String, semester: String, grade_level: String, exam: Exam) {
-        remoteSource.addExam(teacher_id, semester, grade_level, exam)
+    override fun addExam(teacher_id: String, semester: String, grade_level: String, exam: Exam):Flow<Boolean>
+    {
+        return remoteSource.addExam(teacher_id, semester, grade_level, exam)
     }
 
     override fun getAllExams(teacher_id: String, semester: String, grade_level: String, group_id: String): Flow<List<Exam>> {
@@ -214,8 +209,8 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
         return remoteSource.getStudentExamsDegrees(studentId, semester)
     }
 
-    override fun addParent(parent: Parent, teacherId: String, studentId: String): Flow<Boolean> {
-        return remoteSource.addParent(parent,teacherId, studentId)
+    override fun addParent(parent: Parent, teacherId: String, studentId: String, callback: (Boolean) -> Unit)  {
+         remoteSource.addParent(parent,teacherId, studentId,callback)
     }
 
     override fun getParentByEmail(studentId: String): Flow<Parent?> {
@@ -237,4 +232,35 @@ class Repository private constructor( var remoteSource: RemoteInterface):Reposit
     override fun getGradeAndGroupCounts(semester: String, teacherId: String): Flow<Pair<Int, Int>> {
         return remoteSource.getGradeAndGroupCounts(semester, teacherId)
     }
+
+    override   fun assistantSignIn(email: String, password: String, context: Context, callback: (Pair<Any?, Boolean>) -> Unit)
+    {
+         remoteSource.assistantSignIn(email, password,context,callback)
+    }
+
+    override fun getTeacherById(teacherId: String): Flow<Teacher> {
+        return remoteSource.getTeacherById(teacherId)
+    }
+
+    override fun isParentExist(email: String): Flow<Boolean> {
+        return remoteSource.isParentExist(email)
+    }
+
+    override fun studentSignIn(email: String, password: String, context: Context, callback: (Pair<Any?, Boolean>) -> Unit)
+    {
+         remoteSource.studentSignIn(email, password, context,callback)
+    }
+
+    override  fun parentSignIn(email: String, password: String, context: Context, callback: (Pair<Any?, Boolean>) -> Unit)  {
+         remoteSource.parentSignIn(email, password, context,callback)
+    }
+
+    override fun getStudentById(studentId: String): Flow<Student?> {
+        return remoteSource.getStudentById(studentId)
+    }
+
+    override fun deleteParent(studentId: String, callback: (Boolean) -> Unit) {
+        remoteSource.deleteParent(studentId, callback)
+    }
+
 }

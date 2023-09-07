@@ -1,4 +1,4 @@
-package com.example.edutracker.authentication
+package com.example.edutracker.authentication.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -94,12 +94,14 @@ class RecordExamDegreesFragment : Fragment() {
                             binding.examsProgressBar.visibility=View.VISIBLE
                             binding.recordExamsRecycler.visibility=View.INVISIBLE
                             binding.noStudentsTv.visibility=View.INVISIBLE
+                            binding.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()){
                                 binding.examsProgressBar.visibility=View.INVISIBLE
                                 binding.recordExamsRecycler.visibility=View.INVISIBLE
                                 binding.noStudentsTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
                                 Log.i("TAG", "NoStudents: ")
 
                             }else{
@@ -117,6 +119,7 @@ class RecordExamDegreesFragment : Fragment() {
                                                 binding.examsProgressBar.visibility=View.INVISIBLE
                                                 binding.recordExamsRecycler.visibility=View.VISIBLE
                                                 binding.noStudentsTv.visibility=View.INVISIBLE
+                                                binding.noDataAnimationView.visibility=View.INVISIBLE
                                                 examDegreesList=result.data.toMutableList()
                                                 examDegreeAdapter.submitList(result.data)
                                             }

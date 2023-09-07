@@ -1,10 +1,15 @@
 package com.example.edutracker.network
+import android.content.Context
+import android.util.Log
 import com.example.edutracker.dataclasses.*
 import com.example.edutracker.utilities.Constants
 import com.google.firebase.database.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import com.example.edutracker.R
+import kotlinx.coroutines.tasks.await
+import kotlin.math.log
 
 class RemoteClient private constructor() : RemoteInterface {
     private val databaseReference: DatabaseReference by lazy {
@@ -22,35 +27,36 @@ class RemoteClient private constructor() : RemoteInterface {
         }
     }
 
-    override fun addAssistant(assistant: Assistant, teacher_id: String): Flow<Boolean> =
-        callbackFlow {
-            val assistantRef = databaseReference.child(Constants.ASSISTANT_NODE).child(assistant.email)
-
-            val valueEventListener = object : ValueEventListener {
+    override fun addAssistant(assistant: Assistant, teacher_id: String, callback: (Boolean) -> Unit) {
+        val assistantRef = databaseReference.child(Constants.ASSISTANT_NODE).child(assistant.email)
+        try {
+            assistantRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val emailExists = dataSnapshot.exists()
-                    if (emailExists) {
-                        trySend(false)
+                    val assistantExists = dataSnapshot.exists()
+                    if (assistantExists) {
+                        Log.i("TAG", "onDataChange: not added")
+                        callback(false)
                     } else {
                         assistantRef.setValue(assistant)
                             .addOnSuccessListener {
-                                trySend(true)
-                            }
-                            .addOnFailureListener { exception ->
-                                close(exception)
+                                Log.i("TAG", "onDataChange: added")
+                                callback(true)
+                            }.addOnFailureListener { exception ->
+                                Log.i("TAG", "onDataChange: $exception")
+                                callback(false)
                             }
                     }
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    close(error.toException())
+                override fun onCancelled(databaseError: DatabaseError) {
+                    callback(false)
                 }
-            }
-
-            assistantRef.addListenerForSingleValueEvent(valueEventListener)
-
-            awaitClose { assistantRef.removeEventListener(valueEventListener) }
+            })
+        } catch (e: Exception) {
+            // Handle exception
+            callback(false)
         }
+    }
 
     override fun getAllAssistants(teacher_id: String): Flow<List<Assistant>> = callbackFlow {
         val assistantsRef = databaseReference.child(Constants.ASSISTANT_NODE)
@@ -316,38 +322,35 @@ class RemoteClient private constructor() : RemoteInterface {
         teacher_id: String,
         semester: String,
         grade_level: String,
-        group_id: String
-    ): Flow<Boolean> = callbackFlow {
+        group_id: String,callback: (Boolean) -> Unit) {
         val studentRef = databaseReference.child(Constants.STUDENT_NODE).child(student.email)
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val studentExists = dataSnapshot.exists()
-                if (studentExists) {
-                    trySend(false)
-                } else {
-                    // Add the student
-                    studentRef.setValue(student)
-                        .addOnSuccessListener {
-                            // Student added successfully, now add data to the specific path
-                           /* val dataRef = studentRef.child(Constants.SEMESTER_NODE).child(semester)
-                                .child(Constants.GRADE_NODE).child(grade_level)
-                                .child(Constants.GROUP_NODE).child(group_id).child("SStatus")
-                            dataRef.setValue(GroupStatus("active"))*/
-                            trySend(true)
-                        }
-                        .addOnFailureListener { exception ->
-                            close(exception)
-                        }
+        try {
+            studentRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val  studentExists = dataSnapshot.exists()
+                    if (studentExists) {
+                        Log.i("TAG", "onDataChange: not added")
+                        callback(false)
+                    } else {
+                        studentRef.setValue(student)
+                            .addOnSuccessListener {
+                                Log.i("TAG", "onDataChange: added")
+                                callback(true)
+                            }.addOnFailureListener { exception ->
+                                Log.i("TAG", "onDataChange: $exception")
+                                callback(false)
+                            }
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    callback(false)
+                }
+            })
+        } catch (e: Exception) {
+            // Handle exception
+            callback(false)
         }
-        studentRef.addListenerForSingleValueEvent(valueEventListener)
-
-        awaitClose { studentRef.removeEventListener(valueEventListener) }
     }
 
     override fun getAllStudents(teacher_id: String,semester: String): Flow<List<Student>> = callbackFlow {
@@ -557,17 +560,25 @@ class RemoteClient private constructor() : RemoteInterface {
         val studentRef = databaseReference.child(Constants.STUDENT_NODE).child(updatedStudent.email)
         studentRef.setValue(updatedStudent)
     }
-    override fun moveStudentToNewGroup(updatedStudent: Student, semester: String, oldGroupId: String) {
+    override fun moveStudentToNewGroup(updatedStudent: Student):Flow<Boolean> = callbackFlow {
         val studentRef = databaseReference.child(Constants.STUDENT_NODE).child(updatedStudent.email)
         val updatedData = HashMap<String, Any>()
         updatedData["name"] = updatedStudent.name
-        updatedData["email"] = updatedStudent.email
         updatedData["activeGroupId"] = updatedStudent.activeGroupId
         updatedData["activeGradeLevel"] = updatedStudent.activeGradeLevel
-      updatedData["phoneNumber"] = updatedStudent.phoneNumber
+        updatedData["phoneNumber"] = updatedStudent.phoneNumber
         updatedData["password"] = updatedStudent.password
-
         studentRef.updateChildren(updatedData)
+            .addOnSuccessListener {
+                trySend(true)
+                close()
+            }
+            .addOnFailureListener { exception ->
+                trySend(false)
+                close(exception)
+            }
+
+        awaitClose()
     }
 
     override fun getStudentAttendanceDetails(
@@ -664,12 +675,24 @@ class RemoteClient private constructor() : RemoteInterface {
         awaitClose { teacherRef.removeEventListener(valueEventListener) }
     }
 
-    override fun addExam(teacher_id: String, semester: String, grade_level: String, exam: Exam)
-    {
+    override fun addExam(teacher_id: String, semester: String, grade_level: String, exam: Exam):Flow<Boolean>
+    = callbackFlow{
         val lessonRef = databaseReference.child(Constants.TEACHER_NODE).child(teacher_id)
             .child(semester).child(Constants.GRADE_NODE).child(grade_level).child(exam.groupId)
             .child(Constants.EXAM_NODE).child(exam.id)
         lessonRef.setValue(exam)
+            .addOnSuccessListener {
+                // Addition successful
+                trySend(true)
+                close()
+            }
+            .addOnFailureListener { exception ->
+                // Addition failed
+                trySend(false)
+                close(exception)
+            }
+
+        awaitClose()
     }
     override fun getAllExams(teacher_id: String, semester: String, grade_level: String, group_id: String): Flow<List<Exam>> = callbackFlow {
         val lessonRef = databaseReference.child(Constants.TEACHER_NODE).child(teacher_id)
@@ -791,32 +814,35 @@ class RemoteClient private constructor() : RemoteInterface {
         awaitClose { studentRef.removeEventListener(valueEventListener) }
     }
 
-    override fun addParent(parent: Parent, teacherId: String, studentId: String): Flow<Boolean> = callbackFlow {
+    override fun addParent(parent: Parent, teacherId: String, studentId: String, callback: (Boolean) -> Unit) {
         val parentRef = databaseReference.child(Constants.PARENT_NODE).child(parent.parentEmail)
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val parentExists = dataSnapshot.exists()
-                if (parentExists) {
-                    trySend(false)
-                } else {
-                    parentRef.setValue(parent)
-                        .addOnSuccessListener {
-
-                            trySend(true)
-                        }
-                        .addOnFailureListener { exception ->
-                            close(exception)
-                        }
+        try {
+            parentRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val parentExists = dataSnapshot.exists()
+                    if (parentExists) {
+                        Log.i("TAG", "onDataChange: not added")
+                        callback(false)
+                    } else {
+                        parentRef.setValue(parent)
+                            .addOnSuccessListener {
+                                Log.i("TAG", "onDataChange: added")
+                                callback(true)
+                            }.addOnFailureListener { exception ->
+                                Log.i("TAG", "onDataChange: $exception")
+                                callback(false)
+                            }
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    callback(false)
+                }
+            })
+        } catch (e: Exception) {
+            // Handle exception
+            callback(false)
         }
-        parentRef.addListenerForSingleValueEvent(valueEventListener)
-
-        awaitClose { parentRef.removeEventListener(valueEventListener) }
     }
     override fun getParentByEmail(studentId: String): Flow<Parent?> = callbackFlow {
         val parentRef = databaseReference.child(Constants.PARENT_NODE)
@@ -841,7 +867,34 @@ class RemoteClient private constructor() : RemoteInterface {
 
         awaitClose { parentRef.removeEventListener(valueEventListener) }
     }
+    override fun deleteParent(studentId: String, callback: (Boolean) -> Unit) {
+        val parentRef = databaseReference.child(Constants.PARENT_NODE)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (parentSnapshot in dataSnapshot.children) {
+                    val parentObj = parentSnapshot.getValue(Parent::class.java)
+                    if (parentObj?.studentId == studentId) {
+                        parentSnapshot.ref.removeValue().addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // Deletion successful
+                                callback(true)
+                            } else {
+                                // Deletion failed
+                                callback(false)
+                            }
+                        }
+                    }
+                }
+                // Parent not found
+                callback(true)
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                callback(false)
+            }
+        }
+        parentRef.addListenerForSingleValueEvent(valueEventListener)
+    }
     override fun updateParent(updatedParent: Parent) :Flow<Boolean> =callbackFlow {
         val parentRef = databaseReference.child(Constants.PARENT_NODE).child(updatedParent.parentEmail)
         val updatedData = HashMap<String, Any>()
@@ -941,4 +994,160 @@ class RemoteClient private constructor() : RemoteInterface {
         awaitClose { groupsRef.removeEventListener(valueEventListener) }
     }
 
-  }
+
+    override fun assistantSignIn(email: String, password: String, context: Context, callback: (Pair<Any?, Boolean>) -> Unit) {
+        val assistantRef = databaseReference.child(Constants.ASSISTANT_NODE)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+                    val assistant = userSnapshot.getValue(Assistant::class.java)
+                    if (assistant != null && assistant.email == email) {
+                        if (assistant.password == password) {
+                            callback(Pair(assistant, true))
+                            return
+                        } else {
+                            // Password is incorrect
+                            val failureReason = context.getString(R.string.signinWrongPassword)
+                            callback(Pair(failureReason, false))
+                            return
+                        }
+                    }
+                }
+                val failureReason = context.getString(R.string.signinNotExists)
+                callback(Pair(failureReason, false))
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Error occurred while accessing the database
+                val failureReason = context.getString(R.string.signinFailed)
+                callback(Pair(failureReason, false))
+            }
+        }
+
+        assistantRef.addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    override fun getTeacherById(teacherId: String): Flow<Teacher> = callbackFlow {
+        val teacherRef = databaseReference.child(Constants.TEACHER_NODE).child(teacherId)
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val teacher = dataSnapshot.getValue(Teacher::class.java)
+                if (teacher != null) {
+                    trySend(teacher)
+                } else {
+                    // Teacher with the specified ID not found
+                    close()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Error occurred while accessing the database
+                close(databaseError.toException())
+            }
+        }
+        teacherRef.addValueEventListener(valueEventListener)
+        awaitClose { teacherRef.removeEventListener(valueEventListener) }
+    }
+    override fun isParentExist(email: String): Flow<Boolean> = callbackFlow {
+        val parentRef = databaseReference.child(Constants.PARENT_NODE).child(email)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Check if the parent exists based on the dataSnapshot
+                val parentExists = dataSnapshot.exists()
+                trySend(parentExists).isSuccess
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        parentRef.addListenerForSingleValueEvent(valueEventListener)
+
+        awaitClose { parentRef.removeEventListener(valueEventListener) }
+    }
+    override fun studentSignIn(email: String, password: String, context: Context, callback: (Pair<Any?, Boolean>) -> Unit) {
+        val studentRef = databaseReference.child(Constants.STUDENT_NODE)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+                    val student = userSnapshot.getValue(Student::class.java)
+                    if (student != null && student.email == email) {
+                        if (student.password == password) {
+                            callback(Pair(student, true))
+                            return
+                        } else {
+                            // Password is incorrect
+                            val failureReason = context.getString(R.string.signinWrongPassword)
+                            callback(Pair(failureReason, false))
+                            return
+                        }
+                    }
+                }
+                val failureReason = context.getString(R.string.signinNotExists)
+                callback(Pair(failureReason, false))
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Error occurred while accessing the database
+                val failureReason = context.getString(R.string.signinFailed)
+                callback(Pair(failureReason, false))
+            }
+        }
+
+        studentRef.addListenerForSingleValueEvent(valueEventListener)
+    }
+    override fun parentSignIn(email: String, password: String, context: Context, callback: (Pair<Any?, Boolean>) -> Unit) {
+        val parentRef = databaseReference.child(Constants.PARENT_NODE)
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (userSnapshot in dataSnapshot.children) {
+                    val parent = userSnapshot.getValue(Parent::class.java)
+                    if (parent != null && parent.parentEmail == email) {
+                        if (parent.parentPassword == password) {
+                            callback(Pair(parent, true))
+                            return
+                        } else {
+                            // Password is incorrect
+                            val failureReason = context.getString(R.string.signinWrongPassword)
+                            callback(Pair(failureReason, false))
+                            return
+                        }
+                    }
+                }
+                val failureReason = context.getString(R.string.signinNotExists)
+                callback(Pair(failureReason, false))
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Error occurred while accessing the database
+                val failureReason = context.getString(R.string.signinFailed)
+                callback(Pair(failureReason, false))
+            }
+        }
+
+        parentRef.addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    override fun getStudentById(studentId: String): Flow<Student?> = callbackFlow {
+        val studentRef = databaseReference.child(Constants.STUDENT_NODE).child(studentId)
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val student = dataSnapshot.getValue(Student::class.java)
+                if (student != null) {
+                    trySend(student)
+                } else {
+                    trySend(null)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Error occurred while accessing the database
+                close(databaseError.toException())
+            }
+        }
+        studentRef.addValueEventListener(valueEventListener)
+        awaitClose { studentRef.removeEventListener(valueEventListener) }
+    }
+}

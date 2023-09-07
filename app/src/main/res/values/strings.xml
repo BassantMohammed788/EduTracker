@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EduTracker</string>
+    <string name="app_name">nobel</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">Login</string>
     <string name="login2">Log In</string>
@@ -37,6 +37,7 @@
     <string name="signinWrongPassword">Wrong Password</string>
 
     <string name="signinUserType">You Must Choose Your Role</string>
+
 
     <string name="notTeacher">You aren\'t a teacher</string>
 
@@ -167,6 +168,17 @@
     <string name="grades">Grades</string>
     <string name="profile">Profile</string>
 
+    <string name="signinFailed">Sign In Failed</string>
+    <string name="change">Change</string>
+    <string name="current_password_is_the_same_as_new">Enter new password</string>
+    <string name="incorrect_current_password">Current Password is incorrect</string>
+    <string name="enter_current_password">Enter Current Password</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="reenter_new_password">ReEnter New Password</string>
+
+    <string name="are_you_sure_you_want_to_logout">Do You Want To Logout?</string>
+    <string name="the_student">student</string>
+    <string name="this_student_didn_t_take_any_exams_yet">This Student Didn\'t take any exams yet</string>
     <string-array name="grade_levels">
         <item>First preparatory Grade</item>
         <item>Second preparatory Grade</item>

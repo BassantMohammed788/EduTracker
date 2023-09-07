@@ -164,77 +164,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/parentEmailET"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="40dp"
-                android:hint="@string/parent_email"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary"
-                app:layout_constraintEnd_toStartOf="@id/sign_up_right_guideline"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@id/sign_up_left_guideline"
-                app:layout_constraintTop_toBottomOf="@id/passwordTF">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/parentEmailETt"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="textEmailAddress"
-                    android:padding="8dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/parentPhoneTF"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="40dp"
-                android:hint="@string/parent_phone"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary"
-                app:layout_constraintEnd_toStartOf="@id/nameTF"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@id/nameTF"
-                app:layout_constraintTop_toBottomOf="@id/parentEmailET">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/parentPhoneET"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="8dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/parentPasswordTF"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="40dp"
-                android:hint="@string/parent_password"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/primary"
-                app:layout_constraintEnd_toStartOf="@id/phoneTF"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@id/phoneTF"
-                app:layout_constraintTop_toBottomOf="@id/parentPhoneTF">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/parentPasswordET"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"
-                    android:padding="8dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/gradeLevelTF"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -245,10 +174,10 @@
                 android:hint="@string/grade_level"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/primary"
-                app:layout_constraintEnd_toStartOf="@id/parentPasswordTF"
+                app:layout_constraintEnd_toStartOf="@id/sign_up_right_guideline"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@id/parentPasswordTF"
-                app:layout_constraintTop_toBottomOf="@id/parentPasswordTF">
+                app:layout_constraintStart_toStartOf="@id/sign_up_left_guideline"
+                app:layout_constraintTop_toBottomOf="@id/passwordTF">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/gradeLevelET"

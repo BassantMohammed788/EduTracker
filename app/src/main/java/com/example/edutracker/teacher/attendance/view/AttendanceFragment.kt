@@ -10,12 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.marginTop
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.edutracker.R
+import com.example.edutracker.databinding.AlertDialogBinding
 import com.example.edutracker.databinding.FragmentAttendanceBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
+import com.example.edutracker.databinding.NoSemesterDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.dataclasses.Lesson
 import com.example.edutracker.models.Repository
@@ -72,53 +75,68 @@ class AttendanceFragment : Fragment() {
         lessonsViewModelFactory = LessonsViewModelFactory(Repository.getInstance(RemoteClient.getInstance()))
         lessonViewModel = ViewModelProvider(this, lessonsViewModelFactory)[LessonsViewModel::class.java]
 
-        teacherIdVar = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
-        semesterVar = MySharedPreferences.getInstance(requireContext()).getSemester()!!
-
-        gradeLevelAdapter = GradeLevelAdapter(emptyList(),gradeLambda)
-        groupsAdapter=GroupAdapter(groupClickLambda)
-        monthsAdapter=GradeLevelAdapter (emptyList(),monthClickLambda)
-        lessonAdapter= GroupLessonsAdapter (emptyList(),lessonClickLambda)
-        binding.chooseLevel.setOnClickListener{
-            if (semesterVar!=null){
-                displayGradeLevelDialog()
-            }else{
-                Toast.makeText(requireContext(), getString(R.string.you_should_choose_semester), Toast.LENGTH_SHORT).show()
+        if (MySharedPreferences.getInstance(requireContext()).getSemester()==null){
+            binding.constraintLayout.visibility=View.GONE
+            val builder = AlertDialog.Builder(requireContext())
+            val noSemester = NoSemesterDialogBinding.inflate(layoutInflater)
+            builder.setView(noSemester.root)
+            val dialog = builder.create()
+            dialog.show()
+            noSemester.dialogYesBtn.setOnClickListener {
+                Navigation.findNavController(requireView()).popBackStack()
+                dialog.dismiss()
             }
-        }
 
-        binding.chooseGroup.setOnClickListener{
-            Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
-            /*  if (gradeVar!=null){
-                    displayGroupDialog()
-                }else{
-                    Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
-                }*/
-        }
-        binding.chooseMonth.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
+        }else{
+            teacherIdVar = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
+            semesterVar = MySharedPreferences.getInstance(requireContext()).getSemester()!!
 
-            /*   if (gradeVar!=null&&groupNameVar!=null){
-                    displayMonthDialog()
+            gradeLevelAdapter = GradeLevelAdapter(emptyList(),gradeLambda)
+            groupsAdapter=GroupAdapter(groupClickLambda)
+            monthsAdapter=GradeLevelAdapter (emptyList(),monthClickLambda)
+            lessonAdapter= GroupLessonsAdapter (emptyList(),lessonClickLambda)
+            binding.chooseLevel.setOnClickListener{
+                if (semesterVar!=null){
+                    displayGradeLevelDialog()
                 }else{
-                    Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
-                }*/
-        }
-        binding.chooseLesson.setOnClickListener{
-            if (monthVar!=null){
-                displayLessonDialog()
-            }else{
-                Toast.makeText(requireContext(), getString(R.string.you_should_choose_month), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.you_should_choose_semester), Toast.LENGTH_SHORT).show()
+                }
             }
-        }
-        binding.takeAttendanceButton.setOnClickListener{
-            if (monthVar!=null) {
-                val view = view
-                val action =
-                   AttendanceFragmentDirections.actionAttendanceFragmentToTakeAttendanceFragment(lessonIdVar!!,groupIdVar!!,monthVar!!,gradeVar!!,groupNameVar!!)
+
+            binding.chooseGroup.setOnClickListener{
+                Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
+                /*  if (gradeVar!=null){
+                        displayGroupDialog()
+                    }else{
+                        Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level), Toast.LENGTH_SHORT).show()
+                    }*/
+            }
+            binding.chooseMonth.setOnClickListener {
+                Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
+
+                /*   if (gradeVar!=null&&groupNameVar!=null){
+                        displayMonthDialog()
+                    }else{
+                        Toast.makeText(requireContext(), getString(R.string.you_should_choose_grade_level_and_group), Toast.LENGTH_SHORT).show()
+                    }*/
+            }
+            binding.chooseLesson.setOnClickListener{
+                if (monthVar!=null){
+                    displayLessonDialog()
+                }else{
+                    Toast.makeText(requireContext(), getString(R.string.you_should_choose_month), Toast.LENGTH_SHORT).show()
+                }
+            }
+            binding.takeAttendanceButton.setOnClickListener{
+                if (monthVar!=null) {
+                    val view = view
+                    val action =
+                        AttendanceFragmentDirections.actionAttendanceFragmentToTakeAttendanceFragment(lessonIdVar!!,groupIdVar!!,monthVar!!,gradeVar!!,groupNameVar!!)
                     Navigation.findNavController(view).navigate(action)
+                }
             }
         }
+
     }
     private fun displayGradeLevelDialog() {
         val builder = AlertDialog.Builder(requireContext())
@@ -135,29 +153,27 @@ class AttendanceFragment : Fragment() {
                         is FirebaseState.Loading ->{
                             gradeLevelDialog.progressBar.visibility=View.VISIBLE
                             gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                            gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                            gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success ->{
                             if (result.data.isEmpty()){
                                 gradeLevelDialog.progressBar.visibility=View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
-
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.text=getString(R.string.no_grades_yet)
                             }else{
                                 gradeLevelDialog.progressBar.visibility=View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
-                                val list = mutableListOf<String>()
-                                for (i in result.data){
-                                    list.add(i)
-                                }
-                                gradeLevelAdapter.setGradeLevelsList(list)
+                                gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
+                                gradeLevelAdapter.setGradeLevelsList(result.data)
                             }
 
                         }
                         is FirebaseState.Failure ->{}
-
                     }
 
                 }
@@ -191,6 +207,8 @@ class AttendanceFragment : Fragment() {
                             is FirebaseState.Loading ->{
                                 gradeLevelDialog.progressBar.visibility=View.VISIBLE
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                                gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
                             }
                             is FirebaseState.Success ->{
                                 if (result.data.isEmpty()){
@@ -198,10 +216,13 @@ class AttendanceFragment : Fragment() {
                                     gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
                                     gradeLevelDialog.noDataTv.text=getString(R.string.no_groups_yet)
                                     gradeLevelDialog.noDataTv.visibility=View.VISIBLE
+
+                                    gradeLevelDialog.noDataAnimationView.visibility=View.VISIBLE
                                 }else{
                                     gradeLevelDialog.progressBar.visibility=View.GONE
                                     gradeLevelDialog.GradeLevelRecycler.visibility=View.VISIBLE
                                     gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
                                     groupsAdapter.submitList(result.data)
                                 }
 
@@ -243,6 +264,8 @@ class AttendanceFragment : Fragment() {
                         is FirebaseState.Loading ->{
                             monthDialog.progressBar.visibility=View.VISIBLE
                             monthDialog.noDataTv.visibility=View.INVISIBLE
+
+                            monthDialog.noDataAnimationView.visibility=View.INVISIBLE
                             monthDialog.GradeLevelRecycler.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success ->{
@@ -250,9 +273,11 @@ class AttendanceFragment : Fragment() {
                                 monthDialog.progressBar.visibility=View.INVISIBLE
                                 monthDialog.GradeLevelRecycler.visibility=View.GONE
                                 monthDialog.noDataTv.visibility=View.VISIBLE
+                                monthDialog.noDataAnimationView.visibility=View.VISIBLE
                                 monthDialog.noDataTv.text=getString(R.string.no_months_yet)
                             }else{
                                 monthDialog.noDataTv.visibility=View.INVISIBLE
+                                monthDialog.noDataAnimationView.visibility=View.INVISIBLE
                                 monthDialog.progressBar.visibility=View.GONE
                                 monthDialog.GradeLevelRecycler.visibility=View.VISIBLE
                                 val list = mutableListOf<String>()
@@ -303,6 +328,8 @@ class AttendanceFragment : Fragment() {
                             is FirebaseState.Loading->{
                                 gradeLevelDialog.progressBar.visibility=View.VISIBLE
                                 gradeLevelDialog.GradeLevelRecycler.visibility=View.GONE
+                                gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
                             }
                             is FirebaseState.Success ->{
                                 if (result.data.isEmpty()){
@@ -310,11 +337,13 @@ class AttendanceFragment : Fragment() {
                                     gradeLevelDialog.GradeLevelRecycler.visibility=View.INVISIBLE
                                     gradeLevelDialog.noDataTv.text=getString(R.string.no_groups_yet)
                                     gradeLevelDialog.noDataTv.visibility=View.VISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility=View.VISIBLE
 
                                 }else{
                                     gradeLevelDialog.progressBar.visibility=View.GONE
                                     gradeLevelDialog.GradeLevelRecycler.visibility=View.VISIBLE
                                     gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
                                     lessonAdapter.setGradeLevelsList(result.data)
                                 }
 

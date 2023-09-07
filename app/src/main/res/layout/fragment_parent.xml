@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -150,6 +150,7 @@
             android:layout_marginEnd="32dp"
             android:orientation="horizontal"
             android:weightSum="2"
+            android:layout_marginTop="0dp"
             app:layout_constraintEnd_toEndOf="@+id/editTextsLinear"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editTextsLinear">
@@ -173,6 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginBottom="100dp"
                 android:layout_weight="1"
                 android:background="@drawable/background_login_btn"
                 android:paddingStart="25dp"
@@ -184,17 +186,32 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noDataAnimationView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:visibility="invisible"
+            android:contentDescription="@string/todo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/addParentFAB"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:foregroundGravity="center"
+            app:lottie_rawRes="@raw/no_data"
+            app:lottie_speed="1.5"
+            tools:ignore="ImageContrastCheck" />
         <TextView
             android:id="@+id/noPArentTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_parent_added_to_this_student"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/parentTv"
+            app:layout_constraintTop_toBottomOf="@id/noDataAnimationView"
             app:layout_constraintVertical_bias="0.271" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -202,18 +219,18 @@
             android:id="@+id/addParentFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="70dp"
             android:layout_marginStart="32dp"
             android:backgroundTint="@color/primary"
             android:clickable="true"
             android:contentDescription="@string/app_name"
             android:focusable="true"
             android:src="@drawable/add_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLiniar"
             app:rippleColor="@color/white"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

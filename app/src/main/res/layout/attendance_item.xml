@@ -12,6 +12,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="5dp"
+        android:layout_gravity="center"
         android:background="@drawable/card_corner_rdauis"
         android:contentDescription="@string/attendance"
         android:padding="10dp"
@@ -44,11 +45,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:paddingBottom="5dp"
                 android:text="bassant mohammed hassan mandouh"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/attendancetextView"
@@ -59,7 +60,7 @@
                 android:padding="10dp"
                 android:text="@string/attendance_not_taken_yet"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

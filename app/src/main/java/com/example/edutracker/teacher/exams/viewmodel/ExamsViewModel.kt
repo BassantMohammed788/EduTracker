@@ -20,6 +20,10 @@ class ExamsViewModel (private val repo: RepositoryInterface): ViewModel() {
         MutableStateFlow(FirebaseState.Loading)
     val getAllExams: StateFlow<FirebaseState<List<Exam>>> = getExamsMutable
 
+    private var addExamMutable: MutableStateFlow<FirebaseState<Boolean>> =
+        MutableStateFlow(FirebaseState.Loading)
+    val addExam: StateFlow<FirebaseState<Boolean>> = addExamMutable
+
     private var getExamDegreesMutable: MutableStateFlow<FirebaseState<List<Triple<String, String, ExamDegree>>>> =
         MutableStateFlow(FirebaseState.Loading)
     val getExamDegrees: StateFlow<FirebaseState<List<Triple<String, String, ExamDegree>>>> = getExamDegreesMutable
@@ -31,6 +35,14 @@ class ExamsViewModel (private val repo: RepositoryInterface): ViewModel() {
     fun addExam(teacher_id: String, semester: String, grade_level: String, exam: Exam){
         viewModelScope.launch {
             repo.addExam(teacher_id, semester, grade_level, exam)
+                .catch { e ->
+                    Log.e("TAG", "addExamFailure: $e")
+                    addExamMutable.value = FirebaseState.Failure(e)
+                }
+                .collect { data ->
+                    Log.i("TAG", "addExamSuccess: $data")
+                    addExamMutable.value = FirebaseState.Success(data)
+                }
         }
     }
     fun getAllExams( teacher_id: String, semester: String,grade_level: String,group_id:String) {

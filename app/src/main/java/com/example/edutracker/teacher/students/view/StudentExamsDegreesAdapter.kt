@@ -65,6 +65,8 @@ class StudentExamsDegreesAdapter :
             else -> R.color.white
         }
 
+        holder.binding.studentNameTextView.setTextColor(ContextCompat.getColor(context, textColor))
+        holder.binding.examDegreetextView.setTextColor(ContextCompat.getColor(context, textColor))
         holder.binding.attendanceCard.setCardBackgroundColor(ContextCompat.getColor(context, cardColor))
 
 

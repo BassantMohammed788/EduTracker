@@ -9,7 +9,9 @@ data class Teacher(
     val password: String,
     val email: String,
     val subject: String
-)
+){
+    constructor():this("","","","","","")
+}
 
 data class YearNode(
     val id: String

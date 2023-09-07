@@ -29,6 +29,14 @@ object Constants {
     const val TEACHER_PHONE="teacher_phone"
     const val TEACHER_SUBJECT="teacher_subject"
     const val IS_USER_LOGGED_IN="is_user_logged_in"
+    const val USER_NAME="user_name"
+    const val USER_EMAIL="user_email"
+    const val USER_PHONE="user_phone"
+    const val USER_PASSWORD="user_password"
+    const val STUDENT_ID="student_id"
+    const val STUDENT_GRADE_LEVEL="student_grade_level"
+    const val STUDENT_GROUP_ID="student_group_id"
+
 
 
 

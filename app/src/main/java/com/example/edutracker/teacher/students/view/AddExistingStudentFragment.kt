@@ -18,6 +18,7 @@ import com.example.edutracker.R
 import com.example.edutracker.databinding.ChooseStudentDialogBinding
 import com.example.edutracker.databinding.FragmentAddExistingStudentBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.dataclasses.Student
 import com.example.edutracker.models.Repository
@@ -115,13 +116,20 @@ class AddExistingStudentFragment : Fragment() {
                 if (checkConnectivity(requireContext())){
 
                     lifecycleScope.launch {
+                        val builder = AlertDialog.Builder(requireContext())
+                        val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+                        builder.setView(loadingDialogB.root)
+                        val dialog = builder.create()
+                        dialog.setCancelable(false)
                         studentsViewModel.addStudentToNewSemester(newStudentData)
                         studentsViewModel.addStudentToNewSemester.collect { result ->
                             when (result) {
                                 is FirebaseState.Loading -> {
+                                    dialog.show()
                                     Log.i("TAG", "onViewCreated: loading")
                                 }
                                 is FirebaseState.Success -> {
+                                    dialog.dismiss()
                                     if (result.data) {
                                         Toast.makeText(requireContext(), getString(R.string.added_successfully), Toast.LENGTH_SHORT).show()
                                         Navigation.findNavController(requireView()).apply {
@@ -132,6 +140,7 @@ class AddExistingStudentFragment : Fragment() {
                                     }
                                 }
                                 is FirebaseState.Failure -> {
+                                    dialog.dismiss()
                                     Toast.makeText(requireContext(), "Error: ${result.msg}", Toast.LENGTH_SHORT).show()
                                 }
                             }
@@ -168,17 +177,21 @@ class AddExistingStudentFragment : Fragment() {
                         is FirebaseState.Loading -> {
                             gradeLevelDialog.progressBar.visibility = View.VISIBLE
                             gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                            gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                            gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()) {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
                                 gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.VISIBLE
                                 gradeLevelDialog.noDataTv.text = getString(R.string.no_grades_yet)
                             } else {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                 gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data) {
                                     list.add(i)
@@ -230,17 +243,22 @@ class AddExistingStudentFragment : Fragment() {
                             is FirebaseState.Loading -> {
                                 gradeLevelDialog.progressBar.visibility = View.VISIBLE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                                gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                             }
                             is FirebaseState.Success -> {
                                 if (result.data.isEmpty()) {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.INVISIBLE
+
                                     gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility = View.VISIBLE
                                     gradeLevelDialog.noDataTv.text =
                                         getString(R.string.no_groups_yet)
                                 } else {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
                                     gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                     groupsAdapter.submitList(result.data)
                                 }
@@ -321,6 +339,7 @@ class AddExistingStudentFragment : Fragment() {
                             chooseStudentsDialog.progressBar.visibility = View.VISIBLE
                             chooseStudentsDialog.studentsRecycler.visibility = View.INVISIBLE
                             chooseStudentsDialog.noDataTv.visibility = View.INVISIBLE
+                            chooseStudentsDialog.noDataAnimationView.visibility = View.INVISIBLE
                             chooseStudentsDialog.searchEditText.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
@@ -328,11 +347,13 @@ class AddExistingStudentFragment : Fragment() {
                                 chooseStudentsDialog.progressBar.visibility = View.GONE
                                 chooseStudentsDialog.studentsRecycler.visibility = View.INVISIBLE
                                 chooseStudentsDialog.noDataTv.visibility = View.VISIBLE
+                                chooseStudentsDialog.noDataAnimationView.visibility = View.VISIBLE
                                 chooseStudentsDialog.searchEditText.visibility=View.INVISIBLE
                             } else {
                                 chooseStudentsDialog.progressBar.visibility = View.INVISIBLE
                                 chooseStudentsDialog.studentsRecycler.visibility = View.VISIBLE
                                 chooseStudentsDialog.noDataTv.visibility = View.INVISIBLE
+                                chooseStudentsDialog.noDataAnimationView.visibility = View.INVISIBLE
                                 chooseStudentsDialog.searchEditText.visibility=View.VISIBLE
                                 studentsList=result.data
                                 allStudentsAdapter.submitList(result.data)

@@ -59,20 +59,33 @@
             app:layout_constraintTop_toBottomOf="@id/attendanceTV"
             tools:listitem="@layout/attendance_item" />
 
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/noDataAnimationView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:visibility="invisible"
+        android:contentDescription="@string/todo"
+        android:layout_marginTop="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:foregroundGravity="center"
+        app:lottie_rawRes="@raw/no_data"
+        app:lottie_speed="1.5"
+        tools:ignore="ImageContrastCheck" />
         <TextView
             android:id="@+id/noStudentsTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_students_yet"
-            android:textSize="24sp"
-            android:layout_marginTop="250dp"
+            android:textSize="18sp"
             android:gravity="center"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/attendanceTV" />
+            app:layout_constraintTop_toBottomOf="@id/noDataAnimationView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

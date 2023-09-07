@@ -152,6 +152,9 @@
         <action
             android:id="@+id/action_attendanceFragment_to_allLessonsFragment"
             app:destination="@id/allLessonsFragment" />
+        <action
+            android:id="@+id/action_attendanceFragment_to_teacherHomeFragment"
+            app:destination="@id/teacherHomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/studentDetailsFragment"
@@ -196,6 +199,9 @@
         <action
             android:id="@+id/action_paymentFragment_to_recordPaymentFragment"
             app:destination="@id/recordPaymentFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_teacherHomeFragment"
+            app:destination="@id/teacherHomeFragment" />
     </fragment>
     <fragment
         android:id="@+id/recordPaymentFragment"
@@ -249,6 +255,9 @@
         <action
             android:id="@+id/action_allExamsFragment_to_recordExamDegreesFragment"
             app:destination="@id/recordExamDegreesFragment" />
+        <action
+            android:id="@+id/action_allExamsFragment_to_teacherHomeFragment"
+            app:destination="@id/teacherHomeFragment" />
 
     </fragment>
     <fragment

@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentTeacherHomeBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
+import com.example.edutracker.utilities.Constants
 import com.example.edutracker.utilities.MySharedPreferences
 
 class TeacherHomeFragment : Fragment() {
@@ -43,21 +44,34 @@ class TeacherHomeFragment : Fragment() {
         binding.lessonsCard.setOnClickListener {
             Navigation.findNavController(requireView()).navigate(R.id.action_teacherHomeFragment_to_allLessonsFragment)
         }
-
-
-        if (MySharedPreferences.getInstance(requireContext()).getSemester()!=null){
-            binding.AssistantCard.visibility=View.VISIBLE
-            binding.StudentCard.visibility=View.VISIBLE
-            binding.GroupCard.visibility=View.VISIBLE
-            binding.lessonsCard.visibility=View.VISIBLE
+        if (MySharedPreferences.getInstance(requireContext()).getUserType()==Constants.TEACHER){
+            if (MySharedPreferences.getInstance(requireContext()).getSemester()!=null){
+                binding.AssistantCard.visibility=View.VISIBLE
+                binding.StudentCard.visibility=View.VISIBLE
+                binding.GroupCard.visibility=View.VISIBLE
+                binding.lessonsCard.visibility=View.VISIBLE
+            }else{
+                binding.AssistantCard.visibility=View.INVISIBLE
+                binding.StudentCard.visibility=View.INVISIBLE
+                binding.GroupCard.visibility=View.INVISIBLE
+                binding.lessonsCard.visibility=View.INVISIBLE
+            }
 
         }else{
-            binding.AssistantCard.visibility=View.INVISIBLE
-            binding.StudentCard.visibility=View.INVISIBLE
-            binding.GroupCard.visibility=View.INVISIBLE
-            binding.lessonsCard.visibility=View.INVISIBLE
-
+            if (MySharedPreferences.getInstance(requireContext()).getSemester()!=null){
+                binding.AssistantCard.visibility=View.GONE
+                binding.StudentCard.visibility=View.VISIBLE
+                binding.GroupCard.visibility=View.VISIBLE
+                binding.lessonsCard.visibility=View.VISIBLE
+            }else{
+                binding.AssistantCard.visibility=View.GONE
+                binding.StudentCard.visibility=View.INVISIBLE
+                binding.GroupCard.visibility=View.INVISIBLE
+                binding.lessonsCard.visibility=View.INVISIBLE
+            }
         }
+
+
         binding.chooseSemester.setOnClickListener {
             displaySemesterDialog()
         }
@@ -126,7 +140,11 @@ class TeacherHomeFragment : Fragment() {
             if (semesterVar!=null){
                  MySharedPreferences.getInstance(requireContext()).saveSemester(semesterVar!!)
                 binding.semesterName.text = semesterVar
-                binding.AssistantCard.visibility = View.VISIBLE
+                if (MySharedPreferences.getInstance(requireContext()).getUserType()==Constants.TEACHER){
+                    binding.AssistantCard.visibility = View.VISIBLE
+                }else{
+                    binding.AssistantCard.visibility = View.GONE
+                }
                 binding.StudentCard.visibility = View.VISIBLE
                 binding.GroupCard.visibility = View.VISIBLE
                 binding.lessonsCard.visibility = View.VISIBLE

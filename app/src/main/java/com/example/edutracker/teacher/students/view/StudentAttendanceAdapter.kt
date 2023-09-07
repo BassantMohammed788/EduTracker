@@ -51,7 +51,7 @@ class StudentAttendanceAdapter :
         val currentObject = getItem(position)
 
         val parts = currentObject.first.split(", ")
-        holder.binding.studentNameIenttextView.text="${parts[0]} ${parts[2]} \n ${parts[1]}"
+        holder.binding.studentNameIenttextView.text="${parts[0]} ${parts[2]}    ${parts[1]}"
         var attendanceStatus = currentObject.second
         if (currentObject.second == "null"){
             attendanceStatus =context.getString(R.string.attendance_not_taken_yet)

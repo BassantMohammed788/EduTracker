@@ -71,11 +71,13 @@ class TeacherAllAssistantFragment : Fragment() {
                             if (result.data.isEmpty()){
                                 binding.assistantProgressBar.visibility=View.GONE
                                 binding.noAssistantTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
                                 Log.i("TAG", "onViewCreated: no assistant yet")
                             }else{
                                 assistantAdapter.submitList(result.data)
                                 recyclerView.visibility=View.VISIBLE
                                 binding.noAssistantTv.visibility=View.GONE
+                                binding.noDataAnimationView.visibility=View.GONE
                                 binding.noAssistantTv.text=result.data[0].name
                                 binding.assistantProgressBar.visibility=View.GONE
                                 Log.i("TAG", "onViewCreated: ${result.data[0].name}")
@@ -83,6 +85,8 @@ class TeacherAllAssistantFragment : Fragment() {
                         }
                         is FirebaseState.Failure -> {
                             binding.noAssistantTv.visibility=View.GONE
+                            binding.noDataAnimationView.visibility=View.GONE
+
                             Log.i("TAG", "onViewCreated: fail")
                         }
                     }

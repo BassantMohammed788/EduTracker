@@ -1,5 +1,6 @@
 package com.example.edutracker.teacher.assistantdata.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentTeacherAddNewAssistantBinding
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Assistant
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
@@ -55,48 +57,49 @@ class TeacherAddNewAssistantFragment : Fragment() {
             val phone = binding.assistantPhoneNumberET.text.toString()
             val teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
             val transformedEmail = email.replace(".", ",")
+            val builder = AlertDialog.Builder(requireContext())
+            val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+            builder.setView(loadingDialogB.root)
+            val dialog = builder.create()
+            dialog.setCancelable(false)
+                dialog.show()
           if (checkConnectivity(requireContext())){
               if (name.isNotEmpty()&&email.isNotEmpty()&&password.isNotEmpty()&&phone.isNotEmpty()){
                   if (isValidEmail(email)){
                       if (checkEgyptianPhoneNumber(phone)){
                           val assistant=Assistant(name,transformedEmail,phone,password,teacherId)
                           lifecycleScope.launch {
-                              viewModel.addAssistant(teacherId, assistant)
-                                 viewModel.addAssistant.collect { result ->
-                                      when (result) {
-                                          is FirebaseState.Loading -> {
-                                              Log.i("TAG", "onViewCreated: loading")
-                                          }
-                                          is FirebaseState.Success -> {
-                                              if (result.data) {
-                                                  Toast.makeText(requireContext(), "Added Successfully", Toast.LENGTH_SHORT).show()
-                                                  Navigation.findNavController(requireView()).apply {
-                                                      popBackStack() // Clear the back stack up to teacherAllAssistantFragment
-                                                  }
-                                                  } else {
-                                                  Toast.makeText(requireContext(), "The email already exists", Toast.LENGTH_SHORT).show()
-                                              }
-                                          }
-                                          is FirebaseState.Failure -> {
-                                              Toast.makeText(requireContext(), "Error: ${result.msg}", Toast.LENGTH_SHORT).show()
-                                          }
+                              viewModel.addAssistant(assistant,teacherId){ result->
+                                  if (result){
+                                      dialog.dismiss()
+                                      Toast.makeText(requireContext(), getString(R.string.added_successfully), Toast.LENGTH_SHORT).show()
+                                      Navigation.findNavController(requireView()).apply {
+                                          popBackStack()
                                       }
+                                  }else{
+                                      dialog.dismiss()
+                                      Toast.makeText(requireContext(), getString(R.string.The_email_already_exists), Toast.LENGTH_SHORT).show()
                                   }
+                              }
                           }
 
                       }else{
+                          dialog.dismiss()
                           Toast.makeText(requireContext(), getString(R.string.phoneNotValid), Toast.LENGTH_SHORT).show()
                       }
                   }else{
+                      dialog.dismiss()
                       Toast.makeText(requireContext(), getString(R.string.emailNotValid), Toast.LENGTH_SHORT).show()
                   }
               }else{
                   Toast.makeText(requireContext(), getString(R.string.fillAllFields), Toast.LENGTH_SHORT).show()
 
+                  dialog.dismiss()
               }
           }else{
               Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
 
+              dialog.dismiss()
           }
 
 

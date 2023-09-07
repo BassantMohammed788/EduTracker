@@ -97,12 +97,14 @@ class TakeAttendanceFragment : Fragment() {
                             binding.attendanceProgressBar.visibility=View.VISIBLE
                             binding.attendanceRecycler.visibility=View.INVISIBLE
                             binding.noStudentsTv.visibility=View.INVISIBLE
+                            binding.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()){
                                 binding.attendanceProgressBar.visibility=View.INVISIBLE
                                 binding.attendanceRecycler.visibility=View.VISIBLE
                                 binding.noStudentsTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
                             }else{
                                 Log.i("TAG", "getGroupStudents: ${result.data}")
                                 attendanceViewModel.getLessonAttendance(semesterVar!!, gradeVar!!,groupIdVar!!,lessonIdVar!!,monthVar!!,result.data)
@@ -118,6 +120,7 @@ class TakeAttendanceFragment : Fragment() {
                                                 binding.attendanceProgressBar.visibility=View.INVISIBLE
                                                 binding.attendanceRecycler.visibility=View.VISIBLE
                                                 binding.noStudentsTv.visibility=View.INVISIBLE
+                                                binding.noDataAnimationView.visibility=View.INVISIBLE
                                                 attendanceList=result.data.toMutableList()
                                                 groupAttendanceAdapter.submitList(result.data)
                                             }

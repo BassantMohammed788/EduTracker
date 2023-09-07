@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentAddExamBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Exam
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.models.Repository
@@ -27,6 +28,7 @@ import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.teacher.lessons.view.GroupAdapter
 import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -97,10 +99,33 @@ class AddExamFragment : Fragment() {
                 if (groupIdVar!=null&&gradeVar!=null){
                     if (binding.examNameET.text.isNotEmpty()){
                         lifecycleScope.launch{
-                            val exam = Exam(
-                                UUID.randomUUID().toString(),
-                                groupIdVar!!,binding.examNameET.text.toString())
+                            val builder = AlertDialog.Builder(requireContext())
+                            val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+                            builder.setView(loadingDialogB.root)
+                            val dialog = builder.create()
+                            dialog.setCancelable(false)
+                            val exam = Exam(UUID.randomUUID().toString(), groupIdVar!!,binding.examNameET.text.toString())
                             examViewModel.addExam(teacherIdVar!!,semesterVar!!,gradeVar!!,exam)
+                            examViewModel.addExam.collect{ result->
+                                when(result){
+                                    is FirebaseState.Loading->{
+                                        dialog.show()
+                                    }
+                                    is FirebaseState.Success->{
+                                        dialog.dismiss()
+                                        Navigation.findNavController(requireView()).apply {
+                                            popBackStack()
+                                        }
+                                        Toast.makeText(requireContext(),getString(R.string.added_successfully),Toast.LENGTH_SHORT).show()
+                                    }
+                                    is FirebaseState.Failure->{
+                                        dialog.dismiss()
+                                        Toast.makeText(requireContext(),"failed",Toast.LENGTH_SHORT).show()
+
+                                    }
+                                }
+                            }
+
                         }
                     }else{
                         Toast.makeText(
@@ -140,17 +165,21 @@ class AddExamFragment : Fragment() {
                         is FirebaseState.Loading -> {
                             gradeLevelDialog.progressBar.visibility = View.VISIBLE
                             gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                            gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
+                            gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()) {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
                                 gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.VISIBLE
                                 gradeLevelDialog.noDataTv.text = getString(R.string.no_grades_yet)
                             } else {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
-                                gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
+                                gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data) {
                                     list.add(i)
@@ -201,17 +230,21 @@ class AddExamFragment : Fragment() {
                             is FirebaseState.Loading -> {
                                 gradeLevelDialog.progressBar.visibility = View.VISIBLE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                                gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
+                                gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
                             }
                             is FirebaseState.Success -> {
                                 if (result.data.isEmpty()) {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.INVISIBLE
                                     gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility=View.VISIBLE
                                     gradeLevelDialog.noDataTv.text =
                                         getString(R.string.no_groups_yet)
                                 } else {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
-                                    gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility=View.INVISIBLE
+                                    gradeLevelDialog.noDataTv.visibility=View.INVISIBLE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
 
                                     groupsAdapter.submitList(result.data)

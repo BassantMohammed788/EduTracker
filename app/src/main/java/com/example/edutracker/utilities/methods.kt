@@ -34,6 +34,15 @@ fun checkEgyptianPhoneNumber(phoneNumber: String): Boolean {
 
 }
 
+fun sortDatesFromLatestToOldest(datesWithStatus: List<Pair<String, String>>) : List<Pair<String, String>> {
+    val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy, HH:mm a", Locale("ar"))
+
+    val sortedDates = datesWithStatus.sortedByDescending {
+        dateFormat.parse(it.first)
+    }
+
+    return sortedDates
+}
 
 
 

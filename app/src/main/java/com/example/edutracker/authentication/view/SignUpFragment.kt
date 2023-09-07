@@ -1,4 +1,4 @@
-package com.example.edutracker.authentication
+package com.example.edutracker.authentication.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -117,26 +117,26 @@ class SignUpFragment : Fragment() {
 
 
     private fun createTeacherNode(teacher: Teacher) {
-        val year1 = YearNode("2023-2024 First Semester")
-        val year2 = YearNode("2023-2024 Second Semester")
-        val year3 = YearNode("2024-2025 First Semester")
-        val year4 = YearNode("2024-2025 Second Semester")
-        val year5 = YearNode("2025-2026 First Semester")
-        val year6 = YearNode("2025-2026 Second Semester")
-        val year7 = YearNode("2026-2027 First Semester")
-        val year8 = YearNode("2026-2027 Second Semester")
-        val year9 = YearNode("2027-2028 First Semester")
-        val year10 = YearNode("2027-2028 Second Semester")
-        val year11 = YearNode("2028-2029 First Semester")
-        val year12 = YearNode("2028-2029 Second Semester")
-        val year13 = YearNode("2029-2030 First Semester")
-        val year14 = YearNode("2029-2030 Second Semester")
-        val year15 = YearNode("2030-2031 First Semester")
-        val year16 = YearNode("2030-2031 Second Semester")
-        val year17 = YearNode("2031-2032 First Semester")
-        val year18 = YearNode("2031-2032 Second Semester")
-        val year19 = YearNode("2032-2033 First Semester")
-        val year20 = YearNode("2032-2033 Second Semester")
+        val year1 = YearNode( "الفصل الدراسي الأول ٢٠٢٣-٢٠٢٤")
+        val year2 = YearNode("الفصل الدراسي الثاني ٢٠٢٣-٢٠٢٤")
+        val year3 = YearNode("الفصل الدراسي الأول ٢٠٢٤-٢٠٢٥")
+        val year4 = YearNode("الفصل الدراسي الثاني ٢٠٢٤-٢٠٢٥")
+        val year5 = YearNode("الفصل الدراسي الأول ٢٠٢٥-٢٠٢٦")
+        val year6 = YearNode("الفصل الدراسي الثاني ٢٠٢٥-٢٠٢٦")
+        val year7 = YearNode("الفصل الدراسي الأول ٢٠٢٦-٢٠٢٧")
+        val year8 = YearNode("الفصل الدراسي الثاني ٢٠٢٦-٢٠٢٧")
+        val year9 = YearNode("الفصل الدراسي الأول ٢٠٢٧-٢٠٢٨")
+        val year10 = YearNode("الفصل الدراسي الثاني ٢٠٢٧-٢٠٢٨")
+        val year11 = YearNode("الفصل الدراسي الأول ٢٠٢٨-٢٠٢٩")
+        val year12 = YearNode("الفصل الدراسي الثاني ٢٠٢٨-٢٠٢٩")
+        val year13 = YearNode("الفصل الدراسي الأول ٢٠٢٩-٢٠٣٠")
+        val year14 = YearNode("الفصل الدراسي الثاني ٢٠٢٩-٢٠٣٠")
+        val year15 = YearNode("الفصل الدراسي الأول ٢٠٣٠-٢٠٣١")
+        val year16 = YearNode("الفصل الدراسي الثاني ٢٠٣٠-٢٠٣١")
+        val year17 = YearNode("الفصل الدراسي الأول ٢٠٣١-٢٠٣٢")
+        val year18 = YearNode("الفصل الدراسي الثاني ٢٠٣١-٢٠٣٢")
+        val year19 = YearNode("الفصل الدراسي الأول ٢٠٣٢-٢٠٣٣")
+        val year20 = YearNode("الفصل الدراسي الثاني ٢٠٣٢-٢٠٣٣")
         val list = listOf<YearNode>(year1,year2,year3,year4,year5,year6,year7,year8,year9,year10,year11,year12,year13,year14,year15,year16,year17,year18,year19,year20)
         databaseReference.child("Teachers").child(teacher.id).setValue(teacher)
         for (element in list){

@@ -61,7 +61,6 @@ class GroupPaymentAdapter(private var clickListener: (Triple<String, String, Str
             else -> R.color.red
         }
         val textColor = when (attendanceStatus) {
-            context.getString(R.string.present) -> R.color.black
             else -> R.color.white
         }
         holder.binding.attendancetextView.setTextColor(ContextCompat.getColor(context, textColor))

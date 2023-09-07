@@ -146,6 +146,8 @@ class AllLessonsFragment : Fragment() {
                         is FirebaseState.Loading -> {
                             gradeLevelDialog.progressBar.visibility = View.VISIBLE
                             gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                            gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                            gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()) {
@@ -154,11 +156,13 @@ class AllLessonsFragment : Fragment() {
 
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.INVISIBLE
                                 gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.VISIBLE
                                 gradeLevelDialog.noDataTv.text = getString(R.string.no_grades_yet)
                             } else {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                 gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data) {
                                     list.add(i)
@@ -209,7 +213,10 @@ class AllLessonsFragment : Fragment() {
                         when (result) {
                             is FirebaseState.Loading -> {
                                 gradeLevelDialog.progressBar.visibility = View.VISIBLE
-                                gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                                gradeLevelDialog.GradeLevelRecycler.visibility = View.INVISIBLE
+
+                                gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                             }
                             is FirebaseState.Success -> {
                                 if (result.data.isEmpty()) {
@@ -218,10 +225,13 @@ class AllLessonsFragment : Fragment() {
                                     gradeLevelDialog.noDataTv.text =
                                         getString(R.string.no_groups_yet)
                                     gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+
+                                    gradeLevelDialog.noDataAnimationView.visibility = View.VISIBLE
                                 } else {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                     gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                                     groupsAdapter.submitList(result.data)
                                 }
 
@@ -277,16 +287,20 @@ class AllLessonsFragment : Fragment() {
                             monthDialog.progressBar.visibility = View.VISIBLE
                             monthDialog.noDataTv.visibility = View.INVISIBLE
                             monthDialog.GradeLevelRecycler.visibility = View.INVISIBLE
+                            monthDialog.noDataAnimationView.visibility = View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()) {
                                 monthDialog.progressBar.visibility = View.INVISIBLE
                                 monthDialog.GradeLevelRecycler.visibility = View.GONE
                                 monthDialog.noDataTv.visibility = View.VISIBLE
+
+                                monthDialog.noDataAnimationView.visibility = View.VISIBLE
                                 monthDialog.noDataTv.text = getString(R.string.no_months_yet)
                             } else {
                                 monthDialog.noDataTv.visibility = View.INVISIBLE
                                 monthDialog.progressBar.visibility = View.GONE
+                                monthDialog.noDataAnimationView.visibility = View.INVISIBLE
                                 monthDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                 val list = mutableListOf<String>()
                                 val arabicMonthList = listOf(
@@ -335,17 +349,20 @@ class AllLessonsFragment : Fragment() {
                                 is FirebaseState.Loading -> {
                                     binding.lessonProgressBar.visibility = View.VISIBLE
                                     binding.lessonsRecycler.visibility = View.INVISIBLE
+                                    binding.noDataAnimationView.visibility = View.INVISIBLE
                                 }
                                 is FirebaseState.Success -> {
                                     if (result.data.isNotEmpty()) {
                                         binding.lessonProgressBar.visibility = View.INVISIBLE
                                         binding.lessonsRecycler.visibility = View.VISIBLE
+                                        binding.noDataAnimationView.visibility = View.INVISIBLE
                                         lessonAdapter.submitList(result.data)
                                         Log.i("TAG", "displayMonthDialog: not empty")
                                     } else {
                                         binding.lessonProgressBar.visibility = View.INVISIBLE
-                                        binding.lessonsRecycler.visibility = View.INVISIBLE
+                                        binding.lessonsRecycler.visibility = View.GONE
                                         binding.noLessonsTv.visibility = View.VISIBLE
+                                        binding.noDataAnimationView.visibility = View.VISIBLE
 
                                     }
                                 }

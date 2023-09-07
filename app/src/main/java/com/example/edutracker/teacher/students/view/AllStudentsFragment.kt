@@ -74,17 +74,24 @@ class AllStudentsFragment : Fragment() {
                         is FirebaseState.Loading -> {
                             binding.studentsProgressBar.visibility=View.VISIBLE
                             binding.noStudentsTv.visibility=View.GONE
+                            binding.noDataAnimationView.visibility=View.GONE
+                            binding.searchEditText.visibility=View.INVISIBLE
+
                             Log.i("TAG", "onViewCreated: loading")
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()){
                                 binding.studentsProgressBar.visibility=View.GONE
                                 binding.noStudentsTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
+                                binding.searchEditText.visibility=View.INVISIBLE
                                 Log.i("TAG", "onViewCreated: no assistant yet")
                             }else{
                                 studentsAdapter.submitList(result.data)
                                 studentsList=result.data
                                 binding.noStudentsTv.visibility=View.GONE
+                                binding.searchEditText.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.GONE
                                 binding.studentsProgressBar.visibility=View.GONE
                                 Log.i("TAG", "onViewCreated: ${result.data[0].name}")
                             }
@@ -185,8 +192,10 @@ class AllStudentsFragment : Fragment() {
         alertDialog.dialogYesBtn.setOnClickListener {
             if (checkConnectivity(requireContext())){
                 studentsViewModel.deleteStudent(email)
-                studentsAdapter.notifyDataSetChanged()
-                Toast.makeText(requireContext(),getString(R.string.deleted_successfully),Toast.LENGTH_SHORT).show()
+                studentsViewModel.deleteParent(email){
+                    studentsAdapter.notifyDataSetChanged()
+                    Toast.makeText(requireContext(),getString(R.string.deleted_successfully),Toast.LENGTH_SHORT).show()
+                }
             }else{
                 Toast.makeText(requireContext(),getString(R.string.network_lost_title),Toast.LENGTH_SHORT).show()
             }

@@ -13,10 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.edutracker.R
-import com.example.edutracker.databinding.FragmentAddNewGroupBinding
 import com.example.edutracker.databinding.FragmentAddStudentBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
-import com.example.edutracker.dataclasses.Assistant
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.dataclasses.Student
 import com.example.edutracker.models.Repository
@@ -25,8 +24,6 @@ import com.example.edutracker.network.RemoteClient
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModel
 import com.example.edutracker.teacher.groups.viewmodel.GroupsViewModelFactory
 import com.example.edutracker.teacher.lessons.view.GroupAdapter
-import com.example.edutracker.teacher.lessons.viewmodel.LessonsViewModel
-import com.example.edutracker.teacher.lessons.viewmodel.LessonsViewModelFactory
 import com.example.edutracker.teacher.students.viewmodel.StudentsViewModel
 import com.example.edutracker.teacher.students.viewmodel.StudentsViewModelFactory
 import com.example.edutracker.utilities.*
@@ -48,7 +45,7 @@ class AddStudentFragment : Fragment() {
 
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentAddStudentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -97,6 +94,12 @@ class AddStudentFragment : Fragment() {
 
         binding.AddAssistantButton.setOnClickListener {
 
+            val builder = AlertDialog.Builder(requireContext())
+            val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+            builder.setView(loadingDialogB.root)
+            val dialog = builder.create()
+            dialog.setCancelable(false)
+            dialog.show()
             val studentEmail = binding.studentEmailET.text.toString()
             val studentName = binding.studentNameET.text.toString()
             val studentPhone= binding.studentPhoneNumberET.text.toString()
@@ -108,40 +111,39 @@ class AddStudentFragment : Fragment() {
                         if (checkEgyptianPhoneNumber(studentPhone)){
                             val student = Student(transformedEmail,studentName,teacherIdVar!!,studentPassword,studentPhone,gradeVar!!,groupIdVar!!,semesterVar!!)
                             lifecycleScope.launch {
-                                studentsViewModel.addStudent(student,teacherIdVar!!,semesterVar!!,gradeVar!!,groupIdVar!!)
-                                studentsViewModel.addStudent.collect { result ->
-                                    when (result) {
-                                        is FirebaseState.Loading -> {
-                                            Log.i("TAG", "onViewCreated: loading")
+                                studentsViewModel.addStudent(student,teacherIdVar!!,semesterVar!!,gradeVar!!,groupIdVar!!){
+                                        result->
+                                    if (result){
+                                        dialog.dismiss()
+                                        Toast.makeText(requireContext(), getString(R.string.added_successfully), Toast.LENGTH_SHORT).show()
+                                        Navigation.findNavController(requireView()).apply {
+                                            popBackStack()
                                         }
-                                        is FirebaseState.Success -> {
-                                            if (result.data) {
-                                                Toast.makeText(requireContext(), getString(R.string.added_successfully) , Toast.LENGTH_SHORT).show()
-                                                Navigation.findNavController(requireView()).apply {
-                                                    popBackStack() // Clear the back stack up to teacherAllAssistantFragment
-                                                }
-                                            } else {
-                                                Toast.makeText(requireContext(), getString(R.string.The_email_already_exists), Toast.LENGTH_SHORT).show()
-                                            }
-                                        }
-                                        is FirebaseState.Failure -> {
-                                            Toast.makeText(requireContext(), "Error: ${result.msg}", Toast.LENGTH_SHORT).show()
-                                        }
+                                    }else{
+                                        dialog.dismiss()
+                                        Toast.makeText(requireContext(), getString(R.string.The_email_already_exists), Toast.LENGTH_SHORT).show()
                                     }
                                 }
+
                             }
 
                         }else{
+
+                            dialog.dismiss()
                             Toast.makeText(requireContext(), getString(R.string.phoneNotValid), Toast.LENGTH_SHORT).show()
                         }
                     }else{
+
+                        dialog.dismiss()
                         Toast.makeText(requireContext(), getString(R.string.emailNotValid), Toast.LENGTH_SHORT).show()
                     }
                 }else{
-                    Toast.makeText(requireContext(), getString(R.string.fillAllFields), Toast.LENGTH_SHORT).show()
 
+                    dialog.dismiss()
+                    Toast.makeText(requireContext(), getString(R.string.fillAllFields), Toast.LENGTH_SHORT).show()
                 }
             }else{
+                dialog.dismiss()
                 Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
 
             }
@@ -173,17 +175,23 @@ class AddStudentFragment : Fragment() {
                             is FirebaseState.Loading -> {
                                 gradeLevelDialog.progressBar.visibility = View.VISIBLE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                                gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
+
                             }
                             is FirebaseState.Success -> {
                                 if (result.data.isEmpty()) {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.INVISIBLE
                                     gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility = View.VISIBLE
+
                                     gradeLevelDialog.noDataTv.text =
                                         getString(R.string.no_groups_yet)
                                 } else {
                                     gradeLevelDialog.progressBar.visibility = View.GONE
                                     gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                    gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                                     gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                     groupsAdapter.submitList(result.data)
                                 }
@@ -234,17 +242,21 @@ class AddStudentFragment : Fragment() {
                         is FirebaseState.Loading -> {
                             gradeLevelDialog.progressBar.visibility = View.VISIBLE
                             gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
+                            gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                            gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()) {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.GONE
                                 gradeLevelDialog.noDataTv.visibility = View.VISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.VISIBLE
                                 gradeLevelDialog.noDataTv.text = getString(R.string.no_grades_yet)
                             } else {
                                 gradeLevelDialog.progressBar.visibility = View.GONE
                                 gradeLevelDialog.GradeLevelRecycler.visibility = View.VISIBLE
                                 gradeLevelDialog.noDataTv.visibility = View.INVISIBLE
+                                gradeLevelDialog.noDataAnimationView.visibility = View.INVISIBLE
                                 val list = mutableListOf<String>()
                                 for (i in result.data) {
                                     list.add(i)
@@ -268,7 +280,7 @@ class AddStudentFragment : Fragment() {
         }
         gradeLevelDialog.okBTN.setOnClickListener {
             if (gradeVar!=null){
-            binding.gradeName.text = gradeVar
+                binding.gradeName.text = gradeVar
                 displayGroupDialog()
             }
             dialog.dismiss()

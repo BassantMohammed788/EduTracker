@@ -66,16 +66,19 @@ class StudentExamDegreesFragment : Fragment() {
                             binding.examsProgressBar.visibility=View.VISIBLE
                             binding.recordExamsRecycler.visibility=View.INVISIBLE
                             binding.noStudentsTv.visibility=View.INVISIBLE
+                            binding.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success->{
                             if (result.data.isEmpty()){
                                 binding.examsProgressBar.visibility=View.INVISIBLE
                                 binding.recordExamsRecycler.visibility=View.INVISIBLE
                                 binding.noStudentsTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
                             }else{
                                 binding.examsProgressBar.visibility=View.INVISIBLE
                                 binding.recordExamsRecycler.visibility=View.VISIBLE
                                 binding.noStudentsTv.visibility=View.INVISIBLE
+                                binding.noDataAnimationView.visibility=View.INVISIBLE
                                 studentExamsDegreesAdapter.submitList(result.data)
 
                                 }

@@ -1,5 +1,6 @@
 package com.example.edutracker.teacher.students.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentParentBinding
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Parent
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
@@ -61,6 +63,8 @@ class ParentFragment : Fragment() {
                     when (result) {
                         is FirebaseState.Loading -> {
                             binding.ProgressBar.visibility = View.VISIBLE
+                            binding.noPArentTv.visibility=View.INVISIBLE
+                            binding.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data!=null){
@@ -72,6 +76,9 @@ class ParentFragment : Fragment() {
                                 binding.parentPhoneET.setText(result.data.parentPhone)
                                 binding.ProgressBar.visibility = View.INVISIBLE
 
+                                binding.noPArentTv.visibility=View.INVISIBLE
+                                binding.noDataAnimationView.visibility=View.INVISIBLE
+
                                 binding.cancelButton.setOnClickListener {
                                     Navigation.findNavController(requireView()).apply {
                                         popBackStack()
@@ -79,13 +86,11 @@ class ParentFragment : Fragment() {
                                 }
                                 binding.updateButton.setOnClickListener {
                                     updateParent(result.data)
-                                    Navigation.findNavController(requireView()).apply {
-                                        popBackStack()
-                                    }
                                 }
                             }else{
                                 binding.ProgressBar.visibility = View.INVISIBLE
                                 binding.noPArentTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
                                 binding.addParentFAB.visibility=View.VISIBLE
                             }
                         }
@@ -107,6 +112,11 @@ class ParentFragment : Fragment() {
     }
 
     private fun updateParent( parent: Parent){
+        val builder = AlertDialog.Builder(requireContext())
+        val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+        builder.setView(loadingDialogB.root)
+        val dialog = builder.create()
+        dialog.setCancelable(false)
         if (checkConnectivity(requireContext())){
             lifecycleScope.launch {
                 val password = binding.parentPasswordET.text.toString()
@@ -118,19 +128,20 @@ class ParentFragment : Fragment() {
                                   Toast.makeText(requireContext(), getString(R.string.no_thing_change), Toast.LENGTH_SHORT).show()
                               }else{
                                 studentsViewModel.updateParent(updatedParent)
-                                  studentsViewModel.updateStudent.collect{
+                                  studentsViewModel.updateParent.collect{
                                          when (it) {
                                               is FirebaseState.Loading -> {
-                                              binding.ProgressBar.visibility=View.VISIBLE
+                                              dialog.show()
                                               }
                                               is FirebaseState.Success -> {
                                                   if (it.data){
-                                                  binding.ProgressBar.visibility=View.INVISIBLE
+                                                      dialog.dismiss()
                                                   Toast.makeText(requireContext(), getString(R.string.updated_successfully), Toast.LENGTH_SHORT).show()
                                                   Navigation.findNavController(requireView()).apply {
                                                       popBackStack()
                                                   }
                                                   }else{
+                                                      dialog.dismiss()
                                                       Toast.makeText(
                                                           requireContext(),
                                                           "error",
@@ -139,6 +150,7 @@ class ParentFragment : Fragment() {
                                                   }
                                               }
                                               else -> {
+                                                  dialog.dismiss()
                                                   Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
                                               }
                                           }

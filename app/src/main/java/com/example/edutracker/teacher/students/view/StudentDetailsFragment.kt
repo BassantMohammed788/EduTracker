@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentStudentDetailsBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.dataclasses.Student
 import com.example.edutracker.models.Repository
@@ -109,23 +110,8 @@ class StudentDetailsFragment : Fragment() {
                       if (updatedStudent==student){
                           Toast.makeText(requireContext(), getString(R.string.no_thing_change), Toast.LENGTH_SHORT).show()
                       }else{
-                          if (checkConnectivity(requireContext())){
-                              lifecycleScope.launch {
-                                  studentsViewModel.moveStudentToNewGroup(updatedStudent,semesterVar!!,student.activeGroupId)
-                                  if (groupIdVar!=student.activeGroupId) {
-                                      Toast.makeText(requireContext(), getString(R.string.updated_successfully_and_move_to_new_group), Toast.LENGTH_SHORT).show()
-                                  }else{
-                                      Toast.makeText(requireContext(),getString(R.string.updated_successfully),Toast.LENGTH_SHORT).show()
-                                  }
-                                  Navigation.findNavController(requireView()).apply {
-                                      popBackStack()
-                                  }
-                              }}else{
-                              Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
-                          }
+                        updateStudent(updatedStudent)
                       }
-
-
 
                   } else {
                       Toast.makeText(requireContext(), getString(R.string.phoneNotValid), Toast.LENGTH_SHORT).show()
@@ -142,9 +128,48 @@ class StudentDetailsFragment : Fragment() {
 
         }
     }
+    private fun updateStudent(updatedStudent:Student){
+        val builder = AlertDialog.Builder(requireContext())
+        val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+        builder.setView(loadingDialogB.root)
+        val dialog = builder.create()
+        dialog.setCancelable(false)
+        if (checkConnectivity(requireContext())){
+            lifecycleScope.launch {
+                studentsViewModel.updateStudent(updatedStudent)
+                studentsViewModel.updateStudent.collect{ result->
+                    when(result){
+                        is FirebaseState.Loading->{
+                            dialog.show()
+                        }
+                        is FirebaseState.Success->{
+                            dialog.dismiss()
+                            if (result.data){
+                                if (groupIdVar!=student.activeGroupId) {
+                                    Toast.makeText(requireContext(), getString(R.string.updated_successfully_and_move_to_new_group), Toast.LENGTH_SHORT).show()
+                                }else{
+                                    Toast.makeText(requireContext(),getString(R.string.updated_successfully),Toast.LENGTH_SHORT).show()
+                                }
+                                Navigation.findNavController(requireView()).apply {
+                                    popBackStack()
+                                }
+                            }else{
+                                dialog.dismiss()
+                                Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        is FirebaseState.Failure->{
+                            dialog.dismiss()
+                        }
+                    }
+                }
+            }}else{
+            Toast.makeText(requireContext(), getString(R.string.network_lost_title), Toast.LENGTH_SHORT).show()
+        }
+
+    }
     private fun setUpStudentData(){
         binding.studentEmailETt.isFocusableInTouchMode = false
-        binding.parentEmailETt.isFocusableInTouchMode = false
         binding.gradeLevelET.isFocusableInTouchMode = false
         binding.groupET.isFocusableInTouchMode = false
 

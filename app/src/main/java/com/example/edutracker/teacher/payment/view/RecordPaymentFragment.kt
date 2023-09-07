@@ -82,7 +82,7 @@ class RecordPaymentFragment : Fragment() {
         }
 
 
-        binding.attendanceTV.text = "$groupNameVar ${getString(R.string.record_payment)}"
+        binding.attendanceTV.text = " ${getString(R.string.record_payment)} $groupNameVar"
 
         getStudentsPaymentForMonth()
 
@@ -97,6 +97,7 @@ class RecordPaymentFragment : Fragment() {
                             binding.attendanceProgressBar.visibility=View.VISIBLE
                             binding.paymentRecycler.visibility=View.INVISIBLE
                             binding.noStudentsTv.visibility=View.INVISIBLE
+                            binding.noDataAnimationView.visibility=View.INVISIBLE
                         }
                         is FirebaseState.Success -> {
                             if (result.data.isEmpty()){
@@ -104,9 +105,11 @@ class RecordPaymentFragment : Fragment() {
                                 binding.attendanceProgressBar.visibility=View.INVISIBLE
                                 binding.paymentRecycler.visibility=View.INVISIBLE
                                 binding.noStudentsTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
+
                             }else{
                                 Log.i("TAG", "getAllStudents: ${result.data}")
-                                paymentViewModel.getStudentsPaymentForMonth(semesterVar!!, gradeVar!!,groupIdVar!! ,result.data)
+                                paymentViewModel.getStudentsPaymentForMonth(semesterVar!!, gradeVar!!,monthVar!! ,result.data)
                                 paymentViewModel.getMonthPayment.collect{ result->
                                     when(result){
                                         is FirebaseState.Loading ->{
@@ -119,6 +122,7 @@ class RecordPaymentFragment : Fragment() {
                                                 binding.attendanceProgressBar.visibility=View.INVISIBLE
                                                 binding.paymentRecycler.visibility=View.VISIBLE
                                                 binding.noStudentsTv.visibility=View.INVISIBLE
+                                                binding.noDataAnimationView.visibility=View.INVISIBLE
                                                 paymentList=result.data.toMutableList()
                                                 groupPaymentAdapter.submitList(result.data)
                                             }

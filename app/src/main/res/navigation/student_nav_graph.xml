@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/student_nav_graph"
+    app:startDestination="@id/studentDashAttendanceFragment">
+
+
+    <fragment
+        android:id="@+id/studentDashAttendanceFragment"
+        android:name="com.example.edutracker.student.StudentDashAttendanceFragment"
+        android:label="fragment_student_dash_attendance"
+        tools:layout="@layout/fragment_student_dash_attendance" />
+    <fragment
+        android:id="@+id/studentDashPaymentFragment"
+        android:name="com.example.edutracker.student.StudentDashPaymentFragment"
+        android:label="fragment_student_dash_payment"
+        tools:layout="@layout/fragment_student_dash_payment" />
+    <fragment
+        android:id="@+id/studentDashExamsFragment"
+        android:name="com.example.edutracker.student.StudentDashExamsFragment"
+        android:label="fragment_student_dash_exams"
+        tools:layout="@layout/fragment_student_dash_exams" />
+    <fragment
+        android:id="@+id/studentProfileFragment"
+        android:name="com.example.edutracker.student.StudentProfileFragment"
+        android:label="fragment_student_profile"
+        tools:layout="@layout/fragment_student_profile" />
+</navigation>

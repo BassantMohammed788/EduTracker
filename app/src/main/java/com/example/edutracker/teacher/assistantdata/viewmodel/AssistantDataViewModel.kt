@@ -13,9 +13,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class AssistantDataViewModel(private val repo: RepositoryInterface): ViewModel() {
-    private var addAssistantsMutable: MutableStateFlow<FirebaseState<Boolean>> =
-        MutableStateFlow(FirebaseState.Loading)
-    val addAssistant: StateFlow<FirebaseState<Boolean>> = addAssistantsMutable
     private var getAllAssistantsMutable: MutableStateFlow<FirebaseState<List<Assistant>>> =
         MutableStateFlow(FirebaseState.Loading)
     val getAllAssistants: StateFlow<FirebaseState<List<Assistant>>> = getAllAssistantsMutable
@@ -51,17 +48,10 @@ class AssistantDataViewModel(private val repo: RepositoryInterface): ViewModel()
                 }
         }
     }
-    fun addAssistant(teacher_id: String,assistant: Assistant){
+    fun addAssistant(assistant: Assistant, teacher_id: String, callback: (Boolean) -> Unit){
         viewModelScope.launch(Dispatchers.IO){
-        repo.addAssistant(assistant,teacher_id)
-            .catch { e ->
-                Log.e("TAG", "updateAssistant: $e")
-                addAssistantsMutable.value = FirebaseState.Failure(e)
-            }
-            .collect { data ->
-                Log.i("TAG", "getAllAssistantsSuccess: $data")
-                addAssistantsMutable.value = FirebaseState.Success(data)
-            }
+        repo.addAssistant(assistant,teacher_id,callback)
+
     }}
     fun deleteAssistant(teacher_id: String,email:String){
         viewModelScope.launch(Dispatchers.IO){

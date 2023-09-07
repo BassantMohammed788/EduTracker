@@ -22,6 +22,7 @@ import com.example.edutracker.teacher.students.viewmodel.StudentsViewModel
 import com.example.edutracker.teacher.students.viewmodel.StudentsViewModelFactory
 import com.example.edutracker.utilities.MySharedPreferences
 import com.example.edutracker.utilities.checkConnectivity
+import com.example.edutracker.utilities.sortDatesFromLatestToOldest
 import kotlinx.coroutines.launch
 
 
@@ -50,6 +51,7 @@ class StudentAttendanceFragment : Fragment() {
         semesterVar = MySharedPreferences.getInstance(requireContext()).getSemester()!!
         teacherId = MySharedPreferences.getInstance(requireContext()).getTeacherID()!!
 
+
         studentAttendanceAdapter= StudentAttendanceAdapter()
         recyclerView = binding.attendanceRecycler
         recyclerView.apply {
@@ -67,12 +69,13 @@ class StudentAttendanceFragment : Fragment() {
                             binding.attendanceProgressBar.visibility=View.VISIBLE
                             binding.attendanceRecycler.visibility=View.INVISIBLE
                             binding.noAttendanceTv.visibility=View.INVISIBLE
-                        }
+                            binding.noDataAnimationView.visibility=View.INVISIBLE                        }
                         is FirebaseState.Success->{
                             if (result.data.isEmpty()){
                                 binding.attendanceProgressBar.visibility=View.INVISIBLE
                                 binding.attendanceRecycler.visibility=View.INVISIBLE
                                 binding.noAttendanceTv.visibility=View.VISIBLE
+                                binding.noDataAnimationView.visibility=View.VISIBLE
                             }else{
                                 studentsViewModel.getLessonTimeAndAttendanceStatus( teacherId,semesterVar,student.activeGradeLevel,result.data)
 
@@ -86,7 +89,9 @@ class StudentAttendanceFragment : Fragment() {
                                             binding.attendanceProgressBar.visibility=View.INVISIBLE
                                             binding.attendanceRecycler.visibility=View.VISIBLE
                                             binding.noAttendanceTv.visibility=View.INVISIBLE
-                                            studentAttendanceAdapter.submitList(result.data)
+                                            binding.noDataAnimationView.visibility=View.INVISIBLE
+                                            studentAttendanceAdapter.submitList(
+                                                sortDatesFromLatestToOldest( result.data))
                                         }
                                         is FirebaseState.Failure ->{
                                             Log.i("TAG", "getLessonTimeAndAttendanceStatus: Fail")

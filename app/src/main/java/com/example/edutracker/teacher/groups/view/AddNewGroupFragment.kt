@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 import com.example.edutracker.R
 import com.example.edutracker.databinding.FragmentAddNewGroupBinding
 import com.example.edutracker.databinding.GradeLevelDialogBinding
+import com.example.edutracker.databinding.LoadingDialogBinding
 import com.example.edutracker.dataclasses.Group
 import com.example.edutracker.models.Repository
 import com.example.edutracker.network.FirebaseState
@@ -64,15 +65,20 @@ class AddNewGroupFragment : Fragment() {
                   val  gradeLevel = gradeVar!!
                   val groupName= binding.groupNameET.text.toString()
                   val group = Group(teacherId,groupName, UUID.randomUUID().toString(),gradeLevel)
+                  val builder = AlertDialog.Builder(requireContext())
+                  val loadingDialogB = LoadingDialogBinding.inflate(layoutInflater)
+                  builder.setView(loadingDialogB.root)
+                  val dialog = builder.create()
+                  dialog.setCancelable(false)
                   viewModel.addGroup(group,teacherId,semester)
                   viewModel.addGroup.collect{ result->
                       when (result) {
                           is FirebaseState.Loading -> {
                               Log.i("TAG", "onViewCreated: loading")
-                              binding.groupProgressBar.visibility=View.VISIBLE
+                              dialog.show()
                           }
                           is FirebaseState.Success -> {
-                              binding.groupProgressBar.visibility=View.GONE
+                              dialog.dismiss()
                               if (result.data) {
                                   Toast.makeText(requireContext(), getString(R.string.added_successfully), Toast.LENGTH_SHORT).show()
                                   Navigation.findNavController(requireView()).apply {
@@ -83,6 +89,7 @@ class AddNewGroupFragment : Fragment() {
                               }
                           }
                           is FirebaseState.Failure -> {
+                              dialog.dismiss()
                               binding.groupProgressBar.visibility=View.GONE
                               Toast.makeText(requireContext(), "Error: ${result.msg}", Toast.LENGTH_SHORT).show()
                           }
